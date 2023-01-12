@@ -4,7 +4,6 @@ let alpha_vantage_APIKEY = "0BGSBFE3M96OL784";
 let FRED_apikey = "ce4ba2fd678f9dfc7903324adee68449";
 // Query Selectors
 
-
 // Call Functions
 async function callFunction() {
   // getPolygon('SPX');
@@ -64,8 +63,12 @@ function getFRED() {
   console.log(url);
   fetch(url)
     .then((response) => response.json())
-    .then((data) => console.log(data.observations.length));
+    .then((data) => {
+      console.log(data.observations.length);
+      parseFREDdata(data);
+    });
 }
+// getFRED();
 
 // Parse Alpha Vantage Response
 function parseAlphaVantage(rawData) {
@@ -81,7 +84,18 @@ function parseAlphaVantage(rawData) {
 }
 
 // Parse FRED Response
-
+function parseFREDdata(rawData) {
+  let data_temp = rawData.observations;
+  let parsedData = [];
+  for (let i = 0; i < data_temp.length; i++) {
+    parsedData.push({
+      date: data_temp[i].date,
+      closeValue: data_temp[i].value,
+    });
+  }
+  console.log(parsedData);
+  return parsedData;
+}
 // Visualize Data with D3
 
 // Update Chart DOM
