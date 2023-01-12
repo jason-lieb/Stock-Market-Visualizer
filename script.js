@@ -1,11 +1,13 @@
 // Global Variables
-
+polygon_APIKEY = 'TTNbgrcWIJyP1tavyIdjxgTywo6ixljm';
 
 // Query Selectors
 
 
 // Access Data from Polygon API
+function getPolygon() {
 
+}
 
 // Access Data from FRED API
 
