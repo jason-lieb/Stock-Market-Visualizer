@@ -12,7 +12,7 @@ async function callFunction() {
   parseAlphaVantage(rawDataAV);
 }
 
-callFunction()
+// callFunction() ///// Uncomment to run functions
 
 // Access Data from Polygon API
 async function getPolygon(ticker) {
@@ -37,8 +37,6 @@ async function getAlphaVantage(ticker, outputSize) {
 function parseAlphaVantage(rawData) {
   let data = rawData['Time Series (Daily)'];
   let parsedData = [];
-  console.log(rawData)
-  console.log(data);
   let keys = Object.keys(data);
   for (let i = 0; i < keys.length; i++) {
     parsedData.push({ date: keys[i], closeValue: data[keys[i]]['4. close'] });
