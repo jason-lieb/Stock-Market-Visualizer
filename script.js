@@ -6,8 +6,9 @@ async function importTestData() {
 }
 
 // Global Variables
-let polygon_APIKEY = 'TTNbgrcWIJyP1tavyIdjxgTywo6ixljm';
-let alpha_vantage_APIKEY = '0BGSBFE3M96OL784';
+let polygon_APIKEY = "TTNbgrcWIJyP1tavyIdjxgTywo6ixljm";
+let alpha_vantage_APIKEY = "0BGSBFE3M96OL784";
+let FRED_apikey = "ce4ba2fd678f9dfc7903324adee68449";
 
 // Query Selectors
 
@@ -15,7 +16,7 @@ let alpha_vantage_APIKEY = '0BGSBFE3M96OL784';
 // Call Functions
 async function callFunction() {
   // getPolygon('SPX');
-  let rawDataAV = await getAlphaVantage('IBM');
+  let rawDataAV = await getAlphaVantage("IBM");
   parseAlphaVantage(rawDataAV);
 }
 
@@ -23,7 +24,9 @@ async function callFunction() {
 
 // Access Data from Polygon API
 async function getPolygon(ticker) {
-  let response = await fetch(`https://api.polygon.io/v3/reference/tickers/${ticker}?date=2023-01-12&apiKey=${polygon_APIKEY}`);
+  let response = await fetch(
+    `https://api.polygon.io/v3/reference/tickers/${ticker}?date=2023-01-12&apiKey=${polygon_APIKEY}`
+  );
   let data = await response.json();
   return data;
 }
@@ -31,16 +34,18 @@ async function getPolygon(ticker) {
 // Access Data from Alpha Vantage API
 async function getAlphaVantage(ticker, outputSize) {
   // If outputSize is 'compact', will only fetch last 100 days; 'full' responds with 20+ years of data
-  outputSize = outputSize || 'full';
-  let response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${ticker}&outputsize=${outputSize}&apikey=${alpha_vantage_APIKEY}`);
+  outputSize = outputSize || "full";
+  let response = await fetch(
+    `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${ticker}&outputsize=${outputSize}&apikey=${alpha_vantage_APIKEY}`
+  );
   let rawData = await response.json();
   return rawData;
 }
 
 // ----------------------------------------------------Access Data from FRED API
 /* CREATE A API key */
-var fs = require("fs");
-var apikey = fs.readFileSync("./FRED_APIKEY.txt", "utf8");
+var apikey = FRED_apikey;
+console.log(apikey);
 var root = "https://api.stlouisfed.org/fred/";
 var series_id = "CPIAUCSL";
 /* different series data options */
@@ -60,23 +65,23 @@ var series_id = "CPIAUCSL";
 var params = { observation_start: "2020-01-01", observation_end: "2022-12-31" };
 var qeuryString = "";
 for (var key in params) {
-  qeuryString += "&"+ key + "=" + params[key] ;
+  qeuryString += "&" + key + "=" + params[key];
 }
 var url = `${root}series/observations?series_id=${series_id}&api_key=${apikey}&file_type=json${qeuryString}`;
-console.log(url)
-
-fetch(url)
-  .then((response) => response.json())
-  .then((data) => console.log(data.observations.length));
-
+function getFRED() {
+  console.log(url);
+  fetch(url)
+    .then((response) => response.json())
+    .then((data) => console.log(data.observations.length));
+}
 
 // Parse Alpha Vantage Response
 function parseAlphaVantage(rawData) {
-  let data = rawData['Time Series (Daily)'];
+  let data = rawData["Time Series (Daily)"];
   let parsedData = [];
   let keys = Object.keys(data);
   for (let i = 0; i < keys.length; i++) {
-    parsedData.push({ date: keys[i], closeValue: data[keys[i]]['4. close'] });
+    parsedData.push({ date: keys[i], closeValue: data[keys[i]]["4. close"] });
   }
   // Output data in form of array with objects with keys date and closeValue
   console.log(parsedData);
@@ -84,7 +89,6 @@ function parseAlphaVantage(rawData) {
 }
 
 // Parse FRED Response
-
 
 // Visualize Data with D3
 async function visualizeData() {
@@ -95,9 +99,6 @@ visualizeData();
 
 // Update Chart DOM
 
-
 // Clear Chart Container
 
-
 // Change Time Range
-
