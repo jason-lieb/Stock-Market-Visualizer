@@ -1,6 +1,6 @@
 // Imports
 async function importTestData() {
-  testData = await fetch('./data.json');
+  testData = await fetch('./testStockData.json');
   testData = await testData.json();
   return testData;
 }
@@ -9,6 +9,7 @@ async function importTestData() {
 let polygon_APIKEY = "TTNbgrcWIJyP1tavyIdjxgTywo6ixljm";
 let alpha_vantage_APIKEY = "0BGSBFE3M96OL784";
 let FRED_apikey = "ce4ba2fd678f9dfc7903324adee68449";
+// let chart;
 
 // Query Selectors
 
@@ -45,7 +46,6 @@ async function getAlphaVantage(ticker, outputSize) {
 // ----------------------------------------------------Access Data from FRED API
 /* CREATE A API key */
 var apikey = FRED_apikey;
-console.log(apikey);
 var root = "https://api.stlouisfed.org/fred/";
 var series_id = "CPIAUCSL";
 /* different series data options */
@@ -81,8 +81,11 @@ function parseAlphaVantage(rawData) {
   let parsedData = [];
   let keys = Object.keys(data);
   for (let i = 0; i < keys.length; i++) {
-    parsedData.push({ date: keys[i], closeValue: data[keys[i]]["4. close"] });
+    let time = Date.parse(new Date(keys[i]));
+    let value = +data[keys[i]]["4. close"];
+    parsedData.push([time, value]);
   }
+  parsedData.unshift(['Time', 'Stock Price']);
   // Output data in form of array with objects with keys date and closeValue
   console.log(parsedData);
   return parsedData;
@@ -90,12 +93,28 @@ function parseAlphaVantage(rawData) {
 
 // Parse FRED Response
 
-// Visualize Data with D3
-async function visualizeData() {
-  // let testData = await importTestData();
+// Generate Chart with Highcharts
+async function makeChart() {
+  let testData = await importTestData();
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawChart);
 
+  function drawChart() {
+    let data = google.visualization.arrayToDataTable(testData);
+
+    let options = {
+      title: 'Stock Price',
+      curveType: 'function',
+      legend: { position: 'bottom' }
+    };
+
+    let chart = new google.visualization.LineChart(document.getElementById('chart'));
+
+    chart.draw(data, options);
+  }
 }
-visualizeData();
+makeChart();
+
 
 // Update Chart DOM
 
