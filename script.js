@@ -12,7 +12,6 @@ let alpha_vantage_APIKEY = '0BGSBFE3M96OL784';
 // Access Data from Polygon API
 async function getPolygon(ticker) {
   let response = await fetch(`https://api.polygon.io/v3/reference/tickers/${ticker}?date=2023-01-12&apiKey=${polygon_APIKEY}`);
-  // let response = await fetch('https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/2023-01-09?adjusted=true&include_otc=false&apiKey=TTNbgrcWIJyP1tavyIdjxgTywo6ixljm')
   let data = await response.json();
   console.log(data);
   return data;
