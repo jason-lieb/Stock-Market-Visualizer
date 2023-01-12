@@ -1,3 +1,10 @@
+// Imports
+async function importTestData() {
+  testData = await fetch('./data.json');
+  testData = await testData.json();
+  return testData;
+}
+
 // Global Variables
 let polygon_APIKEY = 'TTNbgrcWIJyP1tavyIdjxgTywo6ixljm';
 let alpha_vantage_APIKEY = '0BGSBFE3M96OL784';
@@ -80,7 +87,11 @@ function parseAlphaVantage(rawData) {
 
 
 // Visualize Data with D3
+async function visualizeData() {
+  // let testData = await importTestData();
 
+}
+visualizeData();
 
 // Update Chart DOM
 
