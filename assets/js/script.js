@@ -4,7 +4,7 @@ let alpha_vantage_APIKEY = "0BGSBFE3M96OL784";
 let FRED_apikey = "ce4ba2fd678f9dfc7903324adee68449";
 let data;
 let dataInTimePeriod;
-let selectedTimePeriod = '3';
+let selectedTimePeriod = '3-m';
 let selectedPage = 'Stocks';
 
 // Query Selectors
@@ -26,6 +26,34 @@ google.charts.load('current', {'packages':['corechart']});
 function changeTime(e) {
   if (e.target.dataset.value === undefined) return;
   selectedTimePeriod = e.target.dataset.value;
+  selectDataForTimeRange();
+}
+
+// Create Subset of Data for Time Range
+function selectDataForTimeRange() {
+  // Create variables for today
+  let year = new Date().getFullYear();
+  let month = new Date().getMonth() + 1;
+  let day = new Date().getDate();
+  // Subtract out time period
+  if (selectedTimePeriod.split('-')[1] === 'y') {
+    year -= selectedTimePeriod.split('-')[0];
+  } else if (selectedTimePeriod.split('-')[1] === 'm') {
+    if (selectedTimePeriod.split('-')[0] >= month) {
+      year -= 1;
+      month += 12 - selectedTimePeriod.split('-')[0];
+    }
+  } else {
+    month = 1;
+    day = 1;
+  }
+  // Create Lower Bound for Time Range
+  let timeBound = Date.parse(new Date(`${year}-${month}-${day}`));
+  // Create Array for Data in Time Period
+  dataInTimePeriod = [];
+  for (let i = 0; i < data.length; i++) {
+    if (data[i][0] >= timeBound) dataInTimePeriod.push(data[i]);
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////// For Development
