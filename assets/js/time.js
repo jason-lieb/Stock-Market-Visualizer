@@ -1,5 +1,5 @@
 // Change Selected Time Range
-function changeTime(e) {
+export function changeTime(e) {
   if (e.target.dataset.value === undefined) return;
   selectedTimePeriod = e.target.dataset.value;
   selectDataForTimeRange();
@@ -36,5 +36,3 @@ function selectDataForTimeRange() {
   }
   if (!allData) dataInTimePeriodIndex += 1;
 }
-
-export { changeTime, selectDataForTimeRange }
