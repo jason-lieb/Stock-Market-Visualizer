@@ -1,14 +1,23 @@
 // Imports
-async function importTestData() {
-  testData = await fetch('./testStockData.json');
+async function importTestData(url) {
+  testData = await fetch(url);
   testData = await testData.json();
   return testData;
 }
+async function loadData() {
+  data = await importTestData('./testStockData.json');
+  // data2 = await importTestData('./testStockData2.json');
+}
+loadData();
+
+// Load Google Charts
+google.charts.load('current', {'packages':['corechart']});
 
 // Global Variables
 let polygon_APIKEY = "TTNbgrcWIJyP1tavyIdjxgTywo6ixljm";
 let alpha_vantage_APIKEY = "0BGSBFE3M96OL784";
 let FRED_apikey = "ce4ba2fd678f9dfc7903324adee68449";
+let data;
 
 // Query Selectors
 let navbarBtns = document.querySelector(".navbar-btn");
@@ -138,28 +147,16 @@ function parseFREDdata(rawData) {
 }
 
 // Generate Chart with Google Charts
-async function makeChart() {
-  let testData = await importTestData();
-  google.charts.load('current', {'packages':['corechart']});
-  google.charts.setOnLoadCallback(drawChart);
-
-  function drawChart() {
-    let data = google.visualization.arrayToDataTable(testData);
-
-    let options = {
-      title: 'Stock Price',
-      curveType: 'function',
-      legend: { position: 'bottom' }
-    };
-
-    let chart = new google.visualization.LineChart(document.getElementById('chart'));
-
-    chart.draw(data, options);
-  }
+function drawChart(data) {
+  let chart = new google.visualization.LineChart(document.getElementById('chart'));
+  let chartData = google.visualization.arrayToDataTable(data);
+  let options = {
+    title: 'Stock Price',
+    curveType: 'function',
+    legend: 'none'
+  };
+  chart.draw(chartData, options);
 }
-makeChart();
-
-// Update Chart DOM
 
 // Clear Chart Container
 
