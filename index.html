@@ -5,80 +5,94 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  <link rel="stylesheet" href="./stylesheet.css">
   <title>Stock Market Visualizer</title>
 </head>
 <body>
+  <div class="a"></div><div id="circle"></div>
   <nav class="navbar navbar-expand-lg bg-light border-bottom border-dark border-opacity-50 bg-body-tertiary">
     <div class="container-fluid">
       <a class="navbar-brand bg-dark text-light p-2 fw-bold rounded" href="#">Stock Market Visualizer</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse d-flex justify-content-end" id="navbar">
-        <div class="navbar-nav nav-pills">
-          <a class="nav-link text-dark bg-light m-2 border border-dark border-success border-opacity-50" href="#">STOCKS</a>
-          <a class="nav-link text-dark bg-light m-2 border border-dark border-success border-opacity-50" href="#">CURRENCY</a>
-          <a class="nav-link text-dark bg-light m-2 border border-dark border-success border-opacity-50" href="#">GOVERNMENT DATA</a>
-        </div> 
+      <div class="collapse navbar-collapse " id="navbar-toggler"><!--d-flex justify-content-end-->
+        <!-- <div class="navbar-btn navbar-nav nav-pills"> -->
+          <ul class="navbar-nav mb-2 mb-lg-0">
+            <li class="nav-item">
+              <button id="nav-btn1" class="nav-link text-dark bg-light m-2 border border-dark border-success border-opacity-50" href="#">STOCKS</button>
+            </li>
+            <li class="nav-item">
+              <button id="nav-btn2" class="nav-link text-dark bg-light m-2 border border-dark border-success border-opacity-50" href="#">CURRENCY</button>
+            </li>
+            <li class="nav-item">
+              <button id="nav-btn3" class="nav-link text-dark bg-light m-2 border border-dark border-success border-opacity-50" href="#">GOVERNMENT DATA</button>
+            </li>
+          </ul>
+        <!-- </div> -->
       </div>
     </div>
   </nav>
-  <br>
-  <br>
-  <input class="form-control" type="text" value="Search bar here..." aria-label="Search bar input example" readonly>
-  <div class="crad-wrapper">
-    <h1 class="mbr-text mbr-white mbr-fonts-style mbr-white mb-5 display-1">
-      <strong>Pikachu</strong>
-    </h1>
-    <p class="mbr-texxt mbr-white mbr-fonts-style display-6">
-      "Whatever text we want to put here"
-    </p>
-    <div class="mbr-section-btn mt-4">
-      <a class="btn btn-lg btn-primary display-4" href="#" style=" ">Get Started</a>
-  </div>
-  <br>
-  
-  <div class="card default-card" style="width: 18rem; padding-bottom: 2rem;">
-    <div class="card-body">
-      <h5 class="card-title">Default Options</h5>
-      <div class="default-btn">
-      <button href="#" class="btn btn-primary">Go somewhere</button>
-      <button href="#" class="btn btn-primary">Go somewhere</button>
-      <button href="#" class="btn btn-primary">Go somewhere</button>
-      <button href="#" class="btn btn-primary">Go somewhere</button>
-      <button href="#" class="btn btn-primary">Go somewhere</button>
-      <button href="#" class="btn btn-primary">Go somewhere</button>
+
+  <main class="container-fluid mt-5">
+    <div class="row justify-content-around">
+      <div class="col-sm-12 col-md-2 d-grid gap-2" >
+
+        <input id="search" class="form-control " type="search" placeholder="Search bar here..." value="" aria-label="Search bar input example">
+
+        <div class="card default-card" style=" padding-bottom: 2rem;">
+          <div class="card-body">
+            <h5 class="card-title">Default Options</h5>
+            <div class="d-grid gap-2">
+            <button href="#" id="def-btn1" class="btn btn-dark rounded-1">AMZN</button>
+            <button href="#" id="def-btn2" class="btn btn-dark rounded-1">AAPL</button>
+            <button href="#" id="def-btn3" class="btn btn-dark rounded-1">GOOGL</button>
+            <button href="#" id="def-btn4" class="btn btn-dark rounded-1">META</button>
+            <button href="#" id="def-btn5" class="btn btn-dark rounded-1">NFLX</button>
+            <button href="#" id="def-btn6" class="btn btn-dark rounded-1">TSLA</button>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="col-sm-12 col-md-7">
+
+        <div class="">
+          <div class="" id="chart" style=" height: 35em; border: 3px black solid;"></div>
+        </div>
+
+        <div class="time-btns">
+          <button data-value="3-m" id="3mon-btn" class="btn btn-dark rounded-1" type="button">3m</button>
+          <button data-value="6-m" id="6mon-btn" class="btn btn-dark rounded-1" type="button">6m</button>
+          <button data-value="YTD" id="ytd-btn" class="btn btn-dark rounded-1" type="button">YTD</button>
+          <button data-value="1-y" id="1y-btn" class="btn btn-dark rounded-1" type="button">1y</button>
+          <button data-value="3-y" id="3y-btn" class="btn btn-dark rounded-1" type="button">3y</button>
+          <button data-value="10-y" id="10y-btn" class="btn btn-dark rounded-1" type="button">10y</button>
+        </div>
+
       </div>
     </div>
-  </div>
+  </main>
 
-  <br>
-  <div>
-    <button class="btn btn-dark rounded-1" type="button">3 mon</button>
-    <button class="btn btn-dark rounded-1" type="button">6 mon</button>
-    <button class="btn btn-dark rounded-1" type="button">YTD</button>
-    <button class="btn btn-dark rounded-1" type="button">1y</button>
-    <button class="btn btn-dark rounded-1" type="button">3y</button>
-    <button class="btn btn-dark rounded-1" type="button">10y</button>
-  </div>
 
   <footer>
     <div class="card w-100 fixed-bottom text-center">
       <div class="card-body">
         <h5 class="card-title">Title</h5>
         <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-        <div class = "buttons d-flex justify-content-between">
-        <button class="btn btn-dark rounded-1" type="button">contant running data</button>
-        <button class="btn btn-dark rounded-1" type="button">contant running data</button>
-        <button class="btn btn-dark rounded-1" type="button">contant running data</button>
-        <button class="btn btn-dark rounded-1" type="button">contant running data</button>
+        <div class = "footer-btns d-flex justify-content-between">
+        <button id="footer-btn1" class="btn btn-dark rounded-1" type="button">contant running data</button>
+        <button id="footer-btn2" class="btn btn-dark rounded-1" type="button">contant running data</button>
+        <button id="footer-btn3" class="btn btn-dark rounded-1" type="button">contant running data</button>
+        <button id="footer-btn4" class="btn btn-dark rounded-1" type="button">contant running data</button>
         </div>
       </div>
     </div>
   </footer>
 
-  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-  <script src="script.js"></script>
+  <script src="./assets/js/script.js" type="module"></script>
 </body>
 </html>
