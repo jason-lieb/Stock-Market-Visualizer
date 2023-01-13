@@ -46,7 +46,7 @@ async function importTestData(url) {
   return testData;
 }
 async function loadData() {
-  data = await importTestData('./testStockData.json');
+  data = await importTestData('./testData/testStockData.json');
   // data2 = await importTestData('./testStockData2.json');
 }
 loadData();
