@@ -3,41 +3,65 @@ let polygon_APIKEY = "TTNbgrcWIJyP1tavyIdjxgTywo6ixljm";
 let alpha_vantage_APIKEY = "0BGSBFE3M96OL784";
 let FRED_apikey = "ce4ba2fd678f9dfc7903324adee68449";
 let data;
-let dataInTimePeriod;
-let selectedTimePeriod = '1 Month';
+let dataInTimePeriodIndex = 0;
+let selectedTimePeriod = '3-m';
 let selectedPage = 'Stocks';
 
 // Query Selectors
-let navbarBtns = document.querySelector(".navbar-btn");
-let stocksBtn = document.querySelector("#nav-btn1");
-let currencyBtn = document.querySelector("#nav-btn2");
-let govBtn = document.querySelector("#nav-btn3");
-
-let defaultBtns = document.querySelector(".default-btn");
-let defBtn1 = document.querySelector("#def-btn1");
-let defBtn2 = document.querySelector("#def-btn2");
-let defBtn3 = document.querySelector("#def-btn3");
-let defBtn4 = document.querySelector("#def-btn4");
-let defBtn5 = document.querySelector("#def-btn5");
-let defBtn6 = document.querySelector("#def-btn6");
-
+// let navbarBtns = document.querySelector(".navbar-btn");
+// let defaultBtns = document.querySelector(".default-btn");
 let timeBtns = document.querySelector(".time-btns");
-// let threeMonBtn = document.querySelector("#3mon-btn");
-// let sixMonBtn = document.querySelector("#6mon-btn");
-let ytd = document.querySelector("#ytd-btn");
-// let oneYBtn = document.querySelector("#1y-btn");
-// let threeYBtn = document.querySelector("#3y-btn");
-// let tenYBtn = document.querySelector("#10y-btn");
-
-let footerBtns = document.querySelector(".footer-btns");
-let footerBtn1 = document.querySelector("#footer-btn1");
-let footerBtn2 = document.querySelector("#footer-btn2");
-let footerBtn3 = document.querySelector("#footer-btn3");
-let footerBtn4 = document.querySelector("#footer-btn4");
-let searchInput = document.querySelector("#search");
+// let searchInput = document.querySelector("#search");
 
 // Event Listeners
+// navbarBtns.addEventListener('click', changePage);
+// defaultBtns.addEventListener('click', );
+timeBtns.addEventListener('click', changeTime);
+// searchInput.addEventListener(, ); // Might not be necessary
 
+// Load Google Charts
+google.charts.load('current', {'packages':['corechart']});
+
+// Change Selected Time Range
+function changeTime(e) {
+  if (e.target.dataset.value === undefined) return;
+  selectedTimePeriod = e.target.dataset.value;
+  selectDataForTimeRange();
+}
+
+// Create Subset of Data for Time Range
+function selectDataForTimeRange() {
+  // Create variables for today
+  let year = new Date().getFullYear();
+  let month = new Date().getMonth() + 1;
+  let day = new Date().getDate();
+  // Subtract out time period
+  if (selectedTimePeriod.split('-')[1] === 'y') {
+    year -= selectedTimePeriod.split('-')[0];
+  } else if (selectedTimePeriod.split('-')[1] === 'm') {
+    if (selectedTimePeriod.split('-')[0] >= month) {
+      year -= 1;
+      month += 12 - selectedTimePeriod.split('-')[0];
+    }
+  } else {
+    month = 1;
+    day = 1;
+  }
+  // Create Lower Bound for Time Range
+  let timeBound = Date.parse(new Date(`${year}-${month}-${day}`));
+  // Create Index for Data in Time Period
+  dataInTimePeriodIndex = 0;
+  let allData = true;
+  for (let i = 0; i < data.length; i++) {
+    if (data[i][0] < timeBound) {
+      dataInTimePeriodIndex = i;
+      allData = false;
+    }
+  }
+  if (!allData) dataInTimePeriodIndex += 1;
+}
+
+///////////////////////////////////////////////////////////////////////// For Development
 
 // Imports
 async function importTestData(url) {
@@ -51,10 +75,6 @@ async function loadData() {
 }
 loadData();
 
-// Load Google Charts
-google.charts.load('current', {'packages':['corechart']});
-
-///////////////////////////////////////////// For Development
 // Call Functions
 async function callFunction() {
   // getPolygon('SPX');
@@ -63,7 +83,7 @@ async function callFunction() {
 }
 
 // callFunction() ///// Uncomment to run functions
-//////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////// For Development
 
 // Access Data from Polygon API
 async function getPolygon(ticker) {
@@ -131,7 +151,6 @@ function parseAlphaVantage(rawData) {
     let value = +data[keys[i]]["4. close"];
     parsedData.push([time, value]);
   }
-  parsedData.unshift(['Time', 'Stock Price']);
   // Output data in form of array with objects with keys date and closeValue
   console.log(parsedData);
   return parsedData;
@@ -154,7 +173,7 @@ function parseFREDdata(rawData) {
 // Generate Chart with Google Charts
 function drawChart(data) {
   let chart = new google.visualization.LineChart(document.getElementById('chart'));
-  let chartData = google.visualization.arrayToDataTable(data);
+  let chartData = google.visualization.arrayToDataTable(data.slice(dataInTimePeriodIndex).unshift(['Time', 'Stock Price']));
   let options = {
     title: 'Stock Price',
     curveType: 'function',
@@ -163,3 +182,32 @@ function drawChart(data) {
   chart.draw(chartData, options);
 }
 // Call drawChart(data) to create a chart; make sure that data is loaded or it will throw an error
+
+
+
+
+// Currently unused query selectors
+
+// let stocksBtn = document.querySelector("#nav-btn1");
+// let currencyBtn = document.querySelector("#nav-btn2");
+// let govBtn = document.querySelector("#nav-btn3");
+
+// let defBtn1 = document.querySelector("#def-btn1");
+// let defBtn2 = document.querySelector("#def-btn2");
+// let defBtn3 = document.querySelector("#def-btn3");
+// let defBtn4 = document.querySelector("#def-btn4");
+// let defBtn5 = document.querySelector("#def-btn5");
+// let defBtn6 = document.querySelector("#def-btn6");
+
+// let threeMonBtn = document.querySelector("#3mon-btn");
+// let sixMonBtn = document.querySelector("#6mon-btn");
+// let ytd = document.querySelector("#ytd-btn");
+// let oneYBtn = document.querySelector("#1y-btn");
+// let threeYBtn = document.querySelector("#3y-btn");
+// let tenYBtn = document.querySelector("#10y-btn");
+
+// let footerBtns = document.querySelector(".footer-btns");
+// let footerBtn1 = document.querySelector("#footer-btn1");
+// let footerBtn2 = document.querySelector("#footer-btn2");
+// let footerBtn3 = document.querySelector("#footer-btn3");
+// let footerBtn4 = document.querySelector("#footer-btn4");
