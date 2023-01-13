@@ -1,18 +1,3 @@
-// Imports
-async function importTestData(url) {
-  testData = await fetch(url);
-  testData = await testData.json();
-  return testData;
-}
-async function loadData() {
-  data = await importTestData('./testStockData.json');
-  // data2 = await importTestData('./testStockData2.json');
-}
-loadData();
-
-// Load Google Charts
-google.charts.load('current', {'packages':['corechart']});
-
 // Global Variables
 let polygon_APIKEY = "TTNbgrcWIJyP1tavyIdjxgTywo6ixljm";
 let alpha_vantage_APIKEY = "0BGSBFE3M96OL784";
@@ -54,6 +39,24 @@ let footerBtn4 = document.querySelector("#footer-btn4");
 // need a class or id for main container
 // let main = document.querySelector("");
 
+// Event Listeners
+
+// Imports
+async function importTestData(url) {
+  testData = await fetch(url);
+  testData = await testData.json();
+  return testData;
+}
+async function loadData() {
+  data = await importTestData('./testStockData.json');
+  // data2 = await importTestData('./testStockData2.json');
+}
+loadData();
+
+// Load Google Charts
+google.charts.load('current', {'packages':['corechart']});
+
+///////////////////////////////////////////// For Development
 // Call Functions
 async function callFunction() {
   // getPolygon('SPX');
@@ -62,6 +65,7 @@ async function callFunction() {
 }
 
 // callFunction() ///// Uncomment to run functions
+//////////////////////////////////////////////////////
 
 // Access Data from Polygon API
 async function getPolygon(ticker) {
@@ -161,5 +165,3 @@ function drawChart(data) {
   chart.draw(chartData, options);
 }
 // Call drawChart(data) to create a chart; make sure that data is loaded or it will throw an error
-
-// Change Time Range
