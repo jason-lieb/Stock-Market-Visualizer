@@ -34,12 +34,10 @@ let footerBtn1 = document.querySelector("#footer-btn1");
 let footerBtn2 = document.querySelector("#footer-btn2");
 let footerBtn3 = document.querySelector("#footer-btn3");
 let footerBtn4 = document.querySelector("#footer-btn4");
-// need a class or id for search input
-// let searchInput = document.querySelector("");
-// need a class or id for main container
-// let main = document.querySelector("");
+// let searchInput = document.querySelector("#search");
 
 // Event Listeners
+
 
 // Imports
 async function importTestData(url) {
