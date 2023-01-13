@@ -1,23 +1,11 @@
-// Imports
-async function importTestData(url) {
-  testData = await fetch(url);
-  testData = await testData.json();
-  return testData;
-}
-async function loadData() {
-  data = await importTestData('./testStockData.json');
-  // data2 = await importTestData('./testStockData2.json');
-}
-loadData();
-
-// Load Google Charts
-google.charts.load('current', {'packages':['corechart']});
-
 // Global Variables
 let polygon_APIKEY = "TTNbgrcWIJyP1tavyIdjxgTywo6ixljm";
 let alpha_vantage_APIKEY = "0BGSBFE3M96OL784";
 let FRED_apikey = "ce4ba2fd678f9dfc7903324adee68449";
 let data;
+let dataInTimePeriod;
+let selectedTimePeriod = '1 Month';
+let selectedPage = 'Stocks';
 
 // Query Selectors
 let navbarBtns = document.querySelector(".navbar-btn");
@@ -46,11 +34,27 @@ let footerBtn1 = document.querySelector("#footer-btn1");
 let footerBtn2 = document.querySelector("#footer-btn2");
 let footerBtn3 = document.querySelector("#footer-btn3");
 let footerBtn4 = document.querySelector("#footer-btn4");
-// need a class or id for search input
-// let searchInput = document.querySelector("");
-// need a class or id for main container
-// let main = document.querySelector("");
+let searchInput = document.querySelector("#search");
 
+// Event Listeners
+
+
+// Imports
+async function importTestData(url) {
+  testData = await fetch(url);
+  testData = await testData.json();
+  return testData;
+}
+async function loadData() {
+  data = await importTestData('./testData/testStockData.json');
+  // data2 = await importTestData('./testStockData2.json');
+}
+loadData();
+
+// Load Google Charts
+google.charts.load('current', {'packages':['corechart']});
+
+///////////////////////////////////////////// For Development
 // Call Functions
 async function callFunction() {
   // getPolygon('SPX');
@@ -59,6 +63,7 @@ async function callFunction() {
 }
 
 // callFunction() ///// Uncomment to run functions
+//////////////////////////////////////////////////////
 
 // Access Data from Polygon API
 async function getPolygon(ticker) {
@@ -157,7 +162,4 @@ function drawChart(data) {
   };
   chart.draw(chartData, options);
 }
-
-// Clear Chart Container
-
-// Change Time Range
+// Call drawChart(data) to create a chart; make sure that data is loaded or it will throw an error
