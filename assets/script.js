@@ -47,10 +47,11 @@ function handleDefault(e) {
 }
 
 async function updateChart(ticker) {
-  let newData = await getAlphaVantage(ticker);
-  global.data = parseAlphaVantage(newData);
+  // let newData = await getAlphaVantage(ticker); //Commented out to prevent accidental usage of limited API calls
+  // global.data = parseAlphaVantage(newData);
+  global.data = await loadTestData();
   selectDataForTimeRange();
-  // drawChart(global.data); //////////////////// Commented out to prevent accidental usage of limited API calls
+  drawChart(global.data);
 }
 
 //////////////////////////////////////////////////////// Time Functions /////////////////////////////////////////////////////////////////////
@@ -60,7 +61,7 @@ function changeTime(e) {
   if (e.target.dataset.value === undefined) return;
   global.selectedTimePeriod = e.target.dataset.value;
   selectDataForTimeRange();
-  // drawChart(global.data); //////////////////// Commented out to prevent accidental usage of limited API calls
+  drawChart(global.data);
 }
 
 // Create Subset of Data for Time Range
@@ -213,24 +214,15 @@ async function getPolygon(ticker) {
 
 // Imports
 async function importTestData(url) {
-  testData = await fetch(url);
+  let testData = await fetch(url);
   testData = await testData.json();
   return testData;
 }
-async function loadData() {
-  data = await importTestData('./testData/testStockData.json');
+async function loadTestData() {
+  let data = await importTestData('../testData/testStockDataAmazon.json');
   // data2 = await importTestData('./testStockData2.json');
+  return data
 }
-// loadData();
-
-// Call Functions
-async function callFunction() {
-  // getPolygon('IBM');
-  let rawDataAV = await getAlphaVantage("IBM");
-  parseAlphaVantage(rawDataAV);
-}
-
-// callFunction() ///// Uncomment to run functions
 
 // getFRED();
 
