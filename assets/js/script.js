@@ -2,7 +2,7 @@
 import { getPolygon } from './polygon.js';
 import { getAlphaVantage, parseAlphaVantage } from './alphaVantage.js';
 import { getFRED, parseFREDdata } from './fred.js';
-import { changeTime } from './time.js';
+import { changeTime, selectDataForTimeRange } from './time.js';
 import { drawChart } from './chart.js';
 
 // Load Google Charts
@@ -16,17 +16,41 @@ let selectedPage = 'Stocks';
 
 // Query Selectors
 // let navbarBtns = document.querySelector(".navbar-btn");
-// let defaultBtns = document.querySelector(".default-btn");
+let defaultBtns = document.querySelector("#default-btns");
 let timeBtns = document.querySelector(".time-btns");
 // let searchInput = document.querySelector("#search");
 
 // Event Listeners
 // navbarBtns.addEventListener('click', changePage);
-// defaultBtns.addEventListener('click', );
+defaultBtns.addEventListener('click', handleDefault);
 timeBtns.addEventListener('click', changeTime);
 // searchInput.addEventListener(, ); // Might not be necessary
 
+function handleDefault(e) {
+  if (e.target.dataset.value === undefined) return;
+  switch (selectedPage) {
+    case 'Stocks':
+      let ticker = e.target.dataset.value;
+      updateChart(ticker);
+      break;
+    case 'Currency':
+      //
+      //
+      break;
+    case 'Government Data':
+      //
+      //
+      break;
+  }
 
+}
+
+async function updateChart(ticker) {
+  let newData = await getAlphaVantage(ticker);
+  data = parseAlphaVantage(ticker);
+  selectDataForTimeRange();
+  drawChart(data);
+}
 
 
 ///////////////////////////////////////////////////////////////////////// For Development
