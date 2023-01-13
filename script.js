@@ -34,7 +34,7 @@ let footerBtn1 = document.querySelector("#footer-btn1");
 let footerBtn2 = document.querySelector("#footer-btn2");
 let footerBtn3 = document.querySelector("#footer-btn3");
 let footerBtn4 = document.querySelector("#footer-btn4");
-// let searchInput = document.querySelector("#search");
+let searchInput = document.querySelector("#search");
 
 // Event Listeners
 
