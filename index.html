@@ -8,33 +8,33 @@
   <title>Stock Market Visualizer</title>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg bg-light border-bottom border-dark border-opacity-50 bg-body-tertiary">
-    <div class="container-fluid">
-      <a class="navbar-brand bg-dark text-light p-2 fw-bold rounded" href="#">Stock Market Visualizer</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+  <nav class="navbar navbar-expand-lg bg-light border-bottom border-dark border-opacity-50 bg-body-tertiary justify-content-between">
+    <!-- <div class="container-fluid"> -->
+      <a class="navbar-brand bg-dark text-light ms-2 p-2 fw-bold rounded" href="#">Stock Market Visualizer</a>
+      <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse " id="navbar-toggler"><!--d-flex justify-content-end-->
         <!-- <div class="navbar-btn navbar-nav nav-pills"> -->
-          <ul class="navbar-nav mb-2 mb-lg-0">
-            <li class="nav-item">
-              <button id="nav-btn1" class="nav-link text-dark bg-light m-2 border border-dark border-success border-opacity-50" href="#">STOCKS</button>
-            </li>
-            <li class="nav-item">
-              <button id="nav-btn2" class="nav-link text-dark bg-light m-2 border border-dark border-success border-opacity-50" href="#">CURRENCY</button>
-            </li>
-            <li class="nav-item">
-              <button id="nav-btn3" class="nav-link text-dark bg-light m-2 border border-dark border-success border-opacity-50" href="#">GOVERNMENT DATA</button>
-            </li>
+          <ul class="navbar-nav nav-pills w-100 w-md-50 justify-content-end">
+            <!-- <li> -->
+              <button id="nav-btn1" class="nav-link text-dark bg-light mx-2 border border-dark border-success border-opacity-50" href="#">STOCKS</button>
+            <!-- </li> -->
+            <!-- <li> -->
+              <button id="nav-btn2" class="nav-link text-dark bg-light mx-2 border border-dark border-success border-opacity-50" href="#">CURRENCY</button>
+            <!-- </li> -->
+            <!-- <li> -->
+              <button id="nav-btn3" class="nav-link text-dark bg-light mx-2 border border-dark border-success border-opacity-50" href="#">GOVERNMENT DATA</button>
+            <!-- </li> -->
           </ul>
         <!-- </div> -->
       </div>
-    </div>
+    <!-- </div> -->
   </nav>
 
   <main class="container-fluid mt-5">
     <div class="row justify-content-around">
-      <div class="col-sm-12 col-md-2 d-grid gap-2" >
+      <div class="col-sm-3 d-grid gap-2" >
 
         <input id="search" class="form-control " type="search" placeholder="Search bar here..." value="" aria-label="Search bar input example">
 
@@ -54,7 +54,7 @@
 
 
       </div>
-      <div class="col-sm-12 col-md-7">
+      <div class="col-sm-7">
 
         <div class="">
           <div class="" id="chart" style=" height: 35em; border: 3px black solid;"></div>
