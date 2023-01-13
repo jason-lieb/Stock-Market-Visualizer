@@ -4,40 +4,43 @@ let alpha_vantage_APIKEY = "0BGSBFE3M96OL784";
 let FRED_apikey = "ce4ba2fd678f9dfc7903324adee68449";
 let data;
 let dataInTimePeriod;
-let selectedTimePeriod = '1 Month';
+let selectedTimePeriod = '3';
 let selectedPage = 'Stocks';
 
 // Query Selectors
 let navbarBtns = document.querySelector(".navbar-btn");
-let stocksBtn = document.querySelector("#nav-btn1");
-let currencyBtn = document.querySelector("#nav-btn2");
-let govBtn = document.querySelector("#nav-btn3");
+// let stocksBtn = document.querySelector("#nav-btn1");
+// let currencyBtn = document.querySelector("#nav-btn2");
+// let govBtn = document.querySelector("#nav-btn3");
 
 let defaultBtns = document.querySelector(".default-btn");
-let defBtn1 = document.querySelector("#def-btn1");
-let defBtn2 = document.querySelector("#def-btn2");
-let defBtn3 = document.querySelector("#def-btn3");
-let defBtn4 = document.querySelector("#def-btn4");
-let defBtn5 = document.querySelector("#def-btn5");
-let defBtn6 = document.querySelector("#def-btn6");
+// let defBtn1 = document.querySelector("#def-btn1");
+// let defBtn2 = document.querySelector("#def-btn2");
+// let defBtn3 = document.querySelector("#def-btn3");
+// let defBtn4 = document.querySelector("#def-btn4");
+// let defBtn5 = document.querySelector("#def-btn5");
+// let defBtn6 = document.querySelector("#def-btn6");
 
 let timeBtns = document.querySelector(".time-btns");
 // let threeMonBtn = document.querySelector("#3mon-btn");
 // let sixMonBtn = document.querySelector("#6mon-btn");
-let ytd = document.querySelector("#ytd-btn");
+// let ytd = document.querySelector("#ytd-btn");
 // let oneYBtn = document.querySelector("#1y-btn");
 // let threeYBtn = document.querySelector("#3y-btn");
 // let tenYBtn = document.querySelector("#10y-btn");
 
 let footerBtns = document.querySelector(".footer-btns");
-let footerBtn1 = document.querySelector("#footer-btn1");
-let footerBtn2 = document.querySelector("#footer-btn2");
-let footerBtn3 = document.querySelector("#footer-btn3");
-let footerBtn4 = document.querySelector("#footer-btn4");
+// let footerBtn1 = document.querySelector("#footer-btn1");
+// let footerBtn2 = document.querySelector("#footer-btn2");
+// let footerBtn3 = document.querySelector("#footer-btn3");
+// let footerBtn4 = document.querySelector("#footer-btn4");
 let searchInput = document.querySelector("#search");
 
 // Event Listeners
-
+// document.addEventListener(navbarBtns, changePage);
+// document.addEventListener(defaultBtns, );
+timeBtns.addEventListener('click', changeTime);
+// document.addEventListener(searchInput, ); // Might not be necessary
 
 // Imports
 async function importTestData(url) {
@@ -53,6 +56,12 @@ loadData();
 
 // Load Google Charts
 google.charts.load('current', {'packages':['corechart']});
+
+// Change Selected Time Range
+function changeTime(e) {
+  if (e.target.dataset.value === undefined) return;
+  selectedTimePeriod = e.target.dataset.value;
+}
 
 ///////////////////////////////////////////// For Development
 // Call Functions
