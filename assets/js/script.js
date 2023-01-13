@@ -1,9 +1,9 @@
 // Import
-import getPolygon from './polygon.js';
+import { getPolygon } from './polygon.js';
 import { getAlphaVantage, parseAlphaVantage } from './alphaVantage.js';
 import { getFRED, parseFREDdata } from './fred.js';
-import changeTime from './time.js';
-import drawChart from './chart.js';
+import { changeTime } from './time.js';
+import { drawChart } from './chart.js';
 
 // Load Google Charts
 google.charts.load('current', {'packages':['corechart']});
