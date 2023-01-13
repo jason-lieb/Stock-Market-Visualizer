@@ -11,49 +11,58 @@
   <nav class="navbar navbar-expand-lg bg-light border-bottom border-dark border-opacity-50 bg-body-tertiary">
     <div class="container-fluid">
       <a class="navbar-brand bg-dark text-light p-2 fw-bold rounded" href="#">Stock Market Visualizer</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse d-flex justify-content-end" id="navbar">
-        <div class="navbar-btn navbar-nav nav-pills">
-          <button id="nav-btn1" class="nav-link text-dark bg-light m-2 border border-dark border-success border-opacity-50" href="#">STOCKS</button>
-          <button id="nav-btn2" class="nav-link text-dark bg-light m-2 border border-dark border-success border-opacity-50" href="#">CURRENCY</button>
-          <button id="nav-btn3" class="nav-link text-dark bg-light m-2 border border-dark border-success border-opacity-50" href="#">GOVERNMENT DATA</button>
-        </div>
+      <div class="collapse navbar-collapse " id="navbar-toggler"><!--d-flex justify-content-end-->
+        <!-- <div class="navbar-btn navbar-nav nav-pills"> -->
+          <ul class="navbar-nav mb-2 mb-lg-0">
+            <li class="nav-item">
+              <button id="nav-btn1" class="nav-link text-dark bg-light m-2 border border-dark border-success border-opacity-50" href="#">STOCKS</button>
+            </li>
+            <li class="nav-item">
+              <button id="nav-btn2" class="nav-link text-dark bg-light m-2 border border-dark border-success border-opacity-50" href="#">CURRENCY</button>
+            </li>
+            <li class="nav-item">
+              <button id="nav-btn3" class="nav-link text-dark bg-light m-2 border border-dark border-success border-opacity-50" href="#">GOVERNMENT DATA</button>
+            </li>
+          </ul>
+        <!-- </div> -->
       </div>
     </div>
   </nav>
 
-  <main class="container-fluid">
-    <div class="row">
-      <div class="col-md-4 card default-card">
-        <input id="search" class="form-control mt-4" type="text" value="Search bar here..." aria-label="Search bar input example">
-        <br>
-        <div class="card default-card" style="width: 18rem; padding-bottom: 2rem;">
+  <main class="container-fluid mt-5">
+    <div class="row justify-content-around">
+      <div class="col-sm-12 col-md-2 d-grid gap-2" >
+
+        <input id="search" class="form-control " type="search" placeholder="Search bar here..." value="" aria-label="Search bar input example">
+
+        <div class="card default-card" style=" padding-bottom: 2rem;">
           <div class="card-body">
             <h5 class="card-title">Default Options</h5>
-            <div class="default-btn d-grid gap-2">
-            <button href="#" id="def-btn1" class="btn btn-primary btn-dark rounded-1">Go somewhere</button>
-            <button href="#" id="def-btn2" class="btn btn-primary btn-dark rounded-1">Go somewhere</button>
-            <button href="#" id="def-btn3" class="btn btn-primary btn-dark rounded-1">Go somewhere</button>
-            <button href="#" id="def-btn4" class="btn btn-primary btn-dark rounded-1">Go somewhere</button>
-            <button href="#" id="def-btn5" class="btn btn-primary btn-dark rounded-1">Go somewhere</button>
-            <button href="#" id="def-btn6" class="btn btn-primary btn-dark rounded-1">Go somewhere</button>
+            <div class="d-grid gap-2">
+            <button href="#" id="def-btn1" class="btn btn-dark rounded-1">AMZN</button>
+            <button href="#" id="def-btn2" class="btn btn-dark rounded-1">AAPL</button>
+            <button href="#" id="def-btn3" class="btn btn-dark rounded-1">GOOGL</button>
+            <button href="#" id="def-btn4" class="btn btn-dark rounded-1">META</button>
+            <button href="#" id="def-btn5" class="btn btn-dark rounded-1">NFLX</button>
+            <button href="#" id="def-btn6" class="btn btn-dark rounded-1">TSLA</button>
             </div>
           </div>
         </div>
 
 
       </div>
-      <div class="col-md-8">
+      <div class="col-sm-12 col-md-7">
 
-        <div class="container-fluid">
-          <div class="container" id="chart" style="width: 600px; height: 400px; margin: 20px auto; border: 3px black solid;"></div>
+        <div class="">
+          <div class="" id="chart" style=" height: 35em; border: 3px black solid;"></div>
         </div>
 
         <div class="time-btns">
-          <button data-value="3-m" id="3mon-btn" class="btn btn-dark rounded-1" type="button">3 mon</button>
-          <button data-value="6-m" id="6mon-btn" class="btn btn-dark rounded-1" type="button">6 mon</button>
+          <button data-value="3-m" id="3mon-btn" class="btn btn-dark rounded-1" type="button">3m</button>
+          <button data-value="6-m" id="6mon-btn" class="btn btn-dark rounded-1" type="button">6m</button>
           <button data-value="YTD" id="ytd-btn" class="btn btn-dark rounded-1" type="button">YTD</button>
           <button data-value="1-y" id="1y-btn" class="btn btn-dark rounded-1" type="button">1y</button>
           <button data-value="3-y" id="3y-btn" class="btn btn-dark rounded-1" type="button">3y</button>
