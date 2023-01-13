@@ -11,44 +11,52 @@
   <nav class="navbar navbar-expand-lg bg-light border-bottom border-dark border-opacity-50 bg-body-tertiary">
     <div class="container-fluid">
       <a class="navbar-brand bg-dark text-light p-2 fw-bold rounded" href="#">Stock Market Visualizer</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse d-flex justify-content-end" id="navbar">
-        <div class="navbar-btn navbar-nav nav-pills">
-          <button id="nav-btn1" class="nav-link text-dark bg-light m-2 border border-dark border-success border-opacity-50" href="#">STOCKS</button>
-          <button id="nav-btn2" class="nav-link text-dark bg-light m-2 border border-dark border-success border-opacity-50" href="#">CURRENCY</button>
-          <button id="nav-btn3" class="nav-link text-dark bg-light m-2 border border-dark border-success border-opacity-50" href="#">GOVERNMENT DATA</button>
-        </div>
+      <div class="collapse navbar-collapse " id="navbar-toggler"><!--d-flex justify-content-end-->
+        <!-- <div class="navbar-btn navbar-nav nav-pills"> -->
+          <ul class="navbar-nav mb-2 mb-lg-0">
+            <li class="nav-item">
+              <button id="nav-btn1" class="nav-link text-dark bg-light m-2 border border-dark border-success border-opacity-50" href="#">STOCKS</button>
+            </li>
+            <li class="nav-item">
+              <button id="nav-btn2" class="nav-link text-dark bg-light m-2 border border-dark border-success border-opacity-50" href="#">CURRENCY</button>
+            </li>
+            <li class="nav-item">
+              <button id="nav-btn3" class="nav-link text-dark bg-light m-2 border border-dark border-success border-opacity-50" href="#">GOVERNMENT DATA</button>
+            </li>
+          </ul>
+        <!-- </div> -->
       </div>
     </div>
   </nav>
 
   <main class="container-fluid mt-5">
-    <div class="row">
-      <div class="col-md-3 d-grid gap-2" >
+    <div class="row justify-content-around">
+      <div class="col-sm-12 col-md-2 d-grid gap-2" >
 
-        <input id="search" class="form-control" type="text" placeholder="Search bar here..." value="" aria-label="Search bar input example">
+        <input id="search" class="form-control " type="search" placeholder="Search bar here..." value="" aria-label="Search bar input example">
 
         <div class="card default-card" style=" padding-bottom: 2rem;">
           <div class="card-body">
             <h5 class="card-title">Default Options</h5>
-            <div class="default-btn d-grid gap-2">
-            <button href="#" id="def-btn1" class="btn btn-primary">Go somewhere</button>
-            <button href="#" id="def-btn2" class="btn btn-primary">Go somewhere</button>
-            <button href="#" id="def-btn3" class="btn btn-primary">Go somewhere</button>
-            <button href="#" id="def-btn4" class="btn btn-primary">Go somewhere</button>
-            <button href="#" id="def-btn5" class="btn btn-primary">Go somewhere</button>
-            <button href="#" id="def-btn6" class="btn btn-primary">Go somewhere</button>
+            <div class="d-grid gap-2">
+            <button href="#" id="def-btn1" class="btn btn-primary ">AMZN</button>
+            <button href="#" id="def-btn2" class="btn btn-primary">AAPL</button>
+            <button href="#" id="def-btn3" class="btn btn-primary">GOOGL</button>
+            <button href="#" id="def-btn4" class="btn btn-primary">META</button>
+            <button href="#" id="def-btn5" class="btn btn-primary">NFLX</button>
+            <button href="#" id="def-btn6" class="btn btn-primary">TSLA</button>
             </div>
           </div>
         </div>
 
       </div>
-      <div class="col-md-8">
+      <div class="col-sm-12 col-md-7">
 
         <div class="">
-          <div class="" id="chart" style="width: 600px; height: 400px; border: 3px black solid;"></div>
+          <div class="" id="chart" style=" height: 35em; border: 3px black solid;"></div>
         </div>
 
         <div class="time-btns">
