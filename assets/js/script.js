@@ -3,7 +3,7 @@ let polygon_APIKEY = "TTNbgrcWIJyP1tavyIdjxgTywo6ixljm";
 let alpha_vantage_APIKEY = "0BGSBFE3M96OL784";
 let FRED_apikey = "ce4ba2fd678f9dfc7903324adee68449";
 let data;
-let dataInTimePeriod;
+let dataInTimePeriodIndex;
 let selectedTimePeriod = '3-m';
 let selectedPage = 'Stocks';
 
@@ -49,10 +49,10 @@ function selectDataForTimeRange() {
   }
   // Create Lower Bound for Time Range
   let timeBound = Date.parse(new Date(`${year}-${month}-${day}`));
-  // Create Array for Data in Time Period
-  dataInTimePeriod = [];
+  // Create Index for Data in Time Period
+  dataInTimePeriodIndex = 0;
   for (let i = 0; i < data.length; i++) {
-    if (data[i][0] >= timeBound) dataInTimePeriod.push(data[i]);
+    if (data[i][0] < timeBound) dataInTimePeriodIndex = i;
   }
 }
 
@@ -146,7 +146,6 @@ function parseAlphaVantage(rawData) {
     let value = +data[keys[i]]["4. close"];
     parsedData.push([time, value]);
   }
-  parsedData.unshift(['Time', 'Stock Price']);
   // Output data in form of array with objects with keys date and closeValue
   console.log(parsedData);
   return parsedData;
@@ -169,7 +168,7 @@ function parseFREDdata(rawData) {
 // Generate Chart with Google Charts
 function drawChart(data) {
   let chart = new google.visualization.LineChart(document.getElementById('chart'));
-  let chartData = google.visualization.arrayToDataTable(data);
+  let chartData = google.visualization.arrayToDataTable(data.slice(dataInTimePeriodIndex + 1).unshift(['Time', 'Stock Price']));
   let options = {
     title: 'Stock Price',
     curveType: 'function',
