@@ -18,6 +18,9 @@ let polygon_APIKEY = "TTNbgrcWIJyP1tavyIdjxgTywo6ixljm";
 let alpha_vantage_APIKEY = "0BGSBFE3M96OL784";
 let FRED_apikey = "ce4ba2fd678f9dfc7903324adee68449";
 let data;
+let dataInTimePeriod;
+let selectedTimePeriod = '1 Month';
+let selectedPage = 'Stocks';
 
 // Query Selectors
 let navbarBtns = document.querySelector(".navbar-btn");
@@ -157,7 +160,6 @@ function drawChart(data) {
   };
   chart.draw(chartData, options);
 }
-
-// Clear Chart Container
+// Call drawChart(data) to create a chart; make sure that data is loaded or it will throw an error
 
 // Change Time Range
