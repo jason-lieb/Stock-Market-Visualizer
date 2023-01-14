@@ -59,13 +59,23 @@
         <div class="card default-card" style=" padding-bottom: 2rem;">
           <div id="default-btns" class="card-body">
             <h5 class="card-title">Default Options</h5>
-            <div class="d-grid gap-2">
+            <div class="d-grid gap-2 d-none" id="stock-card"> <!-- use d-none to show or hide different buttons under different category-->
               <button data-value="AMZN" class="btn btn-dark rounded-1">AMZN</button>
               <button data-value="AAPL" class="btn btn-dark rounded-1">AAPL</button>
               <button data-value="GOOG" class="btn btn-dark rounded-1">GOOG</button>
               <button data-value="META" class="btn btn-dark rounded-1">META</button>
               <button data-value="NFLX" class="btn btn-dark rounded-1">NFLX</button>
               <button data-value="TSLA" class="btn btn-dark rounded-1">TSLA</button>
+            </div>
+            <div class="d-grid gap-2" id="governdata-card">
+              <button data-value="GDP" class="btn btn-dark rounded-1">GDP</button>
+              <button data-value="CPI" class="btn btn-dark rounded-1">CPI</button>
+              <button data-value="Unemployment Rate" class="btn btn-dark rounded-1">Unemployment Rate</button>
+            </div>
+            <div class="d-grid gap-2 d-none" id="currency-card">
+              <button data-value="EUR/USD" class="btn btn-dark rounded-1">EUR/USD</button>
+              <button data-value="GBP/USD" class="btn btn-dark rounded-1">GBP/USD</button>
+              <button data-value="USD/JPY" class="btn btn-dark rounded-1">USD/JPY</button>
             </div>
           </div>
         </div>

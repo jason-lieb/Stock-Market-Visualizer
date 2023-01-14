@@ -15,12 +15,21 @@ let global = {
 // let navbarBtns = document.querySelector(".navbar-btn");
 let defaultBtns = document.querySelector("#default-btns");
 let timeBtns = document.querySelector(".time-btns");
+let stockBtn = document.querySelector('#nav-btn1');
+let currencyBtn = document.querySelector('#nav-btn2');
+let governdataBtn = document.querySelector('#nav-btn3');
+let stockCard = document.querySelector('#stock-card');
+let governCard = document.querySelector('#governdata-card');
+let currencyCard = document.querySelector('#currency-card');
 // let searchInput = document.querySelector("#search");
 
 // Event Listeners
 // navbarBtns.addEventListener('click', changePage);
 defaultBtns.addEventListener('click', handleDefault);
 timeBtns.addEventListener('click', changeTime);
+stockBtn.addEventListener('click', showStock);
+currencyBtn.addEventListener('click', showCurrency);
+governdataBtn.addEventListener('click',showGoverndata);
 // searchInput.addEventListener(, ); // Might not be necessary
 
 // Load Google Charts
@@ -228,8 +237,24 @@ async function loadTestData() {
 
 ////////////////////////////////////////////////////////////////////////// For Development
 
-
-
+function showStock() {
+  //need show default chart with default data
+  stockCard.classList.remove("d-none");
+  governCard.classList.add("d-none");
+  currencyCard.classList.add("d-none");
+};
+function showCurrency() {
+  //need show default chart with default data
+  currencyCard.classList.remove("d-none");
+  stockCard.classList.add("d-none");
+  governCard.classList.add("d-none");
+};
+function showGoverndata() {
+  //need show default chart with default data
+  governCard.classList.remove('d-none');
+  stockCard.classList.add('d-none');
+  currencyCard.classList.add('d-none');
+};
 
 
 
@@ -238,9 +263,7 @@ async function loadTestData() {
 
 // Currently unused query selectors
 
-// let stocksBtn = document.querySelector("#nav-btn1");
-// let currencyBtn = document.querySelector("#nav-btn2");
-// let govBtn = document.querySelector("#nav-btn3");
+
 
 // let defBtn1 = document.querySelector("#def-btn1");
 // let defBtn2 = document.querySelector("#def-btn2");
@@ -256,6 +279,8 @@ async function loadTestData() {
 // let threeYBtn = document.querySelector("#3y-btn");
 // let tenYBtn = document.querySelector("#10y-btn");
 
+
+/* sorry I changed footer section name. Lantao */
 // let footerBtns = document.querySelector(".footer-btns");
 // let footerBtn1 = document.querySelector("#footer-btn1");
 // let footerBtn2 = document.querySelector("#footer-btn2");
