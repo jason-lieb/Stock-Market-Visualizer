@@ -15,13 +15,13 @@ let global = {
 // let navbarBtns = document.querySelector(".navbar-btn");
 let defaultBtns = document.querySelector("#default-btns");
 let timeBtns = document.querySelector(".time-btns");
-// let searchInput = document.querySelector("#search");
+let searchInput = document.querySelector("#search");
 
 // Event Listeners
 // navbarBtns.addEventListener('click', changePage);
 defaultBtns.addEventListener('click', handleDefault);
 timeBtns.addEventListener('click', changeTime);
-// searchInput.addEventListener(, ); // Might not be necessary
+searchInput.addEventListener('keypress', handleSearch);
 
 // Load Google Charts
 google.charts.load('current', {'packages':['corechart']});
@@ -44,6 +44,26 @@ function handleDefault(e) {
       //
       break;
   }
+}
+
+function handleSearch(e) {
+  if (e.key !== 'Enter') return;
+  let search = searchInput.value;
+  switch (global.selectedPage) {
+    case 'Stocks':
+      //
+      //
+      break;
+    case 'Currency':
+      //
+      //
+      break;
+    case 'Government Data':
+      //
+      //
+      break;
+  }
+  searchInput.textContent = '';
 }
 
 async function updateChart(ticker) {
