@@ -111,7 +111,6 @@ function drawChart(data) {
   };
   chart.draw(chartData, options);
 }
-// Call drawChart(data) to create a chart; make sure that data is loaded or it will throw an error
 
 /////////////////////////////////////////////////// Alpha Vantage API Functions /////////////////////////////////////////////////////////////////////
 
@@ -223,8 +222,6 @@ async function loadTestData() {
   // data2 = await importTestData('./testStockData2.json');
   return data
 }
-
-// getFRED();
 
 ////////////////////////////////////////////////////////////////////////// For Development
 
