@@ -36,7 +36,7 @@
         <!-- <div class="navbar-btn navbar-nav nav-pills"> -->
           <div class="navbar-nav nav-pills ">
             <!-- <li> -->
-              <button id="nav-btn1" class="nav-link text-dark bg-light ms-2 px-1 my-1 mx-md-2 border border-dark border-success border-opacity-50" href="#">STOCKS</button>
+              <button id="nav-btn1" class="nav-link text-dark bg-light ms-2 px-1 my-1 mx-md-2 border border-info border-success border-opacity-50" href="#">STOCKS</button>
             <!-- </li> -->
             <!-- <li> -->
               <button id="nav-btn2" class="nav-link text-dark bg-light ms-2 px-1 my-1 mx-md-2 border border-dark border-success border-opacity-50" href="#">CURRENCY</button>
@@ -56,16 +56,16 @@
 
         <input id="search" class="form-control align-self-start" type="search" placeholder="Search bar here..." value="" aria-label="Search bar input example" rows="1">
 
-        <div class="card default-card" style=" padding-bottom: 2rem">
-          <div class="card-body">
+        <div class="card default-card" style=" padding-bottom: 2rem;">
+          <div id="default-btns" class="card-body">
             <h5 class="card-title">Default Options</h5>
             <div class="d-grid gap-2">
-            <button href="#" id="def-btn1" class="btn btn-dark rounded-1">AMZN</button>
-            <button href="#" id="def-btn2" class="btn btn-dark rounded-1">AAPL</button>
-            <button href="#" id="def-btn3" class="btn btn-dark rounded-1">GOOGL</button>
-            <button href="#" id="def-btn4" class="btn btn-dark rounded-1">META</button>
-            <button href="#" id="def-btn5" class="btn btn-dark rounded-1">NFLX</button>
-            <button href="#" id="def-btn6" class="btn btn-dark rounded-1">TSLA</button>
+              <button data-value="AMZN" class="btn btn-dark rounded-1">AMZN</button>
+              <button data-value="AAPL" class="btn btn-dark rounded-1">AAPL</button>
+              <button data-value="GOOG" class="btn btn-dark rounded-1">GOOG</button>
+              <button data-value="META" class="btn btn-dark rounded-1">META</button>
+              <button data-value="NFLX" class="btn btn-dark rounded-1">NFLX</button>
+              <button data-value="TSLA" class="btn btn-dark rounded-1">TSLA</button>
             </div>
           </div>
         </div>
@@ -79,7 +79,7 @@
         </div>
 
         <div class="time-btns">
-          <button data-value="3-m" id="3mon-btn" class="btn btn-dark rounded-1" type="button">3m</button>
+          <button data-value="3-m" id="3mon-btn" class="btn btn-dark btn-outline-info rounded-1" type="button">3m</button>
           <button data-value="6-m" id="6mon-btn" class="btn btn-dark rounded-1" type="button">6m</button>
           <button data-value="YTD" id="ytd-btn" class="btn btn-dark rounded-1" type="button">YTD</button>
           <button data-value="1-y" id="1y-btn" class="btn btn-dark rounded-1" type="button">1y</button>
@@ -120,6 +120,6 @@
 
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-  <script src="./assets/js/script.js" type="module"></script>
+  <script src="./assets/script.js" type="module"></script>
 </body>
 </html>
