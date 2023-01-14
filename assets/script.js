@@ -18,9 +18,9 @@ let timeBtns = document.querySelector(".time-btns");
 let searchInput = document.querySelector("#search");
 
 // Event Listeners
-// navbarBtns.addEventListener('click', changePage);
+// navbarBtns.addEventListener('click', handlePage);
 defaultBtns.addEventListener('click', handleDefault);
-timeBtns.addEventListener('click', changeTime);
+timeBtns.addEventListener('click', handleTime);
 searchInput.addEventListener('keypress', handleSearch);
 
 // Load Google Charts
@@ -30,29 +30,29 @@ google.charts.load('current', {'packages':['corechart']});
 
 function handleDefault(e) {
   if (e.target.dataset.value === undefined) return;
-  switch (global.selectedPage) {
-    case 'Stocks':
-      let ticker = e.target.dataset.value;
-      updateChart(ticker);
-      break;
-    case 'Currency':
-      //
-      //
-      break;
-    case 'Government Data':
-      //
-      //
-      break;
-  }
+  let input = e.target.dataset.value;
+  handleData(input);
 }
 
 function handleSearch(e) {
   if (e.key !== 'Enter') return;
   let search = searchInput.value;
+  searchInput.value = '';
+  handleData(search);
+}
+
+function handleData(input) {
+  global.data = getData(input);
+  setTimeout(updateChart, 25);
+  // updateChart();
+}
+
+async function getData(input) {
   switch (global.selectedPage) {
     case 'Stocks':
-      //
-      //
+      // let newData = await getAlphaVantage(input); //Commented out to prevent accidental usage of limited API calls
+      // global.data = parseAlphaVantage(newData);
+      global.data = await importTestData('../testData/testStockDataAmazon.json'); ///////// Temporarily here to use test data
       break;
     case 'Currency':
       //
@@ -63,25 +63,20 @@ function handleSearch(e) {
       //
       break;
   }
-  searchInput.textContent = '';
 }
 
-async function updateChart(ticker) {
-  // let newData = await getAlphaVantage(ticker); //Commented out to prevent accidental usage of limited API calls
-  // global.data = parseAlphaVantage(newData);
-  global.data = await loadTestData();
+function updateChart() {
   selectDataForTimeRange();
-  drawChart(global.data);
+  drawChart();
 }
 
 //////////////////////////////////////////////////////// Time Functions /////////////////////////////////////////////////////////////////////
 
 // Change Selected Time Range
-function changeTime(e) {
+function handleTime(e) {
   if (e.target.dataset.value === undefined) return;
   global.selectedTimePeriod = e.target.dataset.value;
-  selectDataForTimeRange();
-  drawChart(global.data);
+  updateChart();
 }
 
 // Create Subset of Data for Time Range
@@ -119,7 +114,7 @@ function selectDataForTimeRange() {
 //////////////////////////////////////////////////////// Chart Functions /////////////////////////////////////////////////////////////////////
 
 // Generate Chart with Google Charts
-function drawChart(data) {
+function drawChart() {
   let chart = new google.visualization.LineChart(document.getElementById('chart'));
   let displayData = global.data.slice(global.dataInTimePeriodIndex);
   displayData.unshift(['Time', 'Stock Price']);
@@ -233,14 +228,9 @@ async function getPolygon(ticker) {
 
 // Imports
 async function importTestData(url) {
-  let testData = await fetch(url);
-  testData = await testData.json();
+  let testDataPromise = await fetch(url);
+  let testData = await testDataPromise.json();
   return testData;
-}
-async function loadTestData() {
-  let data = await importTestData('../testData/testStockDataAmazon.json');
-  // data2 = await importTestData('./testStockData2.json');
-  return data
 }
 
 ////////////////////////////////////////////////////////////////////////// For Development
