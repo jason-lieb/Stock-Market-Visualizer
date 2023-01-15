@@ -77,7 +77,7 @@ function handleData(input) {
 async function getData(input) {
   switch (global.selectedPage) {
     case 'Stocks':
-      // let newData = await getAlphaVantage(input); //Commented out to prevent accidental usage of limited API calls
+      // let newData = await getAlphaVantageStock(input); //Commented out to prevent accidental usage of limited API calls
       // global.data = parseAlphaVantage(newData);
       global.data = await importTestData('../testData/testStockDataAmazon.json'); ///////// Temporarily here to use test data
       break;
@@ -147,19 +147,15 @@ function drawChart() {
 
 /////////////////////////////////////////////////// Alpha Vantage API Functions /////////////////////////////////////////////////////////////////////
 
-// Access Data from Alpha Vantage API
-async function getAlphaVantage(ticker, outputSize) {
-  // If outputSize is 'compact', will only fetch last 100 days; 'full' responds with 20+ years of data
-  outputSize = outputSize || "full";
+async function getAlphaVantageStock(ticker) {
   let response = await fetch(
-    `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${ticker}&outputsize=${outputSize}&apikey=${alpha_vantage_APIKEY}`
+    `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${ticker}&apikey=${alpha_vantage_APIKEY}`
   );
   let rawData = await response.json();
   return rawData;
 }
 
-// Parse Alpha Vantage Response
-function parseAlphaVantage(rawData) {
+function parseAlphaVantageStock(rawData) {
   let data = rawData["Time Series (Daily)"];
   let parsedData = [];
   let keys = Object.keys(data);
@@ -171,6 +167,32 @@ function parseAlphaVantage(rawData) {
   // Output data in form of array with objects with keys date and closeValue
   return parsedData;
 }
+
+async function getAlphaVantageForex(fromCurrency, toCurrency) {
+  let response = await fetch(
+    `https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=${fromCurrency}&to_symbol=${toCurrency}&apikey=${alpha_vantage_APIKEY}`
+    );
+  let rawData = await response.json();
+  return rawData;
+}
+
+function parseAlphaVantageForex(rawData) {
+  let data = rawData['Time Series FX (Daily)'];
+  console.log(data);
+  let parsedData = [];
+  // let keys = Object.keys(data);
+  // for
+  // return parsedData;
+}
+
+// let currencyTestData = getAlphaVantageForex('USD', 'JPY');
+// setTimeout(parseAlphaVantageForex, 1000, currencyTestData);
+
+
+// Need second search bar for currency
+// Change content of search bar to what input is needed (stock ticker, from currency, to currency, something for gov't data?)
+// Remove search bar for government data
+// Put some sort of title over search bar in addition to selected page looking different?
 
 /////////////////////////////////////////////////////// FRED API Functions /////////////////////////////////////////////////////////////////////
 var root = "https://api.stlouisfed.org/fred/";
