@@ -91,6 +91,7 @@ function selectBtn() {
 // Change Selected Time Range
 function handleTime(e) {
   if (e.target.dataset.value === undefined) return;
+  if (e.target.dataset.value === global.selectedTimePeriod) return;
   global.selectedTimePeriod = e.target.dataset.value;
   updateChart();
 }
