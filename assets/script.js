@@ -36,6 +36,15 @@ function handlePage(e) {
   // selectBtn() // Change Styling of Navbars to unselect old page and select new page
 }
 
+function handleTime(e) {
+  if (e.target.dataset.value === undefined) return;
+  if (e.target.dataset.value === global.selectedTimePeriod) return;
+  global.selectedTimePeriod = e.target.dataset.value;
+  // undoBtnSelection() // Remove styling from currently selected button
+  updateChart();
+  // selectBtn() // Change Styling of Navbars to unselect old page and select new page
+}
+
 function handleDefault(e) {
   if (e.target.dataset.value === undefined) return;
   let input = e.target.dataset.value;
@@ -55,6 +64,16 @@ function handleData(input) {
   // updateChart();
 }
 
+// function undoSelectedBtn() {
+//   //
+// }
+
+// function selectBtn() {
+//   //
+// }
+
+//////////////////////////////////////////////// Data Management Functions /////////////////////////////////////////////////////////////////////
+
 async function getData(input) {
   switch (global.selectedPage) {
     case 'Stocks':
@@ -71,31 +90,6 @@ async function getData(input) {
       //
       break;
   }
-}
-
-function updateChart() {
-  selectDataForTimeRange();
-  drawChart();
-}
-
-function undoSelectedBtn() {
-  //
-}
-
-function selectBtn() {
-  //
-}
-
-//////////////////////////////////////////////////////// Time Functions /////////////////////////////////////////////////////////////////////
-
-// Change Selected Time Range
-function handleTime(e) {
-  if (e.target.dataset.value === undefined) return;
-  if (e.target.dataset.value === global.selectedTimePeriod) return;
-  global.selectedTimePeriod = e.target.dataset.value;
-  // undoBtnSelection() // Remove styling from currently selected button
-  updateChart();
-  // selectBtn() // Change Styling of Navbars to unselect old page and select new page
 }
 
 // Create Subset of Data for Time Range
@@ -131,6 +125,11 @@ function selectDataForTimeRange() {
 }
 
 //////////////////////////////////////////////////////// Chart Functions /////////////////////////////////////////////////////////////////////
+
+function updateChart() {
+  selectDataForTimeRange();
+  drawChart();
+}
 
 // Generate Chart with Google Charts
 function drawChart() {
