@@ -93,7 +93,9 @@ function handleTime(e) {
   if (e.target.dataset.value === undefined) return;
   if (e.target.dataset.value === global.selectedTimePeriod) return;
   global.selectedTimePeriod = e.target.dataset.value;
+  // undoBtnSelection() // Remove styling from currently selected button
   updateChart();
+  // selectBtn() // Change Styling of Navbars to unselect old page and select new page
 }
 
 // Create Subset of Data for Time Range
