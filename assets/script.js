@@ -67,7 +67,7 @@ function handlePage(e) {
   // undoBtnSelection() // Remove styling from currently selected button
   global.selectedPage = e.target.dataset.value;
   // selectBtn() // Change Styling of Navbars to unselect old page and select new page
-  displayDefaultOptionsForPage(e.target);
+  changeUIforPage(e.target);
 }
 
 function handleTime(e) {
@@ -106,22 +106,48 @@ function handleData(input) {
 //   //
 // }
 
-function displayDefaultOptionsForPage(page) {
+function changeUIforPage(page) {
   if (page.dataset.value === "Stocks") {
-    currencyCard.classList.add("d-none");
-    stockCard.classList.remove("d-none");
-    governCard.classList.add("d-none");
+    // Stock
+    show(stockCard);
+    show(searchInput);
+    // Currency
+    hide(currencyCard);
+    hide(toCurrencyInput);
+    hide(fromCurrencyInput);
+    // Government
+    hide(governCard);
   }
   if (page.dataset.value === "Currency") {
-    currencyCard.classList.remove("d-none");
-    stockCard.classList.add("d-none");
-    governCard.classList.add("d-none");
+    // Stock
+    hide(stockCard);
+    hide(searchInput);
+    // Currency
+    show(currencyCard);
+    show(toCurrencyInput);
+    show(fromCurrencyInput);
+    // Government
+    hide(governCard);
   }
   if (page.dataset.value === "Government Data") {
-    currencyCard.classList.add("d-none");
-    stockCard.classList.add("d-none");
-    governCard.classList.remove("d-none");
+    // Stock
+    hide(stockCard);
+    hide(searchInput);
+    // Currency
+    hide(currencyCard);
+    hide(toCurrencyInput);
+    hide(fromCurrencyInput);
+    // Government
+    show(governCard);
   }
+}
+
+function hide(selector) {
+  selector.classList.add("d-none");
+}
+
+function show(selector) {
+  selector.classList.remove("d-none");
 }
 
 //////////////////////////////////////////////// Data Management Functions /////////////////////////////////////////////////////////////////////
