@@ -21,6 +21,9 @@ let stockCard = document.querySelector("#stock-card");
 let governCard = document.querySelector("#governdata-card");
 let currencyCard = document.querySelector("#currency-card");
 
+let toCurrencyInput = document.querySelector("#toCurrency");
+let fromCurrencyInput = document.querySelector("#fromCurrency");
+
 // Event Listeners
 navbarBtns.addEventListener("click", handlePage);
 defaultBtns.addEventListener("click", handleDefault);
