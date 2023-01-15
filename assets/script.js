@@ -14,20 +14,16 @@ let global = {
 // Query Selectors
 let navbarBtns = document.querySelector("#navbar-btns");
 let defaultBtns = document.querySelector("#default-btns");
+let timeBtns = document.querySelector("#time-btns");
+let searchInput = document.querySelector("#search");
+
 let stockCard = document.querySelector("#stock-card");
 let governCard = document.querySelector("#governdata-card");
 let currencyCard = document.querySelector("#currency-card");
-// let searchInput = document.querySelector("#search");
-let timeBtns = document.querySelector("#time-btns");
-let searchInput = document.querySelector("#search");
 
 // Event Listeners
 navbarBtns.addEventListener("click", handlePage);
 defaultBtns.addEventListener("click", handleDefault);
-stockBtn.addEventListener("click", showStock);
-currencyBtn.addEventListener("click", showCurrency);
-governdataBtn.addEventListener("click", showGoverndata);
-// searchInput.addEventListener(, ); // Might not be necessary
 timeBtns.addEventListener("click", handleTime);
 searchInput.addEventListener("keypress", handleSearch);
 
@@ -42,21 +38,7 @@ function handlePage(e) {
   // undoBtnSelection() // Remove styling from currently selected button
   global.selectedPage = e.target.dataset.value;
   // selectBtn() // Change Styling of Navbars to unselect old page and select new page
-  if (e.target.dataset.value === "Stocks") {
-    currencyCard.classList.add("d-none");
-    stockCard.classList.remove("d-none");
-    governCard.classList.add("d-none");
-  }
-  if (e.target.dataset.value === "Currency") {
-    currencyCard.classList.remove("d-none");
-    stockCard.classList.add("d-none");
-    governCard.classList.add("d-none");
-  }
-  if (e.target.dataset.value === "Government Data") {
-    currencyCard.classList.add("d-none");
-    stockCard.classList.add("d-none");
-    governCard.classList.remove("d-none");
-  }
+  displayDefaultOptionsForPage(e.target);
 }
 
 function handleTime(e) {
@@ -95,12 +77,30 @@ function handleData(input) {
 //   //
 // }
 
+function displayDefaultOptionsForPage(page) {
+  if (page.dataset.value === "Stocks") {
+    currencyCard.classList.add("d-none");
+    stockCard.classList.remove("d-none");
+    governCard.classList.add("d-none");
+  }
+  if (page.dataset.value === "Currency") {
+    currencyCard.classList.remove("d-none");
+    stockCard.classList.add("d-none");
+    governCard.classList.add("d-none");
+  }
+  if (page.dataset.value === "Government Data") {
+    currencyCard.classList.add("d-none");
+    stockCard.classList.add("d-none");
+    governCard.classList.remove("d-none");
+  }
+}
+
 //////////////////////////////////////////////// Data Management Functions /////////////////////////////////////////////////////////////////////
 
 async function getData(input) {
   switch (global.selectedPage) {
-    case "Stocks":
-      // let newData = await getAlphaVantage(input); //Commented out to prevent accidental usage of limited API calls
+    case 'Stocks':
+      // let newData = await getAlphaVantageStock(input); //Commented out to prevent accidental usage of limited API calls
       // global.data = parseAlphaVantage(newData);
       global.data = await importTestData(
         "../testData/testStockDataAmazon.json"
@@ -162,7 +162,7 @@ function drawChart() {
     document.getElementById("chart")
   );
   let displayData = global.data.slice(global.dataInTimePeriodIndex);
-  displayData.unshift(["Time", "Stock Price"]);
+  displayData.unshift(["Time", "Stock Price"]); //////////////////////////// Modify header based on incoming data
   let chartData = google.visualization.arrayToDataTable(displayData);
   let options = {
     title: "Stock Price",
@@ -174,20 +174,26 @@ function drawChart() {
 
 /////////////////////////////////////////////////// Alpha Vantage API Functions /////////////////////////////////////////////////////////////////////
 
-// Access Data from Alpha Vantage API
-async function getAlphaVantage(ticker, outputSize) {
-  // If outputSize is 'compact', will only fetch last 100 days; 'full' responds with 20+ years of data
-  outputSize = outputSize || "full";
+async function getAlphaVantageStock(ticker) {
   let response = await fetch(
-    `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${ticker}&outputsize=${outputSize}&apikey=${alpha_vantage_APIKEY}`
+    `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${ticker}&apikey=${alpha_vantage_APIKEY}`
   );
   let rawData = await response.json();
-  return rawData;
+  return { rawData, dataKey: "Time Series (Daily)" };
 }
 
-// Parse Alpha Vantage Response
+async function getAlphaVantageForex(fromCurrency, toCurrency) {
+  let response = await fetch(
+    `https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=${fromCurrency}&to_symbol=${toCurrency}&outputsize=full&apikey=${alpha_vantage_APIKEY}`
+    );
+  let rawData = await response.json();
+  return { rawData, dataKey: "Time Series FX (Daily)" };
+}
+
 function parseAlphaVantage(rawData) {
-  let data = rawData["Time Series (Daily)"];
+  let dataKey = rawData.dataKey;
+  rawData = rawData.rawData;
+  let data = rawData[dataKey];
   let parsedData = [];
   let keys = Object.keys(data);
   for (let i = keys.length - 1; i >= 0; i--) {
