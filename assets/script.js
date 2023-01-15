@@ -14,18 +14,16 @@ let global = {
 // Query Selectors
 let navbarBtns = document.querySelector("#navbar-btns");
 let defaultBtns = document.querySelector("#default-btns");
-// let stockCard = document.querySelector("#stock-card");
-// let governCard = document.querySelector("#governdata-card");
-// let currencyCard = document.querySelector("#currency-card");
 let timeBtns = document.querySelector("#time-btns");
 let searchInput = document.querySelector("#search");
+
+let stockCard = document.querySelector("#stock-card");
+let governCard = document.querySelector("#governdata-card");
+let currencyCard = document.querySelector("#currency-card");
 
 // Event Listeners
 navbarBtns.addEventListener("click", handlePage);
 defaultBtns.addEventListener("click", handleDefault);
-// stockBtn.addEventListener("click", showStock);
-// currencyBtn.addEventListener("click", showCurrency);
-// governdataBtn.addEventListener("click", showGoverndata);
 timeBtns.addEventListener("click", handleTime);
 searchInput.addEventListener("keypress", handleSearch);
 
@@ -40,21 +38,7 @@ function handlePage(e) {
   // undoBtnSelection() // Remove styling from currently selected button
   global.selectedPage = e.target.dataset.value;
   // selectBtn() // Change Styling of Navbars to unselect old page and select new page
-  if (e.target.dataset.value === "Stocks") { /////////////////////////////////////////////// Fix
-    currencyCard.classList.add("d-none");
-    stockCard.classList.remove("d-none");
-    governCard.classList.add("d-none");
-  }
-  if (e.target.dataset.value === "Currency") {
-    currencyCard.classList.remove("d-none");
-    stockCard.classList.add("d-none");
-    governCard.classList.add("d-none");
-  }
-  if (e.target.dataset.value === "Government Data") {
-    currencyCard.classList.add("d-none");
-    stockCard.classList.add("d-none");
-    governCard.classList.remove("d-none");
-  }
+  displayDefaultOptionsForPage(e.target);
 }
 
 function handleTime(e) {
@@ -93,6 +77,24 @@ function handleData(input) {
 //   //
 // }
 
+function displayDefaultOptionsForPage(page) {
+  if (page.dataset.value === "Stocks") {
+    currencyCard.classList.add("d-none");
+    stockCard.classList.remove("d-none");
+    governCard.classList.add("d-none");
+  }
+  if (page.dataset.value === "Currency") {
+    currencyCard.classList.remove("d-none");
+    stockCard.classList.add("d-none");
+    governCard.classList.add("d-none");
+  }
+  if (page.dataset.value === "Government Data") {
+    currencyCard.classList.add("d-none");
+    stockCard.classList.add("d-none");
+    governCard.classList.remove("d-none");
+  }
+}
+
 //////////////////////////////////////////////// Data Management Functions /////////////////////////////////////////////////////////////////////
 
 async function getData(input) {
@@ -100,9 +102,9 @@ async function getData(input) {
     case 'Stocks':
       // let newData = await getAlphaVantageStock(input); //Commented out to prevent accidental usage of limited API calls
       // global.data = parseAlphaVantage(newData);
-      // global.data = await importTestData(
-      //   "../testData/testStockDataAmazon.json"
-      // ); ///////// Temporarily here to use test data
+      global.data = await importTestData(
+        "../testData/testStockDataAmazon.json"
+      ); ///////// Temporarily here to use test data
       break;
     case "Currency":
       //
@@ -160,7 +162,7 @@ function drawChart() {
     document.getElementById("chart")
   );
   let displayData = global.data.slice(global.dataInTimePeriodIndex);
-  displayData.unshift(["Time", "Stock Price"]);
+  displayData.unshift(["Time", "Stock Price"]); //////////////////////////// Modify header based on incoming data
   let chartData = google.visualization.arrayToDataTable(displayData);
   let options = {
     title: "Stock Price",
