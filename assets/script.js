@@ -106,9 +106,12 @@ function handleSelect(e) {
 
 async function handleData(input) {
   clearChart();
-  // add loading symbol
+  addLoadingSymbol();
   await getData(input);
-  // remove loading symbol
+  // for (let i = 0; i < 1000000000; i++) { ////////// For testing loading symbol
+  //   let j = i;
+  // }
+  clearChart();
   updateChart();
 }
 
@@ -165,6 +168,14 @@ function hide(selector) {
 
 function show(selector) {
   selector.classList.remove("d-none");
+}
+
+function addLoadingSymbol() {
+  chartContainer.innerHTML = `
+    <div id="loading" class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    `;
 }
 
 //////////////////////////////////////////////// Data Management Functions /////////////////////////////////////////////////////////////////////
@@ -249,7 +260,7 @@ function drawChart() {
 }
 
 function clearChart() {
-  chartContainer.innerHTML = "";
+  chartContainer.innerHTML = ``;
 }
 
 /////////////////////////////////////////////////// Alpha Vantage API Functions /////////////////////////////////////////////////////////////////////
