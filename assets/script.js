@@ -33,6 +33,32 @@ searchInput.addEventListener("keypress", handleSearch);
 // Load Google Charts
 google.charts.load("current", { packages: ["corechart"] });
 
+// Initialization Function
+async function init() {
+  let currencyOptions = await loadCurrencyOptions();
+  addCurrencyOptions(toCurrencyInput, currencyOptions, 'To');
+  addCurrencyOptions(fromCurrencyInput, currencyOptions, 'From');
+}
+
+init();
+
+async function loadCurrencyOptions() {
+  let response = await fetch('./assets/currencyOptions.json');
+  let currencyOptions = await response.json()
+  let optionHTML = "";
+  for (let i = 0; i < currencyOptions.length; i++) {
+    optionHTML += `<option value="${currencyOptions[i]}">${currencyOptions[i]}</option>`;
+  }
+  return optionHTML
+}
+
+function addCurrencyOptions(parent, currencyOptions, direction) {
+  let optionHTML = `<option>${direction} Currency</option>`;
+  optionHTML += currencyOptions;
+  let select = parent.children[1];
+  select.innerHTML = optionHTML;
+}
+
 ////////////////////////////////////////////////// Functions to Handle Inputs /////////////////////////////////////////////////////////////////////
 
 function handlePage(e) {
