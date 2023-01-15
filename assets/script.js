@@ -23,12 +23,15 @@ let currencyCard = document.querySelector("#currency-card");
 
 let toCurrencyInput = document.querySelector("#toCurrency");
 let fromCurrencyInput = document.querySelector("#fromCurrency");
+let currencyBtn = document.querySelector("#loadCurrency");
 
 // Event Listeners
 navbarBtns.addEventListener("click", handlePage);
 defaultBtns.addEventListener("click", handleDefault);
 timeBtns.addEventListener("click", handleTime);
 searchInput.addEventListener("keypress", handleSearch);
+currencyBtn.addEventListener("click", handleSelect);
+
 
 // Load Google Charts
 google.charts.load("current", { packages: ["corechart"] });
@@ -92,6 +95,10 @@ function handleSearch(e) {
   handleData(search);
 }
 
+function handleSelect(e) {
+  //
+}
+
 function handleData(input) {
   global.data = getData(input);
   setTimeout(updateChart, 25);
@@ -115,6 +122,7 @@ function changeUIforPage(page) {
     hide(currencyCard);
     hide(toCurrencyInput);
     hide(fromCurrencyInput);
+    hide(currencyBtn);
     // Government
     hide(governCard);
   }
@@ -126,6 +134,7 @@ function changeUIforPage(page) {
     show(currencyCard);
     show(toCurrencyInput);
     show(fromCurrencyInput);
+    show(currencyBtn);
     // Government
     hide(governCard);
   }
@@ -137,6 +146,7 @@ function changeUIforPage(page) {
     hide(currencyCard);
     hide(toCurrencyInput);
     hide(fromCurrencyInput);
+    hide(currencyBtn);
     // Government
     show(governCard);
   }
