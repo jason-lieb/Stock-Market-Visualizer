@@ -31,8 +31,9 @@ google.charts.load('current', {'packages':['corechart']});
 function handlePage(e) {
   if (e.target.dataset.value === undefined) return;
   if (e.target.dataset.value === global.selectedPage) return;
-  global.selectedPage = e.target.textContent;
-  // changeSelectedBtn() // Change Styling of Navbars to unselect old page and select new page
+  // undoBtnSelection() // Remove styling from currently selected button
+  global.selectedPage = e.target.dataset.value;
+  // selectBtn() // Change Styling of Navbars to unselect old page and select new page
 }
 
 function handleDefault(e) {
@@ -77,7 +78,11 @@ function updateChart() {
   drawChart();
 }
 
-function changeSelectedBtn() {
+function undoSelectedBtn() {
+  //
+}
+
+function selectBtn() {
   //
 }
 
