@@ -21,6 +21,9 @@ let stockCard = document.querySelector("#stock-card");
 let governCard = document.querySelector("#governdata-card");
 let currencyCard = document.querySelector("#currency-card");
 
+let toCurrencyInput = document.querySelector("#toCurrency");
+let fromCurrencyInput = document.querySelector("#fromCurrency");
+
 // Event Listeners
 navbarBtns.addEventListener("click", handlePage);
 defaultBtns.addEventListener("click", handleDefault);
@@ -30,6 +33,32 @@ searchInput.addEventListener("keypress", handleSearch);
 // Load Google Charts
 google.charts.load("current", { packages: ["corechart"] });
 
+// Initialization Function
+async function init() {
+  let currencyOptions = await loadCurrencyOptions();
+  addCurrencyOptions(toCurrencyInput, currencyOptions, 'To');
+  addCurrencyOptions(fromCurrencyInput, currencyOptions, 'From');
+}
+
+init();
+
+async function loadCurrencyOptions() {
+  let response = await fetch('./assets/currencyOptions.json');
+  let currencyOptions = await response.json()
+  let optionHTML = "";
+  for (let i = 0; i < currencyOptions.length; i++) {
+    optionHTML += `<option value="${currencyOptions[i]}">${currencyOptions[i]}</option>`;
+  }
+  return optionHTML
+}
+
+function addCurrencyOptions(parent, currencyOptions, direction) {
+  let optionHTML = `<option>${direction} Currency</option>`;
+  optionHTML += currencyOptions;
+  let select = parent.children[1];
+  select.innerHTML = optionHTML;
+}
+
 ////////////////////////////////////////////////// Functions to Handle Inputs /////////////////////////////////////////////////////////////////////
 
 function handlePage(e) {
@@ -38,7 +67,7 @@ function handlePage(e) {
   // undoBtnSelection() // Remove styling from currently selected button
   global.selectedPage = e.target.dataset.value;
   // selectBtn() // Change Styling of Navbars to unselect old page and select new page
-  displayDefaultOptionsForPage(e.target);
+  changeUIforPage(e.target);
 }
 
 function handleTime(e) {
@@ -77,22 +106,48 @@ function handleData(input) {
 //   //
 // }
 
-function displayDefaultOptionsForPage(page) {
+function changeUIforPage(page) {
   if (page.dataset.value === "Stocks") {
-    currencyCard.classList.add("d-none");
-    stockCard.classList.remove("d-none");
-    governCard.classList.add("d-none");
+    // Stock
+    show(stockCard);
+    show(searchInput);
+    // Currency
+    hide(currencyCard);
+    hide(toCurrencyInput);
+    hide(fromCurrencyInput);
+    // Government
+    hide(governCard);
   }
   if (page.dataset.value === "Currency") {
-    currencyCard.classList.remove("d-none");
-    stockCard.classList.add("d-none");
-    governCard.classList.add("d-none");
+    // Stock
+    hide(stockCard);
+    hide(searchInput);
+    // Currency
+    show(currencyCard);
+    show(toCurrencyInput);
+    show(fromCurrencyInput);
+    // Government
+    hide(governCard);
   }
   if (page.dataset.value === "Government Data") {
-    currencyCard.classList.add("d-none");
-    stockCard.classList.add("d-none");
-    governCard.classList.remove("d-none");
+    // Stock
+    hide(stockCard);
+    hide(searchInput);
+    // Currency
+    hide(currencyCard);
+    hide(toCurrencyInput);
+    hide(fromCurrencyInput);
+    // Government
+    show(governCard);
   }
+}
+
+function hide(selector) {
+  selector.classList.add("d-none");
+}
+
+function show(selector) {
+  selector.classList.remove("d-none");
 }
 
 //////////////////////////////////////////////// Data Management Functions /////////////////////////////////////////////////////////////////////
