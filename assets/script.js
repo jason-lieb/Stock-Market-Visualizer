@@ -274,7 +274,6 @@ function parseAlphaVantage(rawData) {
     let value = +data[keys[i]]["4. close"];
     parsedData.push([time, value]);
   }
-  // Output data in form of array with objects with keys date and closeValue
   return parsedData;
 }
 
