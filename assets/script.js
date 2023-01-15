@@ -12,28 +12,74 @@ let global = {
 }
 
 // Query Selectors
-// let navbarBtns = document.querySelector(".navbar-btn");
+let navbarBtns = document.querySelector("#navbar-btns");
 let defaultBtns = document.querySelector("#default-btns");
-let timeBtns = document.querySelector(".time-btns");
-// let searchInput = document.querySelector("#search");
+let timeBtns = document.querySelector("#time-btns");
+let searchInput = document.querySelector("#search");
 
 // Event Listeners
-// navbarBtns.addEventListener('click', changePage);
+navbarBtns.addEventListener('click', handlePage);
 defaultBtns.addEventListener('click', handleDefault);
-timeBtns.addEventListener('click', changeTime);
-// searchInput.addEventListener(, ); // Might not be necessary
+timeBtns.addEventListener('click', handleTime);
+searchInput.addEventListener('keypress', handleSearch);
 
 // Load Google Charts
 google.charts.load('current', {'packages':['corechart']});
 
 ////////////////////////////////////////////////// Functions to Handle Inputs /////////////////////////////////////////////////////////////////////
 
+function handlePage(e) {
+  if (e.target.dataset.value === undefined) return;
+  if (e.target.dataset.value === global.selectedPage) return;
+  // undoBtnSelection() // Remove styling from currently selected button
+  global.selectedPage = e.target.dataset.value;
+  // selectBtn() // Change Styling of Navbars to unselect old page and select new page
+}
+
+function handleTime(e) {
+  if (e.target.dataset.value === undefined) return;
+  if (e.target.dataset.value === global.selectedTimePeriod) return;
+  global.selectedTimePeriod = e.target.dataset.value;
+  // undoBtnSelection() // Remove styling from currently selected button
+  updateChart();
+  // selectBtn() // Change Styling of Navbars to unselect old page and select new page
+}
+
 function handleDefault(e) {
   if (e.target.dataset.value === undefined) return;
+  let input = e.target.dataset.value;
+  handleData(input);
+}
+
+function handleSearch(e) {
+  if (e.key !== 'Enter') return;
+  let search = searchInput.value;
+  searchInput.value = '';
+  handleData(search);
+}
+
+function handleData(input) {
+  global.data = getData(input);
+  setTimeout(updateChart, 25);
+  // updateChart();
+}
+
+// function undoSelectedBtn() {
+//   //
+// }
+
+// function selectBtn() {
+//   //
+// }
+
+//////////////////////////////////////////////// Data Management Functions /////////////////////////////////////////////////////////////////////
+
+async function getData(input) {
   switch (global.selectedPage) {
     case 'Stocks':
-      let ticker = e.target.dataset.value;
-      updateChart(ticker);
+      // let newData = await getAlphaVantage(input); //Commented out to prevent accidental usage of limited API calls
+      // global.data = parseAlphaVantage(newData);
+      global.data = await importTestData('../testData/testStockDataAmazon.json'); ///////// Temporarily here to use test data
       break;
     case 'Currency':
       //
@@ -44,24 +90,6 @@ function handleDefault(e) {
       //
       break;
   }
-}
-
-async function updateChart(ticker) {
-  // let newData = await getAlphaVantage(ticker); //Commented out to prevent accidental usage of limited API calls
-  // global.data = parseAlphaVantage(newData);
-  global.data = await loadTestData();
-  selectDataForTimeRange();
-  drawChart(global.data);
-}
-
-//////////////////////////////////////////////////////// Time Functions /////////////////////////////////////////////////////////////////////
-
-// Change Selected Time Range
-function changeTime(e) {
-  if (e.target.dataset.value === undefined) return;
-  global.selectedTimePeriod = e.target.dataset.value;
-  selectDataForTimeRange();
-  drawChart(global.data);
 }
 
 // Create Subset of Data for Time Range
@@ -98,8 +126,13 @@ function selectDataForTimeRange() {
 
 //////////////////////////////////////////////////////// Chart Functions /////////////////////////////////////////////////////////////////////
 
+function updateChart() {
+  selectDataForTimeRange();
+  drawChart();
+}
+
 // Generate Chart with Google Charts
-function drawChart(data) {
+function drawChart() {
   let chart = new google.visualization.LineChart(document.getElementById('chart'));
   let displayData = global.data.slice(global.dataInTimePeriodIndex);
   displayData.unshift(['Time', 'Stock Price']);
@@ -111,7 +144,6 @@ function drawChart(data) {
   };
   chart.draw(chartData, options);
 }
-// Call drawChart(data) to create a chart; make sure that data is loaded or it will throw an error
 
 /////////////////////////////////////////////////// Alpha Vantage API Functions /////////////////////////////////////////////////////////////////////
 
@@ -214,17 +246,10 @@ async function getPolygon(ticker) {
 
 // Imports
 async function importTestData(url) {
-  let testData = await fetch(url);
-  testData = await testData.json();
+  let testDataPromise = await fetch(url);
+  let testData = await testDataPromise.json();
   return testData;
 }
-async function loadTestData() {
-  let data = await importTestData('../testData/testStockDataAmazon.json');
-  // data2 = await importTestData('./testStockData2.json');
-  return data
-}
-
-// getFRED();
 
 ////////////////////////////////////////////////////////////////////////// For Development
 
