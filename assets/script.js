@@ -12,13 +12,13 @@ let global = {
 }
 
 // Query Selectors
-// let navbarBtns = document.querySelector(".navbar-btn");
+let navbarBtns = document.querySelector("#navbar-btns");
 let defaultBtns = document.querySelector("#default-btns");
-let timeBtns = document.querySelector(".time-btns");
+let timeBtns = document.querySelector("#time-btns");
 let searchInput = document.querySelector("#search");
 
 // Event Listeners
-// navbarBtns.addEventListener('click', handlePage);
+navbarBtns.addEventListener('click', handlePage);
 defaultBtns.addEventListener('click', handleDefault);
 timeBtns.addEventListener('click', handleTime);
 searchInput.addEventListener('keypress', handleSearch);
@@ -27,6 +27,13 @@ searchInput.addEventListener('keypress', handleSearch);
 google.charts.load('current', {'packages':['corechart']});
 
 ////////////////////////////////////////////////// Functions to Handle Inputs /////////////////////////////////////////////////////////////////////
+
+function handlePage(e) {
+  if (e.target.dataset.value === undefined) return;
+  if (e.target.dataset.value === global.selectedPage) return;
+  global.selectedPage = e.target.textContent;
+  // changeSelectedBtn() // Change Styling of Navbars to unselect old page and select new page
+}
 
 function handleDefault(e) {
   if (e.target.dataset.value === undefined) return;
@@ -68,6 +75,10 @@ async function getData(input) {
 function updateChart() {
   selectDataForTimeRange();
   drawChart();
+}
+
+function changeSelectedBtn() {
+  //
 }
 
 //////////////////////////////////////////////////////// Time Functions /////////////////////////////////////////////////////////////////////
