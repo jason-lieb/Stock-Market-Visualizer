@@ -7,24 +7,32 @@ let fred_APIKEY = "ce4ba2fd678f9dfc7903324adee68449";
 let global = {
   data: undefined,
   dataInTimePeriodIndex: 0,
-  selectedTimePeriod: '3-m',
-  selectedPage: 'Stocks'
-}
+  selectedTimePeriod: "3-m",
+  selectedPage: "Stocks",
+};
 
 // Query Selectors
 let navbarBtns = document.querySelector("#navbar-btns");
 let defaultBtns = document.querySelector("#default-btns");
+let stockCard = document.querySelector("#stock-card");
+let governCard = document.querySelector("#governdata-card");
+let currencyCard = document.querySelector("#currency-card");
+// let searchInput = document.querySelector("#search");
 let timeBtns = document.querySelector("#time-btns");
 let searchInput = document.querySelector("#search");
 
 // Event Listeners
-navbarBtns.addEventListener('click', handlePage);
-defaultBtns.addEventListener('click', handleDefault);
-timeBtns.addEventListener('click', handleTime);
-searchInput.addEventListener('keypress', handleSearch);
+navbarBtns.addEventListener("click", handlePage);
+defaultBtns.addEventListener("click", handleDefault);
+stockBtn.addEventListener("click", showStock);
+currencyBtn.addEventListener("click", showCurrency);
+governdataBtn.addEventListener("click", showGoverndata);
+// searchInput.addEventListener(, ); // Might not be necessary
+timeBtns.addEventListener("click", handleTime);
+searchInput.addEventListener("keypress", handleSearch);
 
 // Load Google Charts
-google.charts.load('current', {'packages':['corechart']});
+google.charts.load("current", { packages: ["corechart"] });
 
 ////////////////////////////////////////////////// Functions to Handle Inputs /////////////////////////////////////////////////////////////////////
 
@@ -34,6 +42,21 @@ function handlePage(e) {
   // undoBtnSelection() // Remove styling from currently selected button
   global.selectedPage = e.target.dataset.value;
   // selectBtn() // Change Styling of Navbars to unselect old page and select new page
+  if (e.target.dataset.value === "Stocks") {
+    currencyCard.classList.add("d-none");
+    stockCard.classList.remove("d-none");
+    governCard.classList.add("d-none");
+  }
+  if (e.target.dataset.value === "Currency") {
+    currencyCard.classList.remove("d-none");
+    stockCard.classList.add("d-none");
+    governCard.classList.add("d-none");
+  }
+  if (e.target.dataset.value === "Government Data") {
+    currencyCard.classList.add("d-none");
+    stockCard.classList.add("d-none");
+    governCard.classList.remove("d-none");
+  }
 }
 
 function handleTime(e) {
@@ -52,9 +75,9 @@ function handleDefault(e) {
 }
 
 function handleSearch(e) {
-  if (e.key !== 'Enter') return;
+  if (e.key !== "Enter") return;
   let search = searchInput.value;
-  searchInput.value = '';
+  searchInput.value = "";
   handleData(search);
 }
 
@@ -76,16 +99,18 @@ function handleData(input) {
 
 async function getData(input) {
   switch (global.selectedPage) {
-    case 'Stocks':
+    case "Stocks":
       // let newData = await getAlphaVantage(input); //Commented out to prevent accidental usage of limited API calls
       // global.data = parseAlphaVantage(newData);
-      global.data = await importTestData('../testData/testStockDataAmazon.json'); ///////// Temporarily here to use test data
+      global.data = await importTestData(
+        "../testData/testStockDataAmazon.json"
+      ); ///////// Temporarily here to use test data
       break;
-    case 'Currency':
+    case "Currency":
       //
       //
       break;
-    case 'Government Data':
+    case "Government Data":
       //
       //
       break;
@@ -99,12 +124,12 @@ function selectDataForTimeRange() {
   let month = new Date().getMonth() + 1;
   let day = new Date().getDate();
   // Subtract out time period
-  if (global.selectedTimePeriod.split('-')[1] === 'y') {
-    year -= global.selectedTimePeriod.split('-')[0];
-  } else if (global.selectedTimePeriod.split('-')[1] === 'm') {
-    if (global.selectedTimePeriod.split('-')[0] >= month) {
+  if (global.selectedTimePeriod.split("-")[1] === "y") {
+    year -= global.selectedTimePeriod.split("-")[0];
+  } else if (global.selectedTimePeriod.split("-")[1] === "m") {
+    if (global.selectedTimePeriod.split("-")[0] >= month) {
       year -= 1;
-      month += 12 - global.selectedTimePeriod.split('-')[0];
+      month += 12 - global.selectedTimePeriod.split("-")[0];
     }
   } else {
     month = 1;
@@ -133,14 +158,16 @@ function updateChart() {
 
 // Generate Chart with Google Charts
 function drawChart() {
-  let chart = new google.visualization.LineChart(document.getElementById('chart'));
+  let chart = new google.visualization.LineChart(
+    document.getElementById("chart")
+  );
   let displayData = global.data.slice(global.dataInTimePeriodIndex);
-  displayData.unshift(['Time', 'Stock Price']);
+  displayData.unshift(["Time", "Stock Price"]);
   let chartData = google.visualization.arrayToDataTable(displayData);
   let options = {
-    title: 'Stock Price',
-    curveType: 'function',
-    legend: 'none'
+    title: "Stock Price",
+    curveType: "function",
+    legend: "none",
   };
   chart.draw(chartData, options);
 }
@@ -230,18 +257,6 @@ async function getPolygon(ticker) {
   return data;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 ///////////////////////////////////////////////////////////////////////// For Development
 
 // Imports
@@ -255,17 +270,7 @@ async function importTestData(url) {
 
 
 
-
-
-
-
-
-
 // Currently unused query selectors
-
-// let stocksBtn = document.querySelector("#nav-btn1");
-// let currencyBtn = document.querySelector("#nav-btn2");
-// let govBtn = document.querySelector("#nav-btn3");
 
 // let defBtn1 = document.querySelector("#def-btn1");
 // let defBtn2 = document.querySelector("#def-btn2");
@@ -281,6 +286,7 @@ async function importTestData(url) {
 // let threeYBtn = document.querySelector("#3y-btn");
 // let tenYBtn = document.querySelector("#10y-btn");
 
+/* sorry I changed footer section name. Lantao */
 // let footerBtns = document.querySelector(".footer-btns");
 // let footerBtn1 = document.querySelector("#footer-btn1");
 // let footerBtn2 = document.querySelector("#footer-btn2");
