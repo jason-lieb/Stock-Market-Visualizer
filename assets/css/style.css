@@ -1,17 +1,8 @@
+body {
+  background: #111;
+}
 nav {
   background: #555;
-}
-
-body {
-  background: #333;
-}
-
-#footer {
-  background: #1F1B24;
-}
-
-.default-card {
-  background: #999;
 }
 
 #nav-btn2, #nav-btn3 {
@@ -20,6 +11,18 @@ body {
 
 #nav-btn1 {
 background: #777;
+}
+
+.default-card {
+  background: #999;
+}
+
+#three-mon-btn {
+    background: #777;
+}
+
+.card-body2 {
+    background: #555;
 }
 
 
