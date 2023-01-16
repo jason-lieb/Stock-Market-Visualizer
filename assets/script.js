@@ -2,6 +2,7 @@
 let polygon_APIKEY = "TTNbgrcWIJyP1tavyIdjxgTywo6ixljm";
 let alpha_vantage_APIKEY = "0BGSBFE3M96OL784";
 let fred_APIKEY = "ce4ba2fd678f9dfc7903324adee68449";
+let finnhub_APIKEY = "cf2ap1aad3idqn4q4nlgcf2ap1aad3idqn4q4nm0";
 
 // Global Variables
 let global = {
@@ -341,6 +342,50 @@ function parseFREDdata(rawData) {
   console.log(parsedData);
   return parsedData;
 }
+
+//////////////////////////////////////////////////////// Finnhub API Functions /////////////////////////////////////////////////////////////////////
+
+async function getFinnhub(ticker) {
+  let response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${finnhub_APIKEY}`);
+  let data = await response.json();
+  return data;
+}
+
+async function getContinuousStocks() {
+  let continuousStocks = [
+    'AAPL',
+    'MSFT',
+    'AMZN',
+    'TSLA',
+    'GOOGL',
+    'GOOG',
+    'BRK.B',
+    'UNH',
+    'JNJ',
+    'XOM',
+    'JPM',
+    'META',
+    'V',
+    'PG',
+    'NVDA',
+    'HD',
+    'CVX',
+    'LLY',
+    'MA',
+    'ABBV',
+    'PFE',
+    'MRK',
+    'PEP',
+    'BAC',
+    'KO'
+  ];
+  for (let i = 0; i < continuousStocks.length; i++) {
+    let data = await getFinnhub(continuousStocks[i]);
+    console.log([i], data);
+  }
+  setTimeout(getContinuousStocks, 60000);
+}
+// getContinuousStocks();
 
 //////////////////////////////////////////////////////// Polygon API Functions /////////////////////////////////////////////////////////////////////
 
