@@ -23,12 +23,15 @@ let currencyCard = document.querySelector("#currency-card");
 
 let toCurrencyInput = document.querySelector("#toCurrency");
 let fromCurrencyInput = document.querySelector("#fromCurrency");
+let currencyBtn = document.querySelector("#loadCurrency");
 
 // Event Listeners
 navbarBtns.addEventListener("click", handlePage);
 defaultBtns.addEventListener("click", handleDefault);
 timeBtns.addEventListener("click", handleTime);
 searchInput.addEventListener("keypress", handleSearch);
+currencyBtn.addEventListener("click", handleSelect);
+
 
 // Load Google Charts
 google.charts.load("current", { packages: ["corechart"] });
@@ -92,6 +95,13 @@ function handleSearch(e) {
   handleData(search);
 }
 
+function handleSelect(e) {
+  let fromCurrency = e.target.previousElementSibling.children[1];
+  let toCurrency = e.target.previousElementSibling.previousElementSibling.children[1];
+  if (fromCurrency.value === 'From Currency' || toCurrency.value === 'To Currency') return; // Add better error handling
+  handleData(`${toCurrency.value}/${fromCurrency.value}`);
+}
+
 function handleData(input) {
   global.data = getData(input);
   setTimeout(updateChart, 25);
@@ -115,6 +125,7 @@ function changeUIforPage(page) {
     hide(currencyCard);
     hide(toCurrencyInput);
     hide(fromCurrencyInput);
+    hide(currencyBtn);
     // Government
     hide(governCard);
   }
@@ -126,6 +137,7 @@ function changeUIforPage(page) {
     show(currencyCard);
     show(toCurrencyInput);
     show(fromCurrencyInput);
+    show(currencyBtn);
     // Government
     hide(governCard);
   }
@@ -137,6 +149,7 @@ function changeUIforPage(page) {
     hide(currencyCard);
     hide(toCurrencyInput);
     hide(fromCurrencyInput);
+    hide(currencyBtn);
     // Government
     show(governCard);
   }
@@ -153,17 +166,23 @@ function show(selector) {
 //////////////////////////////////////////////// Data Management Functions /////////////////////////////////////////////////////////////////////
 
 async function getData(input) {
+  let newData;
   switch (global.selectedPage) {
     case 'Stocks':
-      // let newData = await getAlphaVantageStock(input); //Commented out to prevent accidental usage of limited API calls
+      // newData = await getAlphaVantageStock(input); //Commented out to prevent accidental usage of limited API calls
       // global.data = parseAlphaVantage(newData);
       global.data = await importTestData(
         "../testData/testStockDataAmazon.json"
       ); ///////// Temporarily here to use test data
       break;
     case "Currency":
-      //
-      //
+      let toCurrency = input.split('/')[0];
+      let fromCurrency = input.split('/')[1];
+      // newData = await getAlphaVantageForex(toCurrency, fromCurrency);
+      // global.data = parseAlphaVantage(newData);
+      // global.data = await importTestData(
+      //   "../testData/testCurrencyData.json"
+      // );
       break;
     case "Government Data":
       //
@@ -237,7 +256,7 @@ async function getAlphaVantageStock(ticker) {
   return { rawData, dataKey: "Time Series (Daily)" };
 }
 
-async function getAlphaVantageForex(fromCurrency, toCurrency) {
+async function getAlphaVantageForex(toCurrency, fromCurrency) {
   let response = await fetch(
     `https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=${fromCurrency}&to_symbol=${toCurrency}&outputsize=full&apikey=${alpha_vantage_APIKEY}`
     );
