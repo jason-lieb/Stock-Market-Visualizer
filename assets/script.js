@@ -7,61 +7,169 @@ let fred_APIKEY = "ce4ba2fd678f9dfc7903324adee68449";
 let global = {
   data: undefined,
   dataInTimePeriodIndex: 0,
-  selectedTimePeriod: '3-m',
-  selectedPage: 'Stocks'
-}
+  selectedTimePeriod: "3-m",
+  selectedPage: "Stocks",
+};
 
 // Query Selectors
-// let navbarBtns = document.querySelector(".navbar-btn");
+let navbarBtns = document.querySelector("#navbar-btns");
 let defaultBtns = document.querySelector("#default-btns");
-let timeBtns = document.querySelector(".time-btns");
-// let searchInput = document.querySelector("#search");
+let timeBtns = document.querySelector("#time-btns");
+let searchInput = document.querySelector("#search");
+
+let stockCard = document.querySelector("#stock-card");
+let governCard = document.querySelector("#governdata-card");
+let currencyCard = document.querySelector("#currency-card");
+
+let toCurrencyInput = document.querySelector("#toCurrency");
+let fromCurrencyInput = document.querySelector("#fromCurrency");
 
 // Event Listeners
-// navbarBtns.addEventListener('click', changePage);
-defaultBtns.addEventListener('click', handleDefault);
-timeBtns.addEventListener('click', changeTime);
-// searchInput.addEventListener(, ); // Might not be necessary
+navbarBtns.addEventListener("click", handlePage);
+defaultBtns.addEventListener("click", handleDefault);
+timeBtns.addEventListener("click", handleTime);
+searchInput.addEventListener("keypress", handleSearch);
 
 // Load Google Charts
-google.charts.load('current', {'packages':['corechart']});
+google.charts.load("current", { packages: ["corechart"] });
+
+// Initialization Function
+async function init() {
+  let currencyOptions = await loadCurrencyOptions();
+  addCurrencyOptions(toCurrencyInput, currencyOptions, 'To');
+  addCurrencyOptions(fromCurrencyInput, currencyOptions, 'From');
+}
+
+init();
+
+async function loadCurrencyOptions() {
+  let response = await fetch('./assets/currencyOptions.json');
+  let currencyOptions = await response.json()
+  let optionHTML = "";
+  for (let i = 0; i < currencyOptions.length; i++) {
+    optionHTML += `<option value="${currencyOptions[i]}">${currencyOptions[i]}</option>`;
+  }
+  return optionHTML
+}
+
+function addCurrencyOptions(parent, currencyOptions, direction) {
+  let optionHTML = `<option>${direction} Currency</option>`;
+  optionHTML += currencyOptions;
+  let select = parent.children[1];
+  select.innerHTML = optionHTML;
+}
 
 ////////////////////////////////////////////////// Functions to Handle Inputs /////////////////////////////////////////////////////////////////////
 
+function handlePage(e) {
+  if (e.target.dataset.value === undefined) return;
+  if (e.target.dataset.value === global.selectedPage) return;
+  // undoBtnSelection() // Remove styling from currently selected button
+  global.selectedPage = e.target.dataset.value;
+  // selectBtn() // Change Styling of Navbars to unselect old page and select new page
+  changeUIforPage(e.target);
+}
+
+function handleTime(e) {
+  if (e.target.dataset.value === undefined) return;
+  if (e.target.dataset.value === global.selectedTimePeriod) return;
+  global.selectedTimePeriod = e.target.dataset.value;
+  // undoBtnSelection() // Remove styling from currently selected button
+  updateChart();
+  // selectBtn() // Change Styling of Navbars to unselect old page and select new page
+}
+
 function handleDefault(e) {
   if (e.target.dataset.value === undefined) return;
+  let input = e.target.dataset.value;
+  handleData(input);
+}
+
+function handleSearch(e) {
+  if (e.key !== "Enter") return;
+  let search = searchInput.value;
+  searchInput.value = "";
+  handleData(search);
+}
+
+function handleData(input) {
+  global.data = getData(input);
+  setTimeout(updateChart, 25);
+  // updateChart();
+}
+
+// function undoSelectedBtn() {
+//   //
+// }
+
+// function selectBtn() {
+//   //
+// }
+
+function changeUIforPage(page) {
+  if (page.dataset.value === "Stocks") {
+    // Stock
+    show(stockCard);
+    show(searchInput);
+    // Currency
+    hide(currencyCard);
+    hide(toCurrencyInput);
+    hide(fromCurrencyInput);
+    // Government
+    hide(governCard);
+  }
+  if (page.dataset.value === "Currency") {
+    // Stock
+    hide(stockCard);
+    hide(searchInput);
+    // Currency
+    show(currencyCard);
+    show(toCurrencyInput);
+    show(fromCurrencyInput);
+    // Government
+    hide(governCard);
+  }
+  if (page.dataset.value === "Government Data") {
+    // Stock
+    hide(stockCard);
+    hide(searchInput);
+    // Currency
+    hide(currencyCard);
+    hide(toCurrencyInput);
+    hide(fromCurrencyInput);
+    // Government
+    show(governCard);
+  }
+}
+
+function hide(selector) {
+  selector.classList.add("d-none");
+}
+
+function show(selector) {
+  selector.classList.remove("d-none");
+}
+
+//////////////////////////////////////////////// Data Management Functions /////////////////////////////////////////////////////////////////////
+
+async function getData(input) {
   switch (global.selectedPage) {
     case 'Stocks':
-      let ticker = e.target.dataset.value;
-      updateChart(ticker);
+      // let newData = await getAlphaVantageStock(input); //Commented out to prevent accidental usage of limited API calls
+      // global.data = parseAlphaVantage(newData);
+      global.data = await importTestData(
+        "../testData/testStockDataAmazon.json"
+      ); ///////// Temporarily here to use test data
       break;
-    case 'Currency':
+    case "Currency":
       //
       //
       break;
-    case 'Government Data':
+    case "Government Data":
       //
       //
       break;
   }
-}
-
-async function updateChart(ticker) {
-  // let newData = await getAlphaVantage(ticker); //Commented out to prevent accidental usage of limited API calls
-  // global.data = parseAlphaVantage(newData);
-  global.data = await loadTestData();
-  selectDataForTimeRange();
-  drawChart(global.data);
-}
-
-//////////////////////////////////////////////////////// Time Functions /////////////////////////////////////////////////////////////////////
-
-// Change Selected Time Range
-function changeTime(e) {
-  if (e.target.dataset.value === undefined) return;
-  global.selectedTimePeriod = e.target.dataset.value;
-  selectDataForTimeRange();
-  drawChart(global.data);
 }
 
 // Create Subset of Data for Time Range
@@ -71,12 +179,12 @@ function selectDataForTimeRange() {
   let month = new Date().getMonth() + 1;
   let day = new Date().getDate();
   // Subtract out time period
-  if (global.selectedTimePeriod.split('-')[1] === 'y') {
-    year -= global.selectedTimePeriod.split('-')[0];
-  } else if (global.selectedTimePeriod.split('-')[1] === 'm') {
-    if (global.selectedTimePeriod.split('-')[0] >= month) {
+  if (global.selectedTimePeriod.split("-")[1] === "y") {
+    year -= global.selectedTimePeriod.split("-")[0];
+  } else if (global.selectedTimePeriod.split("-")[1] === "m") {
+    if (global.selectedTimePeriod.split("-")[0] >= month) {
       year -= 1;
-      month += 12 - global.selectedTimePeriod.split('-')[0];
+      month += 12 - global.selectedTimePeriod.split("-")[0];
     }
   } else {
     month = 1;
@@ -98,37 +206,49 @@ function selectDataForTimeRange() {
 
 //////////////////////////////////////////////////////// Chart Functions /////////////////////////////////////////////////////////////////////
 
+function updateChart() {
+  selectDataForTimeRange();
+  drawChart();
+}
+
 // Generate Chart with Google Charts
-function drawChart(data) {
-  let chart = new google.visualization.LineChart(document.getElementById('chart'));
+function drawChart() {
+  let chart = new google.visualization.LineChart(
+    document.getElementById("chart")
+  );
   let displayData = global.data.slice(global.dataInTimePeriodIndex);
-  displayData.unshift(['Time', 'Stock Price']);
+  displayData.unshift(["Time", "Stock Price"]); //////////////////////////// Modify header based on incoming data
   let chartData = google.visualization.arrayToDataTable(displayData);
   let options = {
-    title: 'Stock Price',
-    curveType: 'function',
-    legend: 'none'
+    title: "Stock Price",
+    curveType: "function",
+    legend: "none",
   };
   chart.draw(chartData, options);
 }
-// Call drawChart(data) to create a chart; make sure that data is loaded or it will throw an error
 
 /////////////////////////////////////////////////// Alpha Vantage API Functions /////////////////////////////////////////////////////////////////////
 
-// Access Data from Alpha Vantage API
-async function getAlphaVantage(ticker, outputSize) {
-  // If outputSize is 'compact', will only fetch last 100 days; 'full' responds with 20+ years of data
-  outputSize = outputSize || "full";
+async function getAlphaVantageStock(ticker) {
   let response = await fetch(
-    `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${ticker}&outputsize=${outputSize}&apikey=${alpha_vantage_APIKEY}`
+    `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${ticker}&apikey=${alpha_vantage_APIKEY}`
   );
   let rawData = await response.json();
-  return rawData;
+  return { rawData, dataKey: "Time Series (Daily)" };
 }
 
-// Parse Alpha Vantage Response
+async function getAlphaVantageForex(fromCurrency, toCurrency) {
+  let response = await fetch(
+    `https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=${fromCurrency}&to_symbol=${toCurrency}&outputsize=full&apikey=${alpha_vantage_APIKEY}`
+    );
+  let rawData = await response.json();
+  return { rawData, dataKey: "Time Series FX (Daily)" };
+}
+
 function parseAlphaVantage(rawData) {
-  let data = rawData["Time Series (Daily)"];
+  let dataKey = rawData.dataKey;
+  rawData = rawData.rawData;
+  let data = rawData[dataKey];
   let parsedData = [];
   let keys = Object.keys(data);
   for (let i = keys.length - 1; i >= 0; i--) {
@@ -198,49 +318,20 @@ async function getPolygon(ticker) {
   return data;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 ///////////////////////////////////////////////////////////////////////// For Development
 
 // Imports
 async function importTestData(url) {
-  let testData = await fetch(url);
-  testData = await testData.json();
+  let testDataPromise = await fetch(url);
+  let testData = await testDataPromise.json();
   return testData;
 }
-async function loadTestData() {
-  let data = await importTestData('../testData/testStockDataAmazon.json');
-  // data2 = await importTestData('./testStockData2.json');
-  return data
-}
-
-// getFRED();
 
 ////////////////////////////////////////////////////////////////////////// For Development
 
 
 
-
-
-
-
-
-
 // Currently unused query selectors
-
-// let stocksBtn = document.querySelector("#nav-btn1");
-// let currencyBtn = document.querySelector("#nav-btn2");
-// let govBtn = document.querySelector("#nav-btn3");
 
 // let defBtn1 = document.querySelector("#def-btn1");
 // let defBtn2 = document.querySelector("#def-btn2");
@@ -256,6 +347,7 @@ async function loadTestData() {
 // let threeYBtn = document.querySelector("#3y-btn");
 // let tenYBtn = document.querySelector("#10y-btn");
 
+/* sorry I changed footer section name. Lantao */
 // let footerBtns = document.querySelector(".footer-btns");
 // let footerBtn1 = document.querySelector("#footer-btn1");
 // let footerBtn2 = document.querySelector("#footer-btn2");
