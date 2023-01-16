@@ -1,5 +1,5 @@
 body {
-  background: #111;
+  background: #333;
 }
 nav {
   background: #555;
@@ -15,10 +15,6 @@ background: #777;
 
 .default-card {
   background: #999;
-}
-
-#three-mon-btn {
-    background: #777;
 }
 
 .card-body2 {
