@@ -12,6 +12,8 @@ let global = {
 };
 
 // Query Selectors
+let chartContainer = document.querySelector("#chart");
+
 let navbarBtns = document.querySelector("#navbar-btns");
 let defaultBtns = document.querySelector("#default-btns");
 let timeBtns = document.querySelector("#time-btns");
@@ -78,7 +80,7 @@ function handleTime(e) {
   if (e.target.dataset.value === global.selectedTimePeriod) return;
   global.selectedTimePeriod = e.target.dataset.value;
   // undoBtnSelection() // Remove styling from currently selected button
-  updateChart();
+  if (global.data !== undefined) updateChart();
   // selectBtn() // Change Styling of Navbars to unselect old page and select new page
 }
 
@@ -103,7 +105,13 @@ function handleSelect(e) {
 }
 
 async function handleData(input) {
+  clearChart();
+  addLoadingSymbol();
   await getData(input);
+  // for (let i = 0; i < 1000000000; i++) { ////////// For testing loading symbol
+  //   let j = i;
+  // }
+  clearChart();
   updateChart();
 }
 
@@ -160,6 +168,14 @@ function hide(selector) {
 
 function show(selector) {
   selector.classList.remove("d-none");
+}
+
+function addLoadingSymbol() {
+  chartContainer.innerHTML = `
+    <div id="loading" class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    `;
 }
 
 //////////////////////////////////////////////// Data Management Functions /////////////////////////////////////////////////////////////////////
@@ -231,9 +247,7 @@ function updateChart() {
 
 // Generate Chart with Google Charts
 function drawChart() {
-  let chart = new google.visualization.LineChart(
-    document.getElementById("chart")
-  );
+  let chart = new google.visualization.LineChart(chartContainer);
   let displayData = global.data.slice(global.dataInTimePeriodIndex);
   displayData.unshift(["Time", "Stock Price"]); //////////////////////////// Modify header based on incoming data
   let chartData = google.visualization.arrayToDataTable(displayData);
@@ -243,6 +257,10 @@ function drawChart() {
     legend: "none",
   };
   chart.draw(chartData, options);
+}
+
+function clearChart() {
+  chartContainer.innerHTML = ``;
 }
 
 /////////////////////////////////////////////////// Alpha Vantage API Functions /////////////////////////////////////////////////////////////////////
