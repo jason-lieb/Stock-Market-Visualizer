@@ -1,11 +1,38 @@
 nav {
-    background: #1F1B24;
+  background: #999;
 }
 
 body {
-    background: #343434;
+  background: #333;
 }
 
-footer {
-    background: #1F1B24;
+#footer {
+  background: #1F1B24;
+}
+
+.default-card {
+  background: #999;
+}
+
+.navbar-btn2 {
+  background: #999;
+}
+
+
+
+@media screen and (max-width: 768px) {
+  button.navbar-toggler {
+    position: absolute;
+    top: 11px;
+    right: 5px;
+  }
+  nav.navbar {
+    justify-content: center !important;
+  }
+}
+@media screen and (min-width: 576px){
+  #search_default {
+    max-width: 300px;
+    min-width: 200px;
+  }
 }
