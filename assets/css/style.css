@@ -23,6 +23,13 @@ background: #777;
 }
 
 
+:root {
+  --dark: #13293d;
+  --light: #fff;
+  --navlink-color: #b9c6ae;
+  --light-blue: lightblue;
+  --h1: teal;
+}
 @media screen and (max-width: 768px) {
   button.navbar-toggler {
     position: absolute;
@@ -32,10 +39,125 @@ background: #777;
   nav.navbar {
     justify-content: center !important;
   }
+  a:link { 
+    text-decoration: none; 
+    color: black;
+    font-weight: bold;
+  }
+  a:visited { 
+    text-decoration: none; 
+    color: black;
+    font-weight: bold;
+  }
+  a:hover { 
+    text-decoration: none; 
+    color: grey;
+    font-weight: bold;
+  }
+  a:active { 
+    text-decoration: none; 
+    color: red;
+    font-weight: bold;
+  }
 }
 @media screen and (min-width: 576px){
   #search_default {
     max-width: 300px;
     min-width: 200px;
+  }
+  a:link { 
+    text-decoration: none; 
+    color: black;
+    font-weight: bold;
+  }
+  a:visited { 
+    text-decoration: none; 
+    color: black;
+    font-weight: bold;
+  }
+  a:hover { 
+    text-decoration: none; 
+    color: grey;
+    font-weight: bold;
+  }
+  a:active { 
+    text-decoration: none; 
+    color: red;
+    font-weight: bold;
+  }
+  footer {
+    position: absolute;
+    border-left: 2000px;
+  }
+  hr.name {
+    border-top: 3px solid black;
+    opacity: 100%;
+  }
+  hr.separate {
+    border-top: 3px solid grey;
+    opacity: 100%;
+  }
+  ul {
+    list-style-type: square;
+    font-size: larger;
+    font-weight: bold;
+  }
+  .other {
+    flex: 1;
+    position: relative;
+    background-color: var(--light);
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    left: 700px;
+    top: 100px;
+    opacity: .5;
+    width: 650px;
+    height: 300px;
+    /* justify-content: center; */
+  }
+  .link {
+    /* border-style: solid; */
+    border: 5px solid var(--light-blue);
+    /* border-width: 1px; */
+    border-radius: 50px;
+    padding: 10px;
+    flex: 0 0 400px;
+    display: flex;
+    flex-wrap: wrap;
+    /* background-image: url(../images/iStock-1224500457.jpg);
+    background-repeat: no-repeat;
+    background-size: cover; */
+    margin: 25px;
+  }
+  .other.link header
+  ,.other2.link header {
+    position: absolute;
+    justify-content: left;
+    align-items: flex-start;
+    padding: 20px 20px 20px 30px;
+    background-color: var(--light-blue);
+    color: black;
+    top: 180px;
+    left: -5px;
+    font-weight: bolder;
+    font-size: 20px;
+  }
+  section.link:hover {
+    opacity: 1;
+  }
+  section.link {
+    cursor: pointer;
+  }
+  #img4 {
+    background-image: url(./images/techSolutions.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  #img2 {
+      background-image: url(./images/problemSolving.jpg);
+      background-repeat: no-repeat;
+      background-size: cover;
   }
 }
