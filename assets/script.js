@@ -28,6 +28,8 @@ let toCurrencyInput = document.querySelector("#toCurrency");
 let fromCurrencyInput = document.querySelector("#fromCurrency");
 let currencyBtn = document.querySelector("#loadCurrency");
 
+let scrollingData = document.querySelector('#scrolling');
+
 // Event Listeners
 navbarBtns.addEventListener("click", handlePage);
 defaultBtns.addEventListener("click", handleDefault);
@@ -44,6 +46,7 @@ async function init() {
   let currencyOptions = await loadCurrencyOptions();
   addCurrencyOptions(toCurrencyInput, currencyOptions, 'To');
   addCurrencyOptions(fromCurrencyInput, currencyOptions, 'From');
+  // getContinuousStocks();
 }
 
 init();
@@ -351,6 +354,14 @@ async function getFinnhub(ticker) {
   return data;
 }
 
+function parseFinnhub(ticker, data) {
+  let parsedData = {
+    ticker,
+    incPercent: Math.round(data.dp * 100) / 100,
+  }
+  return parsedData;
+}
+
 async function getContinuousStocks() {
   let continuousStocks = [
     'AAPL',
@@ -379,13 +390,29 @@ async function getContinuousStocks() {
     'BAC',
     'KO'
   ];
+  let continuousData = [];
   for (let i = 0; i < continuousStocks.length; i++) {
     let data = await getFinnhub(continuousStocks[i]);
-    console.log([i], data);
+    let parsedData = parseFinnhub(continuousStocks[i], data);
+    continuousData.push(parsedData);
   }
+  createContinuousStocks(continuousData);
   setTimeout(getContinuousStocks, 60000);
 }
-// getContinuousStocks();
+
+function createContinuousStocks(continuousData) {
+  scrollingData.innerHTML = '';
+  for(let i = 0; i < continuousData.length; i++) {
+    let stock = continuousData[i];
+    let chevron = stock.incPercent > 0 ? 'fa-chevron-up' : 'fa-chevron-down';
+    let color = stock.incPercent > 0 ? 'text-green' : 'text-red';
+    scrollingData.innerHTML += `
+      <div>${stock.ticker} <span class="${color}"><i class="fas ${chevron}"></i> ${stock.incPercent}%</span></div>
+    `
+  }
+}
+
+
 
 //////////////////////////////////////////////////////// Polygon API Functions /////////////////////////////////////////////////////////////////////
 
@@ -408,28 +435,3 @@ async function importTestData(url) {
 }
 
 ////////////////////////////////////////////////////////////////////////// For Development
-
-
-
-// Currently unused query selectors
-
-// let defBtn1 = document.querySelector("#def-btn1");
-// let defBtn2 = document.querySelector("#def-btn2");
-// let defBtn3 = document.querySelector("#def-btn3");
-// let defBtn4 = document.querySelector("#def-btn4");
-// let defBtn5 = document.querySelector("#def-btn5");
-// let defBtn6 = document.querySelector("#def-btn6");
-
-// let threeMonBtn = document.querySelector("#3mon-btn");
-// let sixMonBtn = document.querySelector("#6mon-btn");
-// let ytd = document.querySelector("#ytd-btn");
-// let oneYBtn = document.querySelector("#1y-btn");
-// let threeYBtn = document.querySelector("#3y-btn");
-// let tenYBtn = document.querySelector("#10y-btn");
-
-/* sorry I changed footer section name. Lantao */
-// let footerBtns = document.querySelector(".footer-btns");
-// let footerBtn1 = document.querySelector("#footer-btn1");
-// let footerBtn2 = document.querySelector("#footer-btn2");
-// let footerBtn3 = document.querySelector("#footer-btn3");
-// let footerBtn4 = document.querySelector("#footer-btn4");
