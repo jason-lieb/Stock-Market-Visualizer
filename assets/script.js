@@ -12,6 +12,8 @@ let global = {
 };
 
 // Query Selectors
+let chartContainer = document.querySelector("#chart");
+
 let navbarBtns = document.querySelector("#navbar-btns");
 let defaultBtns = document.querySelector("#default-btns");
 let timeBtns = document.querySelector("#time-btns");
@@ -23,12 +25,15 @@ let currencyCard = document.querySelector("#currency-card");
 
 let toCurrencyInput = document.querySelector("#toCurrency");
 let fromCurrencyInput = document.querySelector("#fromCurrency");
+let currencyBtn = document.querySelector("#loadCurrency");
 
 // Event Listeners
 navbarBtns.addEventListener("click", handlePage);
 defaultBtns.addEventListener("click", handleDefault);
 timeBtns.addEventListener("click", handleTime);
 searchInput.addEventListener("keypress", handleSearch);
+currencyBtn.addEventListener("click", handleSelect);
+
 
 // Load Google Charts
 google.charts.load("current", { packages: ["corechart"] });
@@ -75,7 +80,7 @@ function handleTime(e) {
   if (e.target.dataset.value === global.selectedTimePeriod) return;
   global.selectedTimePeriod = e.target.dataset.value;
   // undoBtnSelection() // Remove styling from currently selected button
-  updateChart();
+  if (global.data !== undefined) updateChart();
   // selectBtn() // Change Styling of Navbars to unselect old page and select new page
 }
 
@@ -92,10 +97,22 @@ function handleSearch(e) {
   handleData(search);
 }
 
-function handleData(input) {
-  global.data = getData(input);
-  setTimeout(updateChart, 25);
-  // updateChart();
+function handleSelect(e) {
+  let fromCurrency = e.target.previousElementSibling.children[1];
+  let toCurrency = e.target.previousElementSibling.previousElementSibling.children[1];
+  if (fromCurrency.value === 'From Currency' || toCurrency.value === 'To Currency') return; // Add better error handling
+  handleData(`${toCurrency.value}/${fromCurrency.value}`);
+}
+
+async function handleData(input) {
+  clearChart();
+  addLoadingSymbol();
+  await getData(input);
+  // for (let i = 0; i < 1000000000; i++) { ////////// For testing loading symbol
+  //   let j = i;
+  // }
+  clearChart();
+  updateChart();
 }
 
 // function undoSelectedBtn() {
@@ -115,6 +132,7 @@ function changeUIforPage(page) {
     hide(currencyCard);
     hide(toCurrencyInput);
     hide(fromCurrencyInput);
+    hide(currencyBtn);
     // Government
     hide(governCard);
   }
@@ -126,6 +144,7 @@ function changeUIforPage(page) {
     show(currencyCard);
     show(toCurrencyInput);
     show(fromCurrencyInput);
+    show(currencyBtn);
     // Government
     hide(governCard);
   }
@@ -137,6 +156,7 @@ function changeUIforPage(page) {
     hide(currencyCard);
     hide(toCurrencyInput);
     hide(fromCurrencyInput);
+    hide(currencyBtn);
     // Government
     show(governCard);
   }
@@ -150,20 +170,34 @@ function show(selector) {
   selector.classList.remove("d-none");
 }
 
+function addLoadingSymbol() {
+  chartContainer.innerHTML = `
+    <div id="loading" class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    `;
+}
+
 //////////////////////////////////////////////// Data Management Functions /////////////////////////////////////////////////////////////////////
 
 async function getData(input) {
+  let newData;
   switch (global.selectedPage) {
     case 'Stocks':
-      // let newData = await getAlphaVantageStock(input); //Commented out to prevent accidental usage of limited API calls
+      // newData = await getAlphaVantageStock(input); //Commented out to prevent accidental usage of limited API calls
       // global.data = parseAlphaVantage(newData);
       global.data = await importTestData(
         "../testData/testStockDataAmazon.json"
       ); ///////// Temporarily here to use test data
       break;
     case "Currency":
-      //
-      //
+      let toCurrency = input.split('/')[0];
+      let fromCurrency = input.split('/')[1];
+      // newData = await getAlphaVantageForex(toCurrency, fromCurrency);
+      // global.data = parseAlphaVantage(newData);
+      global.data = await importTestData(
+        "../testData/testCurrencyDataEURUSD.json"
+      );
       break;
     case "Government Data":
       //
@@ -213,9 +247,7 @@ function updateChart() {
 
 // Generate Chart with Google Charts
 function drawChart() {
-  let chart = new google.visualization.LineChart(
-    document.getElementById("chart")
-  );
+  let chart = new google.visualization.LineChart(chartContainer);
   let displayData = global.data.slice(global.dataInTimePeriodIndex);
   displayData.unshift(["Time", "Stock Price"]); //////////////////////////// Modify header based on incoming data
   let chartData = google.visualization.arrayToDataTable(displayData);
@@ -227,17 +259,21 @@ function drawChart() {
   chart.draw(chartData, options);
 }
 
+function clearChart() {
+  chartContainer.innerHTML = ``;
+}
+
 /////////////////////////////////////////////////// Alpha Vantage API Functions /////////////////////////////////////////////////////////////////////
 
 async function getAlphaVantageStock(ticker) {
   let response = await fetch(
-    `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${ticker}&apikey=${alpha_vantage_APIKEY}`
+    `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${ticker}&outputsize=full&apikey=${alpha_vantage_APIKEY}`
   );
   let rawData = await response.json();
   return { rawData, dataKey: "Time Series (Daily)" };
 }
 
-async function getAlphaVantageForex(fromCurrency, toCurrency) {
+async function getAlphaVantageForex(toCurrency, fromCurrency) {
   let response = await fetch(
     `https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=${fromCurrency}&to_symbol=${toCurrency}&outputsize=full&apikey=${alpha_vantage_APIKEY}`
     );
@@ -256,7 +292,6 @@ function parseAlphaVantage(rawData) {
     let value = +data[keys[i]]["4. close"];
     parsedData.push([time, value]);
   }
-  // Output data in form of array with objects with keys date and closeValue
   return parsedData;
 }
 

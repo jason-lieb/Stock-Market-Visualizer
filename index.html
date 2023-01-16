@@ -10,8 +10,8 @@
 </head>
 <body>
   <!-- Nav -->
-  <nav class=" navbar navbar-expand-md border-bottom border-dark border-opacity-50 bg-body-tertiary justify-content-between">
-      <a class="navbar-brand bg-dark text-light ms-2 p-2 fw-bold rounded" href="#">Stock Market Visualizer</a>
+  <nav class="navbar navbar-expand-md bg-light border-bottom border-dark border-opacity-50 bg-body-tertiary justify-content-between">
+      <a class="navbar-brand bg-dark text-light ms-2 p-2 fw-bold rounded">Stock Market Visualizer</a>
       <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -38,6 +38,7 @@
           <label for="fromCurrency" >From Currency</label>
           <select name="fromCurrency"></select>
         </div>
+        <button id="loadCurrency" class="btn btn-dark rounded-1 d-none">Load Data</button>
 
         <!-- Defaults -->
         <div class="card default-card flex-fill" style=" padding-bottom: 2rem;">
@@ -68,7 +69,7 @@
       </div>
       <div class="col-sm-7">
         <!-- Chart -->
-        <div class="" id="chart" style=" height: 35em; border: 3px black solid;"></div>
+        <div class="d-flex justify-content-center align-items-center" id="chart" style=" height: 35em; border: 3px black solid;"></div>
 
         <!-- Time Buttons -->
         <div id="time-btns">
