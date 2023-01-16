@@ -102,10 +102,9 @@ function handleSelect(e) {
   handleData(`${toCurrency.value}/${fromCurrency.value}`);
 }
 
-function handleData(input) {
-  global.data = getData(input);
-  setTimeout(updateChart, 25);
-  // updateChart();
+async function handleData(input) {
+  await getData(input);
+  updateChart();
 }
 
 // function undoSelectedBtn() {
@@ -180,9 +179,9 @@ async function getData(input) {
       let fromCurrency = input.split('/')[1];
       // newData = await getAlphaVantageForex(toCurrency, fromCurrency);
       // global.data = parseAlphaVantage(newData);
-      // global.data = await importTestData(
-      //   "../testData/testCurrencyData.json"
-      // );
+      global.data = await importTestData(
+        "../testData/testCurrencyDataEURUSD.json"
+      );
       break;
     case "Government Data":
       //
@@ -250,7 +249,7 @@ function drawChart() {
 
 async function getAlphaVantageStock(ticker) {
   let response = await fetch(
-    `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${ticker}&apikey=${alpha_vantage_APIKEY}`
+    `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${ticker}&outputsize=full&apikey=${alpha_vantage_APIKEY}`
   );
   let rawData = await response.json();
   return { rawData, dataKey: "Time Series (Daily)" };
@@ -275,7 +274,6 @@ function parseAlphaVantage(rawData) {
     let value = +data[keys[i]]["4. close"];
     parsedData.push([time, value]);
   }
-  // Output data in form of array with objects with keys date and closeValue
   return parsedData;
 }
 
