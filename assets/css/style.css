@@ -1,5 +1,5 @@
 nav {
-  background: #999;
+  background: #555;
 }
 
 body {
@@ -14,10 +14,13 @@ body {
   background: #999;
 }
 
-.navbar-btn2 {
-  background: #999;
+#nav-btn2, #nav-btn3 {
+  background: #999 !important;
 }
 
+#nav-btn1 {
+background: #777;
+}
 
 
 @media screen and (max-width: 768px) {
