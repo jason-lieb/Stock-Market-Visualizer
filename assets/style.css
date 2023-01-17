@@ -13,20 +13,31 @@ nav {
   background: #555;
 }
 
-#nav-btn2, #nav-btn3 {
+#nav-btn1, #nav-btn2, #nav-btn3 {
   background: #999 !important;
 }
 
-#nav-btn1 {
-background: #777;
+#nav-btn1:hover, #nav-btn2:hover, #nav-btn3:hover {
+  background: var(--bs-success) !important;
+  border: 5px var(--bs-success) solid !important;
+  color: white !important;
+}
+
+.hoverHighlight:hover {
+  background: var(--bs-success) !important;
+}
+
+.clickHighlight:active {
+  background: var(--bs-success) !important;
+  border: var(--bs-success) 1px solid !important;
+}
+
+.invisibleBorder {
+  border: 5px #999 solid !important;
 }
 
 .default-card {
   background: #999;
-}
-
-.card-body2 {
-    background: #555;
 }
 
 @keyframes stockTicker {
@@ -68,7 +79,7 @@ background: #777;
   }
   a:active {
     text-decoration: none;
-    color: red;
+    color: var(--bs-success);
     font-weight: bold;
   }
 }
@@ -95,7 +106,7 @@ background: #777;
   }
   a:active {
     text-decoration: none;
-    color: red;
+    color: var(--bs-success);
     font-weight: bold;
   }
 
