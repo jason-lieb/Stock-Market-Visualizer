@@ -28,6 +28,14 @@ let toCurrencyInput = document.querySelector("#toCurrency");
 let fromCurrencyInput = document.querySelector("#fromCurrency");
 let currencyBtn = document.querySelector("#loadCurrency");
 
+let threeMonBtn = document.querySelector("#three-mon-btn");
+let sixMonBtn = document.querySelector("#six-mon-btn");
+let ytd = document.querySelector("#ytd-btn");
+let oneYBtn = document.querySelector("#one-y-btn");
+let threeYBtn = document.querySelector("#three-y-btn");
+let tenYBtn = document.querySelector("#ten-y-btn");
+let allBtn = document.querySelector("#all-btn");
+
 // Event Listeners
 navbarBtns.addEventListener("click", handlePage);
 defaultBtns.addEventListener("click", handleDefault);
@@ -140,6 +148,8 @@ function changeUIforPage(page) {
     hide(currencyBtn);
     // Government
     hide(governCard);
+    enable(threeMonBtn, sixMonBtn, ytd, oneYBtn, threeYBtn);
+    disable(allBtn)
   }
   if (page.dataset.value === "Currency") {
     // Stock
@@ -152,6 +162,9 @@ function changeUIforPage(page) {
     show(currencyBtn);
     // Government
     hide(governCard);
+    enable(threeMonBtn, sixMonBtn, ytd, oneYBtn, threeYBtn);
+    disable(allBtn);
+
   }
   if (page.dataset.value === "Government Data") {
     // Stock
@@ -164,7 +177,8 @@ function changeUIforPage(page) {
     hide(currencyBtn);
     // Government
     show(governCard);
-    
+    disable(threeMonBtn, sixMonBtn, ytd, oneYBtn, threeYBtn);
+    enable(allBtn);
   }
 }
 
@@ -176,12 +190,16 @@ function show(selector) {
   selector.classList.remove("d-none");
 }
 
-function addLoadingSymbol() {
-  chartContainer.innerHTML = `
-    <div id="loading" class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
-    `;
+function enable(s_1, s_2, s_3, s_4, s_5) {
+  for (let i = 0; i < arguments.length; i++) {
+    arguments[i].classList.remove("disabled");
+  }
+}
+
+function disable(s_1, s_2, s_3, s_4, s_5) {
+  for (let i = 0; i < arguments.length; i++) {
+    arguments[i].classList.add("disabled");
+  }
 }
 
 //////////////////////////////////////////////// Data Management Functions /////////////////////////////////////////////////////////////////////
@@ -206,10 +224,7 @@ async function getData(input) {
       );
       break;
     case "Government Data":
-      //
-      //
       global.data = await getBEA();
-      console.log(global.data);
       break;
   }
 }
@@ -256,15 +271,13 @@ function updateChart() {
 // Generate Chart with Google Charts
 function drawChart() {
   let chart = new google.visualization.LineChart(chartContainer);
-  console.log(global.dataInTimePeriodIndex)
+  console.log(global.dataInTimePeriodIndex);
   let displayData = global.data.slice(global.dataInTimePeriodIndex);
 
   // displayData.unshift(["Time", "Stock Price"]); //////////////////////////// Modify header based on incoming data
   global.data.unshift(["Time", "Stock Price"]); //////////////////////////// Modify header based on incoming data
-  let chartData = google.visualization.arrayToDataTable(
-    global.data
-  );
-  console.log(displayData)
+  let chartData = google.visualization.arrayToDataTable(global.data);
+  console.log(displayData);
   let options = {
     title: "Stock Price",
     curveType: "function",
@@ -314,10 +327,9 @@ function parseAlphaVantage(rawData) {
 async function getBEA() {
   var url = `http://apps.bea.gov/api/data/?UserID=${bea_APIKEY}&method=getDATA&datasetname=nipa&TABLENAME=t10101&FREQUENCY=a&YEAR=ALL`;
   console.log(url);
-  let response = await fetch(url)
-  let data = await response.json()
+  let response = await fetch(url);
+  let data = await response.json();
   return parseBEAdata(data);
-    
 }
 
 // Parse BEA Response
@@ -364,13 +376,6 @@ async function importTestData(url) {
 // let defBtn4 = document.querySelector("#def-btn4");
 // let defBtn5 = document.querySelector("#def-btn5");
 // let defBtn6 = document.querySelector("#def-btn6");
-
-// let threeMonBtn = document.querySelector("#3mon-btn");
-// let sixMonBtn = document.querySelector("#6mon-btn");
-// let ytd = document.querySelector("#ytd-btn");
-// let oneYBtn = document.querySelector("#1y-btn");
-// let threeYBtn = document.querySelector("#3y-btn");
-// let tenYBtn = document.querySelector("#10y-btn");
 
 /* sorry I changed footer section name. Lantao */
 // let footerBtns = document.querySelector(".footer-btns");
