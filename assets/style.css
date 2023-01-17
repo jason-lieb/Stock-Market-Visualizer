@@ -72,11 +72,12 @@ background: #777;
     font-weight: bold;
   }
 }
-@media screen and (max-width: 576px){
-  #search_default {
+@media screen and (min-width: 576px){
+   #search_default {
     max-width: 300px;
     min-width: 200px;
-  }
+   
+  }  
   a:link {
     text-decoration: none;
     color: black;
@@ -97,12 +98,6 @@ background: #777;
     color: red;
     font-weight: bold;
   }
-
- div.row {
-  display: flex;
-  /* flex-direction: column-reverse; */
-  flex-wrap: wrap-reverse;
- }
 
   footer {
     position: absolute;
@@ -179,4 +174,16 @@ background: #777;
       background-repeat: no-repeat;
       background-size: cover;
   }
+}
+
+@media screen and (max-width: 576px){ 
+  #search_default {
+     margin-top: 100px;
+  }
+
+  div.row {
+  display: flex;
+  flex-wrap: wrap-reverse;
+ }
+
 }
