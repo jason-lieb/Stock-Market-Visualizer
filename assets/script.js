@@ -347,10 +347,10 @@ function createWelcome() {
     let pageSpecificMessage;
     switch (global.selectedPage) {
       case 'Stocks':
-        pageSpecificMessage = 'Use the search bar to search for stocks by ticker or choose one of our most popular options.';
+        pageSpecificMessage = 'Use the search bar to search for stocks by ticker or choose one of our popular options.';
         break;
       case 'Currency':
-        pageSpecificMessage = 'Choose which currency you would like to change from and to or choose one of our most popular options';
+        pageSpecificMessage = 'Choose which currency you would like to change from and to or choose one of our popular options';
         break;
     }
     chartContainer.innerHTML = `
