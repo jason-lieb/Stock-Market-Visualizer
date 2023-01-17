@@ -23,8 +23,11 @@
           </div>
       </div>
   </nav>
+  <div id="scrollWrap" class="d-flex align-items-center mt-2 mb-md-5">
+    <div id="scrolling" class="d-flex container-fluid"></div>
+  </div>
 
-  <main class="container-fluid mt-5" >
+  <main class="container-fluid mt-5">
     <div class="row justify-content-around">
       <div class="col-sm-3 d-flex flex-column" id="search_default">
 
@@ -63,10 +66,10 @@
               <button data-value="GME" class="btn btn-dark rounded-1 clickHighlight">GME</button>
             </div>
             <div class="d-grid gap-2 d-none" id="governdata-card">
-              <button data-value="GDPannual" class="btn btn-dark rounded-1 clickHighlight">GDP Annually</button>
-              <button data-value="GDPquarter" class="btn btn-dark rounded-1 clickHighlight">GDP Quarterly</button>
-              <button data-value="PCEannual" class="btn btn-dark rounded-1 clickHighlight">PCE Annually<br><span style="font-size:x-small">Personal Consumption Expenditures</span></button>
-              <button data-value="PCEquarter" class="btn btn-dark rounded-1 clickHighlight">PCE Quarterly<br><span style="font-size:x-small">Personal Consumption Expenditures</span></button>
+              <button data-value="GDPannual" class="btn btn-dark rounded-1 clickHighlight">GDP Annually<br><span style="font-size:small">Gross Domestic Product</span></button>
+              <button data-value="GDPquarter" class="btn btn-dark rounded-1 clickHighlight">GDP Quarterly<br><span style="font-size:small">Gross Domestic Product</span></button>
+              <button data-value="PCEannual" class="btn btn-dark rounded-1 clickHighlight">PCE Annually<br><span style="font-size:small">Personal Consumption Expenditures</span></button>
+              <button data-value="PCEquarter" class="btn btn-dark rounded-1 clickHighlight">PCE Quarterly<br><span style="font-size:small">Personal Consumption Expenditures</span></button>
             </div>
             <div class="d-grid gap-2 d-none" id="currency-card">
               <button data-value="EUR/USD" class="btn btn-dark rounded-1 clickHighlight">EUR/USD</button>
@@ -82,7 +85,7 @@
 
       <div class="col-sm-7">
         <!-- Chart -->
-        <div class="d-flex justify-content-center align-items-center" id="chart"></div>
+        <div class="d-flex justify-content-center align-items-center p-1" id="chart"></div>
 
         <!-- Time Buttons -->
         <div id="time-btns" class="mt-2 mx-3">
@@ -98,10 +101,6 @@
       </div>
     </div>
   </main>
-
-  <div id="scrollWrap" class="d-flex align-items-center mt-5">
-    <div id="scrolling" class="d-flex container-fluid"></div>
-  </div>
 
   <footer class="container-fluid d-flex justify-content-center" style="margin-top: 50px;">
     <div class="col-6 d-flex justify-content-between">
