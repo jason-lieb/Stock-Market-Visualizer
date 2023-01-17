@@ -53,9 +53,9 @@
         </div>
 
         <!-- Defaults -->
-        <div class="card default-card ">
+        <div id="alertReference" class="card default-card ">
           <div id="default-btns" class="card-body">
-            <h5 id="defaultText" class="card-title text-uppercase">Popular Stocks</h5>
+            <h5 id="defaultText" class="card-title text-center text-uppercase">Popular Stocks</h5>
             <div class="d-grid gap-2" id="stock-card"> <!-- use d-none to show or hide different buttons under different category-->
               <button data-value="AMZN" class="btn btn-dark rounded-1 clickHighlight">AMZN</button>
               <button data-value="AAPL" class="btn btn-dark rounded-1 clickHighlight">AAPL</button>
@@ -104,10 +104,6 @@
       </div>
     </div>
   </main>
-
-  <div id="scrollWrap" class="d-flex align-items-center mt-5">
-    <div id="scrolling" class="d-flex container-fluid"></div>
-  </div>
 
   <footer class="container-fluid d-flex justify-content-center" style="margin-top: 50px;">
     <div class="col-6 d-flex justify-content-between">

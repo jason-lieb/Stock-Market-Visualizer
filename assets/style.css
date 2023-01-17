@@ -62,6 +62,13 @@ nav a {
   font-family: var(--font2);
 }
 
+#alert {
+  margin-top: 0.125rem !important;
+  margin-bottom: 0.375rem !important;
+  padding: 0.375rem !important;
+  border: 0 !important;
+}
+
 #welcome {
   background-color: var(--header-color);
   color: white;
