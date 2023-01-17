@@ -1,13 +1,14 @@
 //API Keys
 let polygon_APIKEY = "TTNbgrcWIJyP1tavyIdjxgTywo6ixljm";
 let alpha_vantage_APIKEY = "0BGSBFE3M96OL784";
-let fred_APIKEY = "ce4ba2fd678f9dfc7903324adee68449";
+// let fred_APIKEY = "ce4ba2fd678f9dfc7903324adee68449"; //depreciated
+let bea_APIKEY = "D34BBF56-E892-4E7A-9427-83869BD3A09D";
 
 // Global Variables
 let global = {
   data: undefined,
   dataInTimePeriodIndex: 0,
-  selectedTimePeriod: "3-m",
+  selectedTimePeriod: "10-y",
   selectedPage: "Stocks",
 };
 
@@ -34,27 +35,26 @@ timeBtns.addEventListener("click", handleTime);
 searchInput.addEventListener("keypress", handleSearch);
 currencyBtn.addEventListener("click", handleSelect);
 
-
 // Load Google Charts
 google.charts.load("current", { packages: ["corechart"] });
 
 // Initialization Function
 async function init() {
   let currencyOptions = await loadCurrencyOptions();
-  addCurrencyOptions(toCurrencyInput, currencyOptions, 'To');
-  addCurrencyOptions(fromCurrencyInput, currencyOptions, 'From');
+  addCurrencyOptions(toCurrencyInput, currencyOptions, "To");
+  addCurrencyOptions(fromCurrencyInput, currencyOptions, "From");
 }
 
 init();
 
 async function loadCurrencyOptions() {
-  let response = await fetch('./assets/currencyOptions.json');
-  let currencyOptions = await response.json()
+  let response = await fetch("./assets/currencyOptions.json");
+  let currencyOptions = await response.json();
   let optionHTML = "";
   for (let i = 0; i < currencyOptions.length; i++) {
     optionHTML += `<option value="${currencyOptions[i]}">${currencyOptions[i]}</option>`;
   }
-  return optionHTML
+  return optionHTML;
 }
 
 function addCurrencyOptions(parent, currencyOptions, direction) {
@@ -99,8 +99,13 @@ function handleSearch(e) {
 
 function handleSelect(e) {
   let fromCurrency = e.target.previousElementSibling.children[1];
-  let toCurrency = e.target.previousElementSibling.previousElementSibling.children[1];
-  if (fromCurrency.value === 'From Currency' || toCurrency.value === 'To Currency') return; // Add better error handling
+  let toCurrency =
+    e.target.previousElementSibling.previousElementSibling.children[1];
+  if (
+    fromCurrency.value === "From Currency" ||
+    toCurrency.value === "To Currency"
+  )
+    return; // Add better error handling
   handleData(`${toCurrency.value}/${fromCurrency.value}`);
 }
 
@@ -159,6 +164,7 @@ function changeUIforPage(page) {
     hide(currencyBtn);
     // Government
     show(governCard);
+    
   }
 }
 
@@ -183,7 +189,7 @@ function addLoadingSymbol() {
 async function getData(input) {
   let newData;
   switch (global.selectedPage) {
-    case 'Stocks':
+    case "Stocks":
       // newData = await getAlphaVantageStock(input); //Commented out to prevent accidental usage of limited API calls
       // global.data = parseAlphaVantage(newData);
       global.data = await importTestData(
@@ -191,8 +197,8 @@ async function getData(input) {
       ); ///////// Temporarily here to use test data
       break;
     case "Currency":
-      let toCurrency = input.split('/')[0];
-      let fromCurrency = input.split('/')[1];
+      let toCurrency = input.split("/")[0];
+      let fromCurrency = input.split("/")[1];
       // newData = await getAlphaVantageForex(toCurrency, fromCurrency);
       // global.data = parseAlphaVantage(newData);
       global.data = await importTestData(
@@ -202,6 +208,8 @@ async function getData(input) {
     case "Government Data":
       //
       //
+      global.data = await getBEA();
+      console.log(global.data);
       break;
   }
 }
@@ -248,9 +256,15 @@ function updateChart() {
 // Generate Chart with Google Charts
 function drawChart() {
   let chart = new google.visualization.LineChart(chartContainer);
+  console.log(global.dataInTimePeriodIndex)
   let displayData = global.data.slice(global.dataInTimePeriodIndex);
-  displayData.unshift(["Time", "Stock Price"]); //////////////////////////// Modify header based on incoming data
-  let chartData = google.visualization.arrayToDataTable(displayData);
+
+  // displayData.unshift(["Time", "Stock Price"]); //////////////////////////// Modify header based on incoming data
+  global.data.unshift(["Time", "Stock Price"]); //////////////////////////// Modify header based on incoming data
+  let chartData = google.visualization.arrayToDataTable(
+    global.data
+  );
+  console.log(displayData)
   let options = {
     title: "Stock Price",
     curveType: "function",
@@ -276,7 +290,7 @@ async function getAlphaVantageStock(ticker) {
 async function getAlphaVantageForex(toCurrency, fromCurrency) {
   let response = await fetch(
     `https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=${fromCurrency}&to_symbol=${toCurrency}&outputsize=full&apikey=${alpha_vantage_APIKEY}`
-    );
+  );
   let rawData = await response.json();
   return { rawData, dataKey: "Time Series FX (Daily)" };
 }
@@ -295,50 +309,28 @@ function parseAlphaVantage(rawData) {
   return parsedData;
 }
 
-/////////////////////////////////////////////////////// FRED API Functions /////////////////////////////////////////////////////////////////////
-var root = "https://api.stlouisfed.org/fred/";
-var series_id = "CPIAUCSL";
-/* different series data options */
-[
-  "GDP", //GDP returns quarterly
-  "SP500", //index sp500 daily, close, daily
-  "NASDAQCOM", //NASDAQ Composite Index, close, daily
-  "DJIA", //Dow Jones Industrial Average, close, daily
-  "CPIAUCSL", // Consumer Price Index for All Urban Consumers: All Items in U.S. City Average, monthly, only price index, not percent change
-  "UNRATE", // Unemployment Rate, percent, monthly
-];
-/* different parameters */
-[
-  "observation_start", //YYYY-MM-DD formatted string, optional, default: 1776-07-04 (earliest available)
-  "observation_end", //YYYY-MM-DD formatted string, optional, default: 9999-12-31 (latest available)
-];
-var params = { observation_start: "2020-01-01", observation_end: "2022-12-31" };
-var qeuryString = "";
-for (var key in params) {
-  qeuryString += "&" + key + "=" + params[key];
-}
-var url = `${root}series/observations?series_id=${series_id}&api_key=${fred_APIKEY}&file_type=json${qeuryString}`;
-function getFRED() {
+/////////////////////////////////////////////////////// BEA API Functions /////////////////////////////////////////////////////////////////////
+
+async function getBEA() {
+  var url = `http://apps.bea.gov/api/data/?UserID=${bea_APIKEY}&method=getDATA&datasetname=nipa&TABLENAME=t10101&FREQUENCY=a&YEAR=ALL`;
   console.log(url);
-  fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data.observations.length);
-      parseFREDdata(data);
-    });
+  let response = await fetch(url)
+  let data = await response.json()
+  return parseBEAdata(data);
+    
 }
 
-// Parse FRED Response
-function parseFREDdata(rawData) {
-  let data_temp = rawData.observations;
+// Parse BEA Response
+function parseBEAdata(rawData) {
+  let data_temp = rawData.BEAAPI.Results.Data;
   let parsedData = [];
   for (let i = 0; i < data_temp.length; i++) {
-    parsedData.push({
-      date: data_temp[i].date,
-      closeValue: data_temp[i].value,
-    });
+    if (data_temp[i].LineNumber !== "1") {
+      break; //only take line1 which is the real GDP data
+    }
+    parsedData.push([data_temp[i].TimePeriod, Number(data_temp[i].DataValue)]);
   }
-  console.log(parsedData);
+  // parsedData.unshift(["Year", "Value"]);
   return parsedData;
 }
 
@@ -363,8 +355,6 @@ async function importTestData(url) {
 }
 
 ////////////////////////////////////////////////////////////////////////// For Development
-
-
 
 // Currently unused query selectors
 
