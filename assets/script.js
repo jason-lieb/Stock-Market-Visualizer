@@ -504,17 +504,7 @@ async function getContinuousStocks() {
     'META',
     'V',
     'PG',
-    'NVDA',
-    'HD',
-    'CVX',
-    'LLY',
-    'MA',
-    'ABBV',
-    'PFE',
-    'MRK',
-    'PEP',
-    'BAC',
-    'KO'
+    'NVDA'
   ];
   let continuousData = [];
   for (let i = 0; i < continuousStocks.length; i++) {
@@ -537,7 +527,7 @@ function createContinuousStocks(continuousData) {
     let chevron = stock.incPercent > 0 ? 'fa-chevron-up' : 'fa-chevron-down';
     let id = stock.ticker === 'BRK.B' ? 'BRK' : stock.ticker;
     scrollingData.innerHTML += `
-      <div id="${id}" class="bg-dark card" style="width: 10rem; margin-right: 0.5rem; flex-shrink: 0;">
+      <div id="${id}" class="bg-dark card continuousStock">
         <div class="card-body ${color} d-flex justify-content-between py-1">
           <span>${stock.ticker}</span>
           <i class="fas ${chevron}"></i>
