@@ -44,8 +44,8 @@ google.charts.load("current", { packages: ["corechart"] });
 // Initialization Function
 async function init() {
   let currencyOptions = await loadCurrencyOptions();
-  addCurrencyOptions(toCurrencyInput, currencyOptions, 'To');
-  addCurrencyOptions(fromCurrencyInput, currencyOptions, 'From');
+  addCurrencyOptions(toCurrencyInput, currencyOptions);
+  addCurrencyOptions(fromCurrencyInput, currencyOptions);
   getContinuousStocks();
 }
 
@@ -61,8 +61,8 @@ async function loadCurrencyOptions() {
   return optionHTML
 }
 
-function addCurrencyOptions(parent, currencyOptions, direction) {
-  let optionHTML = `<option>${direction} Currency</option>`;
+function addCurrencyOptions(parent, currencyOptions) {
+  let optionHTML = `<option></option>`;
   optionHTML += currencyOptions;
   let select = parent.children[1];
   select.innerHTML = optionHTML;
@@ -370,25 +370,25 @@ async function getContinuousStocks() {
     'TSLA',
     'GOOGL',
     'GOOG',
-    // 'BRK.B',
-    // 'UNH',
-    // 'JNJ',
-    // 'XOM',
-    // 'JPM',
-    // 'META',
-    // 'V',
-    // 'PG',
-    // 'NVDA',
-    // 'HD',
-    // 'CVX',
-    // 'LLY',
-    // 'MA',
-    // 'ABBV',
-    // 'PFE',
-    // 'MRK',
-    // 'PEP',
-    // 'BAC',
-    // 'KO'
+    'BRK.B',
+    'UNH',
+    'JNJ',
+    'XOM',
+    'JPM',
+    'META',
+    'V',
+    'PG',
+    'NVDA',
+    'HD',
+    'CVX',
+    'LLY',
+    'MA',
+    'ABBV',
+    'PFE',
+    'MRK',
+    'PEP',
+    'BAC',
+    'KO'
   ];
   let continuousData = [];
   for (let i = 0; i < continuousStocks.length; i++) {
@@ -396,18 +396,22 @@ async function getContinuousStocks() {
     let parsedData = parseFinnhub(continuousStocks[i], data);
     continuousData.push(parsedData);
   }
-  createContinuousStocks(continuousData);
-  setTimeout(getContinuousStocks, 60000);
+  if (scrollingData.innerHTML === '') {
+    createContinuousStocks(continuousData);
+  } else {
+    updateContinuousStocks(continuousData);
+  }
+  setTimeout(getContinuousStocks, 120000);
 }
 
 function createContinuousStocks(continuousData) {
-  scrollingData.innerHTML = '';
   for(let i = 0; i < continuousData.length; i++) {
     let stock = continuousData[i];
-    let chevron = stock.incPercent > 0 ? 'fa-chevron-up' : 'fa-chevron-down';
     let color = stock.incPercent > 0 ? 'text-success' : 'text-danger';
+    let chevron = stock.incPercent > 0 ? 'fa-chevron-up' : 'fa-chevron-down';
+    let id = stock.ticker === 'BRK.B' ? 'BRK' : stock.ticker;
     scrollingData.innerHTML += `
-      <div class="bg-dark card" style="width: 10rem; margin-right: 0.5rem;">
+      <div id="${id}" class="bg-dark card" style="width: 10rem; margin-right: 0.5rem; flex-shrink: 0;">
         <div class="card-body ${color} d-flex justify-content-between py-1">
           <span>${stock.ticker}</span>
           <i class="fas ${chevron}"></i>
@@ -418,7 +422,20 @@ function createContinuousStocks(continuousData) {
   }
 }
 
-
+function updateContinuousStocks(continuousData) {
+  for(let i = 0; i < continuousData.length; i++) {
+    let stock = continuousData[i];
+    let id = stock.ticker === 'BRK.B' ? 'BRK' : stock.ticker;
+    let cardBodyHTML = document.querySelector(`#${id}`).children[0];
+    let color = stock.incPercent > 0 ? 'text-success' : 'text-danger';
+    cardBodyHTML.className = `card-body ${color} d-flex justify-content-between py-1`;
+    let chevronHTML = cardBodyHTML.children[1];
+    let chevron = stock.incPercent > 0 ? 'fa-chevron-up' : 'fa-chevron-down';
+    chevronHTML.className = `fas ${chevron}`;
+    let incHTML = cardBodyHTML.children[2];
+    incHTML.innerHTML = `${stock.incPercent}%`;
+  }
+}
 
 //////////////////////////////////////////////////////// Polygon API Functions /////////////////////////////////////////////////////////////////////
 
