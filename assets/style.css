@@ -94,7 +94,7 @@ background: #777;
   }
   a:active {
     text-decoration: none;
-    color: red;
+    color: var(--bs-success-rgb);
     font-weight: bold;
   }
   footer {

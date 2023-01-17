@@ -30,20 +30,26 @@
 
         <!-- Inputs -->
         <input id="search" class="form-control mb-5" type="search" placeholder="Search stock tickers here" aria-label="Stock search bar input">
-        <div id="toCurrency" class="d-none text-light">
-          <label for="toCurrency">To Currency</label>
-          <select name="toCurrency"></select>
+        <div id="currencyInputs" class="card default-card d-none mb-5">
+          <div class="card-body">
+            <div id="toCurrency" class="text-light">
+              <label for="toCurrency" class="text-dark">To Currency</label>
+              <select name="toCurrency" class="form-select mb-2"></select>
+            </div>
+            <div id="fromCurrency" class="text-light">
+              <label for="fromCurrency"  class="text-dark">From Currency</label>
+              <select name="fromCurrency" class="form-select mb-2"></select>
+            </div>
+            <div class="d-grid gap-2">
+              <button id="loadCurrency" class="btn btn-dark rounded-1">Load Data</button>
+            </div>
+          </div>
         </div>
-        <div id="fromCurrency" class="d-none text-light">
-          <label for="fromCurrency" >From Currency</label>
-          <select name="fromCurrency"></select>
-        </div>
-        <button id="loadCurrency" class="btn btn-dark rounded-1 d-none">Load Data</button>
 
         <!-- Defaults -->
         <div class="card default-card flex-fill" style=" padding-bottom: 2rem;">
           <div id="default-btns" class="card-body">
-            <h5 class="card-title">Default Options</h5>
+            <h5 id="defaultText" class="card-title">Popular Stocks</h5>
             <div class="d-grid gap-2" id="stock-card"> <!-- use d-none to show or hide different buttons under different category-->
               <button data-value="AMZN" class="btn btn-dark rounded-1">AMZN</button>
               <button data-value="AAPL" class="btn btn-dark rounded-1">AAPL</button>
@@ -58,9 +64,12 @@
               <button data-value="Unemployment Rate" class="btn btn-dark rounded-1">Unemployment Rate</button>
             </div>
             <div class="d-grid gap-2 d-none" id="currency-card">
-              <button data-value="EUR/USD" class="btn btn-dark rounded-1">EUR/USD</button>
+              <button data-value="EUR/USD" class="btn btn-dark rounded-1 active:border-success active:text-success">EUR/USD</button>
               <button data-value="GBP/USD" class="btn btn-dark rounded-1">GBP/USD</button>
-              <button data-value="USD/JPY" class="btn btn-dark rounded-1">USD/JPY</button>
+              <button data-value="CAD/USD" class="btn btn-dark rounded-1">CAD/USD</button>
+              <button data-value="AUD/USD" class="btn btn-dark rounded-1">AUD/USD</button>
+              <button data-value="CNY/USD" class="btn btn-dark rounded-1">CNY/USD</button>
+              <button data-value="JPY/USD" class="btn btn-dark rounded-1">JPY/USD</button>
             </div>
           </div>
         </div>
@@ -72,7 +81,7 @@
 
         <!-- Time Buttons -->
         <div id="time-btns">
-          <button data-value="3-m" id="three-mon-btn" class="btn btn-outline-success rounded-1" type="button">3m</button>
+          <button data-value="3-m" id="three-mon-btn" class="btn btn-dark btn-outline-success rounded-1" type="button">3m</button>
           <button data-value="6-m" id="six-mon-btn" class="btn btn-dark rounded-1" type="button">6m</button>
           <button data-value="YTD" id="ytd-btn" class="btn btn-dark rounded-1" type="button">YTD</button>
           <button data-value="1-y" id="one-y-btn" class="btn btn-dark rounded-1" type="button">1y</button>

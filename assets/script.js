@@ -25,9 +25,12 @@ let stockCard = document.querySelector("#stock-card");
 let governCard = document.querySelector("#governdata-card");
 let currencyCard = document.querySelector("#currency-card");
 
+let currencyInputs = document.querySelector('#currencyInputs');
 let toCurrencyInput = document.querySelector("#toCurrency");
 let fromCurrencyInput = document.querySelector("#fromCurrency");
 let currencyBtn = document.querySelector("#loadCurrency");
+
+let defaultText = document.querySelector("#defaultText");
 
 let scrollingData = document.querySelector('#scrolling');
 
@@ -137,42 +140,43 @@ async function handleData(input) {
 
 function changeUIforPage(page) {
   if (page.dataset.value === "Stocks") {
+    // Default Title
+    defaultText.textContent = 'Popular Stocks';
     // Stock
     show(stockCard);
     show(searchInput);
     // Currency
     hide(currencyCard);
-    hide(toCurrencyInput);
-    hide(fromCurrencyInput);
-    hide(currencyBtn);
+    hide(currencyInputs);
     // Government
     hide(governCard);
     enable(threeMonBtn, sixMonBtn, ytd, oneYBtn, threeYBtn);
     disable(allBtn);
   }
   if (page.dataset.value === "Currency") {
+    // Default Title
+    defaultText.textContent = 'Popular Conversions';
     // Stock
     hide(stockCard);
     hide(searchInput);
     // Currency
     show(currencyCard);
-    show(toCurrencyInput);
-    show(fromCurrencyInput);
-    show(currencyBtn);
+    show(currencyInputs);
+
     // Government
     hide(governCard);
     enable(threeMonBtn, sixMonBtn, ytd, oneYBtn, threeYBtn);
     disable(allBtn);
   }
   if (page.dataset.value === "Government Data") {
+    // Default Title
+    defaultText.textContent = 'US Government Statistics';
     // Stock
     hide(stockCard);
     hide(searchInput);
     // Currency
     hide(currencyCard);
-    hide(toCurrencyInput);
-    hide(fromCurrencyInput);
-    hide(currencyBtn);
+    hide(currencyInputs);
     // Government
     show(governCard);
     disable(threeMonBtn, sixMonBtn, ytd, oneYBtn, threeYBtn);
