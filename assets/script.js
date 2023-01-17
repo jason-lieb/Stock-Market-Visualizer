@@ -140,7 +140,7 @@ function handleSelect(e) {
 async function handleData(input) {
   clearChart();
   addLoadingSymbol();
-  await getData(input);
+  await getData(input).catch(handleGetDataError);
   clearChart();
   updateChart();
   addHistory(input);
@@ -642,6 +642,7 @@ function parseBEAdata(rawData) {
 
 async function getFinnhub(ticker) {
   let response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${finnhub_APIKEY}`);
+  if (response.status === 429) return '429 Error';
   let data = await response.json();
   return data;
 }
@@ -655,6 +656,7 @@ function parseFinnhub(ticker, data) {
 }
 
 async function getContinuousStocks() {
+  let error429 = false;
   let continuousStocks = [
     'AAPL',
     'MSFT',
@@ -674,19 +676,36 @@ async function getContinuousStocks() {
   ];
   let continuousData = [];
   for (let i = 0; i < continuousStocks.length; i++) {
-    let data = await getFinnhub(continuousStocks[i]);
+    let data = await getFinnhub(continuousStocks[i]).catch(handleFinnhubError);
+    if (data === '429 Error') {
+      error429 = true;
+      break;
+    }
     let parsedData = parseFinnhub(continuousStocks[i], data);
     continuousData.push(parsedData);
   }
+  if (error429 === true) {
+    continuousData = await importTestData('./testData/testContinuousStockData.json');
+  };
   if (scrollingData.innerHTML === '') {
-    createContinuousStocks(continuousData);
+    createContinuousStocks(continuousData, error429);
   } else {
-    updateContinuousStocks(continuousData);
+    updateContinuousStocks(continuousData, error429);
   }
-  setTimeout(getContinuousStocks, 120000);
+  setTimeout(getContinuousStocks, 60000);
 }
 
-function createContinuousStocks(continuousData) {
+function createContinuousStocks(continuousData, error429) {
+  if (error429 === true) {
+    scrollingData.innerHTML += `
+      <div id="error429" class="bg-danger card continuousStockError">
+        <div class="card-body text-dark d-flex justify-content-between align-items-center py-1">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          <span>API Calls Exceeded - Loading Test Data</span>
+        </div>
+      </div>
+      `;
+  }
   for(let i = 0; i < continuousData.length; i++) {
     let stock = continuousData[i];
     let color = stock.incPercent > 0 ? 'text-success' : 'text-danger';
@@ -704,7 +723,12 @@ function createContinuousStocks(continuousData) {
   }
 }
 
-function updateContinuousStocks(continuousData) {
+function updateContinuousStocks(continuousData, error429) {
+  if (error429) return;
+  if (document.querySelector('#error429') !== null) {
+    console.log(document.querySelector('#error429'))
+    document.querySelector('#scrolling').removeChild(document.querySelector('#error429'));
+  }
   for(let i = 0; i < continuousData.length; i++) {
     let stock = continuousData[i];
     let id = stock.ticker === 'BRK.B' ? 'BRK' : stock.ticker;
@@ -719,7 +743,7 @@ function updateContinuousStocks(continuousData) {
   }
 }
 
-//////////////////////////////////////////////////////// Polygon API Functions /////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////// Polygon API Function /////////////////////////////////////////////////////////////////////
 
 // Access Data from Polygon API
 async function getPolygon(ticker) {
@@ -730,13 +754,20 @@ async function getPolygon(ticker) {
   return data;
 }
 
-///////////////////////////////////////////////////////////////////////// For Development
+//////////////////////////////////////////////////////// Test Data Loading Function /////////////////////////////////////////////////////////////////////
 
-// Imports
 async function importTestData(url) {
   let testDataPromise = await fetch(url);
   let testData = await testDataPromise.json();
   return testData;
 }
 
-////////////////////////////////////////////////////////////////////////// For Development
+//////////////////////////////////////////////////////// Error Handling Functions /////////////////////////////////////////////////////////////////////
+
+function handleGetDataError(err) {
+  console.error(err);
+}
+
+function handleFinnhubError(err) {
+  return null;
+}

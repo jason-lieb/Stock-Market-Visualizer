@@ -100,10 +100,9 @@ nav a {
   font-family: var(--font3);
 }
 
-
 @keyframes stockTicker {
-  0% { transform: translate3d(110%, 0, 0) }
-  100% { transform: translate3d(-135%, 0, 0) }
+  0% { transform: translate3d(105%, 0, 0) }
+  100% { transform: translate3d(-155%, 0, 0) }
 }
 
 #scrollWrap {
@@ -114,6 +113,12 @@ nav a {
 
 #scrolling {
   animation: stockTicker linear 60s infinite;
+}
+
+.continuousStockError {
+  width: 21rem;
+  margin-right: 0.5rem;
+  flex-shrink: 0;
 }
 
 .continuousStock {
