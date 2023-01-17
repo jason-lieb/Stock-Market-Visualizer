@@ -10,7 +10,10 @@ let global = {
   dataInTimePeriodIndex: 0,
   selectedTimePeriod: "3-m",
   selectedPage: "Stocks",
-  history: undefined
+  history: {
+    'Stocks': [],
+    'Currency': []
+  }
 };
 
 // Query Selectors
@@ -268,47 +271,58 @@ function changeUIforPage(page) {
 }
 
 function createWelcome() {
-  // if history is empty
-  let pageSpecificMessage;
-  switch (global.selectedPage) {
-    case 'Stocks':
-      pageSpecificMessage = 'Use the search bar to search for stocks by ticker or choose one of our most popular options.';
-      break;
-    case 'Currency':
-      pageSpecificMessage = 'Choose which currency you would like to change from and to or choose one of our most popular options';
-      break;
-    case 'Government Data':
-      pageSpecificMessage = 'Ch';
-      break;
-  }
-  switch (global.selectedPage) {
-    case 'Stocks':
-    case 'Currency':
-      chartContainer.innerHTML = `
-        <div id="welcome" class="container">
-          <h2>Welcome to the ${global.selectedPage} Page</h2>
-          <p>Your history is empty. ${pageSpecificMessage}</p>
-        </div>
-        `;
-      break;
-    case 'Government Data':
-      chartContainer.innerHTML = `
-        <div id="welcome" class="container">
-          <h2>Welcome to the ${global.selectedPage} Page</h2>
-          <p>Choose whatever data you would like to see from our options on the left.</p>
-        </div>
-        `;
-      break;
+  let pageHistory = global.history[global.selectedPage];
+  if (global.selectedPage === 'Government Data') {
+    // Government data page
+    chartContainer.innerHTML = `
+          <div id="welcome" class="container">
+            <h2>Welcome to the ${global.selectedPage} Page</h2>
+            <p>Choose whatever data you would like to see from our options on the left.</p>
+          </div>
+          `;
+  } else if (pageHistory.length === 0) {
+    // Stock and currency pages without history
+    let pageSpecificMessage;
+    switch (global.selectedPage) {
+      case 'Stocks':
+        pageSpecificMessage = 'Use the search bar to search for stocks by ticker or choose one of our most popular options.';
+        break;
+      case 'Currency':
+        pageSpecificMessage = 'Choose which currency you would like to change from and to or choose one of our most popular options';
+        break;
+    }
+    chartContainer.innerHTML = `
+      <div id="welcome" class="container">
+        <h2>Welcome to the ${global.selectedPage} Page</h2>
+        <p>Your history is empty. ${pageSpecificMessage}</p>
+      </div>
+      `;
+  } else {
+    // Stock and currency with history
+    let historyBtns = '';
+    for (let i = 0; i < pageHistory.length; i++) {
+      historyBtns += `<button data-value="${pageHistory[i]}" class="btn btn-dark rounded-1 clickHighlight">${pageHistory[i]}</button>`;
+    }
+    chartContainer.innerHTML = `
+      <div id="welcome" class="container">
+        <h2>Welcome to the ${global.selectedPage} Page</h2>
+        <h3>History:</h3>
+        ${historyBtns}
+      </div>
+      `;
   }
 }
 
-// function setHistory() {
+function setHistory() {
+  let history = global.history;
+  localStorage.setItem('history', JSON.stringify(history));
+}
 
-// }
+function getHistory() {
+  global.history = JSON.parse(localStorage.getItem('history'));
+}
 
-// function getHistory() {
-
-// }
+// add items to global history and populate history functions in workflow
 
 function hide(selector) {
   selector.classList.add("d-none");
