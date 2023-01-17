@@ -480,27 +480,57 @@ function drawChart() {
   switch (global.selectedPage) {
     case "Stocks":
       options = {
-        title: "Stock Price",
+        title: "Stock Price $",
+        titleTextStyle: { color: "white" },
         curveType: "function",
         legend: "none",
+        backgroundColor: { fill: "black" },
+        colors: ["white"],
+        vAxis: { textStyle: { color: "white" } },
+        hAxis: { textStyle: { color: "white" } },
+        animation: { startup: true, duration: 1000, easing: "linear" },
+        explorer: {
+          axis: "horizontal",
+          actions: ["dragToZoom", "rightClickToReset"],
+          keepInBounds: true,
+        }
       };
       break;
     case "Currency":
       options = {
         title: "Currency Exchange Rate",
+        titleTextStyle: { color: "white" },
         curveType: "function",
         legend: "none",
+        backgroundColor: { fill: "black" },
+        colors: ["white"],
+        vAxis: { textStyle: { color: "white" } },
+        hAxis: { textStyle: { color: "white" } },
+        animation: { startup: true, duration: 1000, easing: "linear" },
+        explorer: {
+          axis: "horizontal",
+          actions: ["dragToZoom", "rightClickToReset"],
+          keepInBounds: true,
+        }
       };
       break;
     case "Government Data":
       options = {
-        title: "Macro Data",
+        title: "Macro Data %",
+        titleTextStyle: {color: 'white'},
         curveType: "function",
         legend: "none",
+        backgroundColor: {fill: 'black'},
+        colors: ['white'],
+        vAxis:{textStyle: {color: 'white'}},
+        hAxis:{textStyle: {color: 'white'}},
+        animation: {"startup": true, duration: 2000, easing: "linear"}
       };
       break;
   }
+  console.log(options);
   chart.draw(chartData, options);
+  document.querySelector('svg').setAttribute('style', 'border-radius: 1rem');
 }
 
 function clearChart() {
