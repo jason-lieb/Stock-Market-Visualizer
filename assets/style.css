@@ -101,7 +101,7 @@ nav a {
 }
 
 @keyframes stockTicker {
-  0% { transform: translate3d(110%, 0, 0) }
+  0% { transform: translate3d(105%, 0, 0) }
   100% { transform: translate3d(-155%, 0, 0) }
 }
 
