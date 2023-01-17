@@ -3,6 +3,7 @@ let polygon_APIKEY = "TTNbgrcWIJyP1tavyIdjxgTywo6ixljm";
 let alpha_vantage_APIKEY = "0BGSBFE3M96OL784";
 // let fred_APIKEY = "ce4ba2fd678f9dfc7903324adee68449"; //depreciated
 let bea_APIKEY = "D34BBF56-E892-4E7A-9427-83869BD3A09D";
+let finnhub_APIKEY = "cf2ap1aad3idqn4q4nlgcf2ap1aad3idqn4q4nm0";
 
 // Global Variables
 let global = {
@@ -28,6 +29,8 @@ let toCurrencyInput = document.querySelector("#toCurrency");
 let fromCurrencyInput = document.querySelector("#fromCurrency");
 let currencyBtn = document.querySelector("#loadCurrency");
 
+let scrollingData = document.querySelector('#scrolling');
+
 let threeMonBtn = document.querySelector("#three-mon-btn");
 let sixMonBtn = document.querySelector("#six-mon-btn");
 let ytd = document.querySelector("#ytd-btn");
@@ -49,8 +52,9 @@ google.charts.load("current", { packages: ["corechart"] });
 // Initialization Function
 async function init() {
   let currencyOptions = await loadCurrencyOptions();
-  addCurrencyOptions(toCurrencyInput, currencyOptions, "To");
-  addCurrencyOptions(fromCurrencyInput, currencyOptions, "From");
+  addCurrencyOptions(toCurrencyInput, currencyOptions);
+  addCurrencyOptions(fromCurrencyInput, currencyOptions);
+  getContinuousStocks();
 }
 
 init();
@@ -65,8 +69,8 @@ async function loadCurrencyOptions() {
   return optionHTML;
 }
 
-function addCurrencyOptions(parent, currencyOptions, direction) {
-  let optionHTML = `<option>${direction} Currency</option>`;
+function addCurrencyOptions(parent, currencyOptions) {
+  let optionHTML = `<option></option>`;
   optionHTML += currencyOptions;
   let select = parent.children[1];
   select.innerHTML = optionHTML;
@@ -107,13 +111,8 @@ function handleSearch(e) {
 
 function handleSelect(e) {
   let fromCurrency = e.target.previousElementSibling.children[1];
-  let toCurrency =
-    e.target.previousElementSibling.previousElementSibling.children[1];
-  if (
-    fromCurrency.value === "From Currency" ||
-    toCurrency.value === "To Currency"
-  )
-    return; // Add better error handling
+  let toCurrency = e.target.previousElementSibling.previousElementSibling.children[1];
+  if (fromCurrency.value === '' || toCurrency.value === '') return; // Add better error handling
   handleData(`${toCurrency.value}/${fromCurrency.value}`);
 }
 
@@ -385,6 +384,97 @@ function parseBEAdata(rawData) {
   return parsedData;
 }
 
+//////////////////////////////////////////////////////// Finnhub API Functions /////////////////////////////////////////////////////////////////////
+
+async function getFinnhub(ticker) {
+  let response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${finnhub_APIKEY}`);
+  let data = await response.json();
+  return data;
+}
+
+function parseFinnhub(ticker, data) {
+  let parsedData = {
+    ticker,
+    incPercent: Math.round(data.dp * 100) / 100,
+  }
+  return parsedData;
+}
+
+async function getContinuousStocks() {
+  let continuousStocks = [
+    'AAPL',
+    'MSFT',
+    'AMZN',
+    'TSLA',
+    'GOOGL',
+    'GOOG',
+    'BRK.B',
+    'UNH',
+    'JNJ',
+    'XOM',
+    'JPM',
+    'META',
+    'V',
+    'PG',
+    'NVDA',
+    'HD',
+    'CVX',
+    'LLY',
+    'MA',
+    'ABBV',
+    'PFE',
+    'MRK',
+    'PEP',
+    'BAC',
+    'KO'
+  ];
+  let continuousData = [];
+  for (let i = 0; i < continuousStocks.length; i++) {
+    let data = await getFinnhub(continuousStocks[i]);
+    let parsedData = parseFinnhub(continuousStocks[i], data);
+    continuousData.push(parsedData);
+  }
+  if (scrollingData.innerHTML === '') {
+    createContinuousStocks(continuousData);
+  } else {
+    updateContinuousStocks(continuousData);
+  }
+  setTimeout(getContinuousStocks, 60000);
+}
+
+function createContinuousStocks(continuousData) {
+  for(let i = 0; i < continuousData.length; i++) {
+    let stock = continuousData[i];
+    let color = stock.incPercent > 0 ? 'text-success' : 'text-danger';
+    let chevron = stock.incPercent > 0 ? 'fa-chevron-up' : 'fa-chevron-down';
+    let id = stock.ticker === 'BRK.B' ? 'BRK' : stock.ticker;
+    scrollingData.innerHTML += `
+      <div id="${id}" class="bg-dark card" style="width: 10rem; margin-right: 0.5rem; flex-shrink: 0;">
+        <div class="card-body ${color} d-flex justify-content-between py-1">
+          <span>${stock.ticker}</span>
+          <i class="fas ${chevron}"></i>
+          <span>${stock.incPercent}%</span>
+        </div>
+      </div>
+      `;
+  }
+}
+
+function updateContinuousStocks(continuousData) {
+  for(let i = 0; i < continuousData.length; i++) {
+    let stock = continuousData[i];
+    let id = stock.ticker === 'BRK.B' ? 'BRK' : stock.ticker;
+    let cardBodyHTML = document.querySelector(`#${id}`).children[0];
+    let color = stock.incPercent > 0 ? 'text-success' : 'text-danger';
+    cardBodyHTML.className = `card-body ${color} d-flex justify-content-between py-1`;
+    let chevronHTML = cardBodyHTML.children[1];
+    let chevron = stock.incPercent > 0 ? 'fa-chevron-up' : 'fa-chevron-down';
+    chevronHTML.className = `fas ${chevron}`;
+    let incHTML = cardBodyHTML.children[2];
+    incHTML.innerHTML = `${stock.incPercent}%`;
+  }
+}
+
 //////////////////////////////////////////////////////// Polygon API Functions /////////////////////////////////////////////////////////////////////
 
 // Access Data from Polygon API
@@ -406,19 +496,3 @@ async function importTestData(url) {
 }
 
 ////////////////////////////////////////////////////////////////////////// For Development
-
-// Currently unused query selectors
-
-// let defBtn1 = document.querySelector("#def-btn1");
-// let defBtn2 = document.querySelector("#def-btn2");
-// let defBtn3 = document.querySelector("#def-btn3");
-// let defBtn4 = document.querySelector("#def-btn4");
-// let defBtn5 = document.querySelector("#def-btn5");
-// let defBtn6 = document.querySelector("#def-btn6");
-
-/* sorry I changed footer section name. Lantao */
-// let footerBtns = document.querySelector(".footer-btns");
-// let footerBtn1 = document.querySelector("#footer-btn1");
-// let footerBtn2 = document.querySelector("#footer-btn2");
-// let footerBtn3 = document.querySelector("#footer-btn3");
-// let footerBtn4 = document.querySelector("#footer-btn4");
