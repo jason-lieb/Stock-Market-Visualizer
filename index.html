@@ -17,9 +17,9 @@
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbar-toggler"><!--d-flex justify-content-end-->
           <div id="navbar-btns" class="navbar-nav nav-pills ">
-              <button id="nav-btn1" data-value="Stocks" class="nav-link text-dark ms-2 px-2 my-1 mx-md-2 invisibleBorder" href="#">STOCKS</button>
-              <button id="nav-btn2" data-value="Currency" class="nav-link text-dark ms-2 px-2 my-1 mx-md-2 invisibleBorder" href="#">CURRENCY</button>
-              <button id="nav-btn3" data-value="Government Data" class="nav-link text-dark ms-2 px-2 my-1 mx-md-2 invisibleBorder" href="#">GOVERNMENT DATA</button>
+              <button id="nav-btn1" data-value="Stocks" class="nav-link text-dark ms-2 px-2 my-1 mx-md-2 invisibleBorder border border-5" href="#">STOCKS</button>
+              <button id="nav-btn2" data-value="Currency" class="nav-link text-dark ms-2 px-2 my-1 mx-md-2 invisibleBorder border border-5" href="#">CURRENCY</button>
+              <button id="nav-btn3" data-value="Government Data" class="nav-link text-dark ms-2 px-2 my-1 mx-md-2 invisibleBorder border border-5" href="#">GOVERNMENT DATA</button>
           </div>
       </div>
   </nav>
@@ -82,28 +82,28 @@
 
       <div class="col-sm-7">
         <!-- Chart -->
-        <div class="d-flex justify-content-center align-items-center" id="chart" style=" height: 35em; border: 3px black solid;"></div>
+        <div class="d-flex justify-content-center align-items-center" id="chart"></div>
 
         <!-- Time Buttons -->
-        <div id="time-btns">
+        <div id="time-btns" class="mt-2 mx-3">
           <button data-value="3-m" id="three-mon-btn" class="btn btn-dark rounded-1 hoverHighlight" type="button">3m</button>
           <button data-value="6-m" id="six-mon-btn" class="btn btn-dark rounded-1 hoverHighlight" type="button">6m</button>
           <button data-value="YTD" id="ytd-btn" class="btn btn-dark rounded-1 hoverHighlight" type="button">YTD</button>
           <button data-value="1-y" id="one-y-btn" class="btn btn-dark rounded-1 hoverHighlight" type="button">1y</button>
           <button data-value="3-y" id="three-y-btn" class="btn btn-dark rounded-1 hoverHighlight" type="button">3y</button>
           <button data-value="10-y" id="ten-y-btn" class="btn btn-dark rounded-1 hoverHighlight" type="button">10y</button>
-          <button data-value="200-y" id="all-btn" class="btn btn-dark rounded-1 hoverHighlight" type="button" >All</button>
+          <button data-value="200-y" id="all-btn" class="btn btn-dark rounded-1 hoverHighlight" type="button" disabled>All</button>
         </div>
 
       </div>
     </div>
   </main>
 
-  <div id="scrollWrap" class="d-flex align-items-center mt-5" style="border: 1px black solid; height: 3rem; background-color: rgb(32, 41, 41);">
+  <div id="scrollWrap" class="d-flex align-items-center mt-5">
     <div id="scrolling" class="d-flex container-fluid"></div>
   </div>
 
-  <footer class="container footer fixed-bottom d-flex justify-content-center" style="height: 100px">
+  <footer class="container footer fixed-bottom d-flex justify-content-center mb-2">
     <div class="col-6 d-flex justify-content-around">
       <span><a href="./about.html">About</a></span><span><a href="./contact.html">Contact</a></span><span><a href="./support.html">Support</a></span><span><a href="./social.html">Social</a></span>
     </div>

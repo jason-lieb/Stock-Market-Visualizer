@@ -150,7 +150,7 @@ function undoBtnSelection() {
       pageId = 'nav-btn3';
       break;
   }
-  document.querySelector(`#${pageId}`).className = 'nav-link text-dark ms-2 px-1 my-1 mx-md-2 invisibleBorder border border-5';
+  document.querySelector(`#${pageId}`).className = 'nav-link text-dark ms-2 px-2 my-1 mx-md-2 invisibleBorder border border-5';
   // Time button
   let timeId;
   switch (global.selectedTimePeriod) {
@@ -193,7 +193,7 @@ function selectBtn() {
       pageId = 'nav-btn3';
       break;
   }
-  document.querySelector(`#${pageId}`).className = 'nav-link text-dark ms-2 px-1 my-1 mx-md-2 border border-5 border-success border-opacity-50';
+  document.querySelector(`#${pageId}`).className = 'nav-link text-dark ms-2 px-2 my-1 mx-md-2 border border-5 border-success border-opacity-50';
   // Time button
   let timeId;
   switch (global.selectedTimePeriod) {
@@ -458,7 +458,7 @@ let MacroData = {
   },
 };
 async function getBEA(input) {
-  let frequency = input.endsWith('quarter') ? 'q' : 'a'; 
+  let frequency = input.endsWith('quarter') ? 'q' : 'a';
   var url = `http://apps.bea.gov/api/data/?UserID=${bea_APIKEY}&method=getDATA&datasetname=nipa&TABLENAME=${MacroData.tablename[input]}&FREQUENCY=${frequency}&YEAR=ALL`;
   console.log(url);
   let response = await fetch(url);
@@ -512,17 +512,7 @@ async function getContinuousStocks() {
     'META',
     'V',
     'PG',
-    'NVDA',
-    'HD',
-    'CVX',
-    'LLY',
-    'MA',
-    'ABBV',
-    'PFE',
-    'MRK',
-    'PEP',
-    'BAC',
-    'KO'
+    'NVDA'
   ];
   let continuousData = [];
   for (let i = 0; i < continuousStocks.length; i++) {
@@ -545,7 +535,7 @@ function createContinuousStocks(continuousData) {
     let chevron = stock.incPercent > 0 ? 'fa-chevron-up' : 'fa-chevron-down';
     let id = stock.ticker === 'BRK.B' ? 'BRK' : stock.ticker;
     scrollingData.innerHTML += `
-      <div id="${id}" class="bg-dark card" style="width: 10rem; margin-right: 0.5rem; flex-shrink: 0;">
+      <div id="${id}" class="bg-dark card continuousStock">
         <div class="card-body ${color} d-flex justify-content-between py-1">
           <span>${stock.ticker}</span>
           <i class="fas ${chevron}"></i>
