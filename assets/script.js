@@ -391,6 +391,10 @@ function drawChart() {
         title: "Stock Price",
         curveType: "function",
         legend: "none",
+        backgroundColor: {fill: 'black'},
+        colors: ['white'],
+        vAxis:{textStyle: {color: 'white'}},
+        hAxis:{textStyle: {color: 'white'}}
       };
       break;
     case "Currency":
@@ -398,6 +402,10 @@ function drawChart() {
         title: "Currency Exchange Rate",
         curveType: "function",
         legend: "none",
+        backgroundColor: {fill: 'black'},
+        colors: ['white'],
+        vAxis:{textStyle: {color: 'white'}},
+        hAxis:{textStyle: {color: 'white'}}
       };
       break;
     case "Government Data":
@@ -405,10 +413,15 @@ function drawChart() {
         title: "Macro Data",
         curveType: "function",
         legend: "none",
+        backgroundColor: {fill: 'black'},
+        colors: ['white'],
+        vAxis:{textStyle: {color: 'white'}},
+        hAxis:{textStyle: {color: 'white'}}
       };
       break;
   }
   chart.draw(chartData, options);
+  document.querySelector('svg').setAttribute('style', 'border-radius: 1rem');
 }
 
 function clearChart() {
