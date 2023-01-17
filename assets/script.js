@@ -524,7 +524,7 @@ function drawChart() {
         colors: ["white"],
         vAxis: { textStyle: { color: "white" } },
         hAxis: { textStyle: { color: "white" } },
-        animation: { startup: true, duration: 1000, easing: "linear" },
+        // animation: { startup: true, duration: 1000, easing: "linear" },
         explorer: {
           axis: "horizontal",
           actions: ["dragToZoom", "rightClickToReset"],
@@ -542,7 +542,7 @@ function drawChart() {
         colors: ["white"],
         vAxis: { textStyle: { color: "white" } },
         hAxis: { textStyle: { color: "white" } },
-        animation: { startup: true, duration: 1000, easing: "linear" },
+        // animation: { startup: true, duration: 1000, easing: "linear" },
         explorer: {
           axis: "horizontal",
           actions: ["dragToZoom", "rightClickToReset"],
@@ -560,7 +560,7 @@ function drawChart() {
         colors: ['white'],
         vAxis:{textStyle: {color: 'white'}},
         hAxis:{textStyle: {color: 'white'}},
-        animation: {"startup": true, duration: 2000, easing: "linear"}
+        // animation: {"startup": true, duration: 2000, easing: "linear"}
       };
       break;
   }
