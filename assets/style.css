@@ -17,6 +17,16 @@ nav {
   background: #999 !important;
 }
 
+#nav-btn1:hover, #nav-btn2:hover, #nav-btn3:hover {
+  background: var(--bs-success) !important;
+  border: 5px var(--bs-success) solid !important;
+  color: white !important;
+}
+
+.hoverHighlight:hover {
+  background: var(--bs-success) !important;
+}
+
 .invisibleBorder {
   border: 5px #999 solid !important;
 }
@@ -64,7 +74,7 @@ nav {
   }
   a:active {
     text-decoration: none;
-    color: red;
+    color: var(--bs-success);
     font-weight: bold;
   }
 }
@@ -90,7 +100,7 @@ nav {
   }
   a:active {
     text-decoration: none;
-    color: var(--bs-success-rgb);
+    color: var(--bs-success);
     font-weight: bold;
   }
   footer {

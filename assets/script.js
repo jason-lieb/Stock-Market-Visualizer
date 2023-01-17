@@ -171,7 +171,7 @@ function undoBtnSelection() {
       timeId = 'all-btn';
       break;
   }
-  document.querySelector(`#${timeId}`).className = 'btn btn-dark rounded-1';
+  document.querySelector(`#${timeId}`).className = 'btn btn-dark rounded-1 hoverHighlight';
 }
 
 function selectBtn() {
