@@ -298,9 +298,9 @@ function drawChart() {
   // global.data.unshift(["Time", "Stock Price"]); //////////////////////////// Modify header based on incoming data
   let chartData = google.visualization.arrayToDataTable(displayData);
   console.log(displayData);
-  let options;
+  let options = {};
   switch (global.selectedPage) {
-    case "stocks":
+    case "Stocks":
       options = {
         title: "Stock Price",
         curveType: "function",
@@ -315,7 +315,7 @@ function drawChart() {
       };
       break;
     case "Government Data":
-      let options = {
+      options = {
         title: "Macro Data",
         curveType: "function",
         legend: "none",
