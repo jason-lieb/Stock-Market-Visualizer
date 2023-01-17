@@ -7,18 +7,14 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="./assets/style.css"/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans&family=Roboto:wght@500&display=swap" rel="stylesheet">
   <title>Stock Market Visualizer</title>
 </head>
 <body>
   <!-- Nav -->
   <nav class="navbar navbar-expand-md border-bottom border-dark border-opacity-50 bg-body-tertiary justify-content-between">
-      <a class="navbar-brand bg-dark text-light ms-2 p-2 fw-bold rounded">Stock Market Visualizer</a>
+      <a class="navbar-brand bg-dark text-light ms-2 p-2 fw-bold rounded ">Stock Market Visualizer</a>
       <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -40,7 +36,7 @@
 
         <!-- Inputs -->
         <input id="search" class="form-control mb-5" type="search" placeholder="Search stock tickers here" aria-label="Stock search bar input">
-        <div id="currencyInputs" class="card default-card d-none mb-5">
+        <div id="currencyInputs" class="card default-card d-none mb-5 text-uppercase">
           <div class="card-body">
             <div id="toCurrency" class="text-light">
               <label for="toCurrency" class="text-dark">To Currency</label>
@@ -51,7 +47,7 @@
               <select name="fromCurrency" class="form-select mb-2"></select>
             </div>
             <div class="d-grid gap-2">
-              <button id="loadCurrency" class="btn btn-dark rounded-1 clickHighlight">Load Data</button>
+              <button id="loadCurrency" class="btn btn-dark rounded-1 clickHighlight text-uppercase">Load Data</button>
             </div>
           </div>
         </div>
@@ -59,7 +55,7 @@
         <!-- Defaults -->
         <div class="card default-card ">
           <div id="default-btns" class="card-body">
-            <h5 id="defaultText" class="card-title">Popular Stocks</h5>
+            <h5 id="defaultText" class="card-title text-uppercase">Popular Stocks</h5>
             <div class="d-grid gap-2" id="stock-card"> <!-- use d-none to show or hide different buttons under different category-->
               <button data-value="AMZN" class="btn btn-dark rounded-1 clickHighlight">AMZN</button>
               <button data-value="AAPL" class="btn btn-dark rounded-1 clickHighlight">AAPL</button>
