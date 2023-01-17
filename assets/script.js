@@ -452,7 +452,7 @@ function parseAlphaVantage(rawData) {
 let MacroData = {
   tablename: {
     GDPannual: "t10101", //Gross domestic product percent change annual rate // line 1
-    PCE: "t20301",
+    PCEannual: "t20301",
     GDPquarter: "t10101",
     PCEquarter: "t20301",
   },
