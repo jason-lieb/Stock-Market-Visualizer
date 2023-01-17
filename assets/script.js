@@ -676,7 +676,7 @@ async function getContinuousStocks() {
   ];
   let continuousData = [];
   for (let i = 0; i < continuousStocks.length; i++) {
-    let data = await getFinnhub(continuousStocks[i]).catch(handleFinnhubError);
+    let data = await getFinnhub(continuousStocks[i])
     if (data === '429 Error') {
       error429 = true;
       break;
@@ -766,8 +766,4 @@ async function importTestData(url) {
 
 function handleGetDataError(err) {
   console.error(err);
-}
-
-function handleFinnhubError(err) {
-  return null;
 }
