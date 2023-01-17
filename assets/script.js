@@ -10,6 +10,7 @@ let global = {
   dataInTimePeriodIndex: 0,
   selectedTimePeriod: "3-m",
   selectedPage: "Stocks",
+  history: undefined
 };
 
 // Query Selectors
@@ -54,6 +55,7 @@ google.charts.load("current", { packages: ["corechart"] });
 // Initialization Function
 async function init() {
   selectBtn();
+  createWelcome();
   let currencyOptions = await loadCurrencyOptions();
   addCurrencyOptions(toCurrencyInput, currencyOptions);
   addCurrencyOptions(fromCurrencyInput, currencyOptions);
@@ -91,9 +93,10 @@ function handlePage(e) {
   } else if (global.selectedTimePeriod === '200-y') {
     global.selectedTimePeriod = '3-m';
   }
-
   selectBtn()
   changeUIforPage(e.target);
+  clearChart();
+  createWelcome();
 }
 
 function handleTime(e) {
@@ -129,9 +132,6 @@ async function handleData(input) {
   clearChart();
   addLoadingSymbol();
   await getData(input);
-  // for (let i = 0; i < 1000000000; i++) { ////////// For testing loading symbol
-  //   let j = i;
-  // }
   clearChart();
   updateChart();
 }
@@ -266,6 +266,49 @@ function changeUIforPage(page) {
     enable(allBtn);
   }
 }
+
+function createWelcome() {
+  // if history is empty
+  let pageSpecificMessage;
+  switch (global.selectedPage) {
+    case 'Stocks':
+      pageSpecificMessage = 'Use the search bar to search for stocks by ticker or choose one of our most popular options.';
+      break;
+    case 'Currency':
+      pageSpecificMessage = 'Choose which currency you would like to change from and to or choose one of our most popular options';
+      break;
+    case 'Government Data':
+      pageSpecificMessage = 'Ch';
+      break;
+  }
+  switch (global.selectedPage) {
+    case 'Stocks':
+    case 'Currency':
+      chartContainer.innerHTML = `
+        <div id="welcome" class="container">
+          <h2>Welcome to the ${global.selectedPage} Page</h2>
+          <p>Your history is empty. ${pageSpecificMessage}</p>
+        </div>
+        `;
+      break;
+    case 'Government Data':
+      chartContainer.innerHTML = `
+        <div id="welcome" class="container">
+          <h2>Welcome to the ${global.selectedPage} Page</h2>
+          <p>Choose whatever data you would like to see from our options on the left.</p>
+        </div>
+        `;
+      break;
+  }
+}
+
+// function setHistory() {
+
+// }
+
+// function getHistory() {
+
+// }
 
 function hide(selector) {
   selector.classList.add("d-none");

@@ -44,6 +44,11 @@ nav {
   background: var(--light-buttons);
 }
 
+#welcome {
+  background-color: var(--header-color);
+  color: white;
+}
+
 #chart {
   height: 35em;
   border: 3px var(--header-color) solid;
