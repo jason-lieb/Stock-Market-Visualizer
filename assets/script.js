@@ -401,7 +401,7 @@ async function getContinuousStocks() {
   } else {
     updateContinuousStocks(continuousData);
   }
-  setTimeout(getContinuousStocks, 120000);
+  setTimeout(getContinuousStocks, 60000);
 }
 
 function createContinuousStocks(continuousData) {
