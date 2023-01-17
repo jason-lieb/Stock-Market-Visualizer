@@ -186,4 +186,9 @@ background: #777;
   flex-wrap: wrap-reverse;
  }
 
+ footer {
+
+  display: flex; 
+  justify-content: start;
+ }
 }
