@@ -17,6 +17,14 @@ nav {
   background: var(--header-color);
 }
 
+h1 {
+  color: aliceblue;
+}
+
+li {
+  color: aliceblue;
+}
+
 #nav-btn1, #nav-btn2, #nav-btn3 {
   background: var(--light-buttons) !important;
 }
