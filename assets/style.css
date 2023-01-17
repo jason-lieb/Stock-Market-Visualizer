@@ -7,6 +7,8 @@
   --header-color: rgb(46, 49, 53);
   --background-color: #14191f;
   --light-buttons: rgb(113, 117, 122);
+  --font1: 'Merriweather', serif;
+  --font2: font-family: 'Roboto', sans-serif;
 }
 
 body {
@@ -15,6 +17,10 @@ body {
 
 nav {
   background: var(--header-color);
+}
+
+nav a {
+  font-family: var(--font1);
 }
 
 #nav-btn1, #nav-btn2, #nav-btn3 {
@@ -47,6 +53,7 @@ nav {
 #welcome {
   background-color: var(--header-color);
   color: white;
+  font-family: var(--font1);
 }
 
 #chart {
