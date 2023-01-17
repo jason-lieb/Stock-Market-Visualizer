@@ -4,17 +4,21 @@
   --navlink-color: #b9c6ae;
   --light-blue: lightblue;
   --h1: teal;
+  --header-color: rgb(46, 49, 53);
+  --background-color: #14191f;
+  --light-buttons: rgb(113, 117, 122);
 }
 
 body {
-  background: #333;
+  background: var(--background-color);
 }
+
 nav {
-  background: #555;
+  background: var(--header-color);
 }
 
 #nav-btn1, #nav-btn2, #nav-btn3 {
-  background: #999 !important;
+  background: var(--light-buttons) !important;
 }
 
 #nav-btn1:hover, #nav-btn2:hover, #nav-btn3:hover {
@@ -33,25 +37,39 @@ nav {
 }
 
 .invisibleBorder {
-  border: 5px #999 solid !important;
+  border: 5px var(--light-buttons) solid !important;
 }
 
 .default-card {
-  background: #999;
+  background: var(--light-buttons);
+}
+
+#chart {
+  height: 35em;
+  border: 3px var(--header-color) solid;
+  border-radius: 1rem;
 }
 
 
 @keyframes stockTicker {
-  0% { transform: translate3d(5%, 0, 0) }
-  100% { transform: translate3d(-100%, 0, 0) }
+  0% { transform: translate3d(110%, 0, 0) }
+  100% { transform: translate3d(-135%, 0, 0) }
 }
 
 #scrollWrap {
   overflow: hidden;
+  background-color: var(--header-color);
+  height: 3rem;
 }
 
 #scrolling {
   animation: stockTicker linear 60s infinite;
+}
+
+.continuousStock {
+  width: 10rem;
+  margin-right: 0.5rem;
+  flex-shrink: 0;
 }
 
 @media screen and (max-width: 768px) {
@@ -65,17 +83,17 @@ nav {
   }
   a:link {
     text-decoration: none;
-    color: black;
+    color: var(--light-buttons);
     font-weight: bold;
   }
   a:visited {
     text-decoration: none;
-    color: black;
+    color: var(--light-buttons);
     font-weight: bold;
   }
   a:hover {
     text-decoration: none;
-    color: grey;
+    color: white;
     font-weight: bold;
   }
   a:active {
@@ -92,17 +110,17 @@ nav {
   }  
   a:link {
     text-decoration: none;
-    color: black;
+    color: var(--light-buttons);
     font-weight: bold;
   }
   a:visited {
     text-decoration: none;
-    color: black;
+    color: var(--light-buttons);
     font-weight: bold;
   }
   a:hover {
     text-decoration: none;
-    color: grey;
+    color: white;
     font-weight: bold;
   }
   a:active {
