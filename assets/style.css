@@ -190,7 +190,7 @@ nav {
   section.link:hover {
     opacity: 1;
   }
-  section.link {
+  section.linksmart {
     cursor: pointer;
   }
   #img4 {
