@@ -1,3 +1,11 @@
+:root {
+  --dark: #13293d;
+  --light: #fff;
+  --navlink-color: #b9c6ae;
+  --light-blue: lightblue;
+  --h1: teal;
+}
+
 body {
   background: #333;
 }
@@ -21,14 +29,19 @@ background: #777;
     background: #555;
 }
 
-
-:root {
-  --dark: #13293d;
-  --light: #fff;
-  --navlink-color: #b9c6ae;
-  --light-blue: lightblue;
-  --h1: teal;
+@keyframes stockTicker {
+  0% { transform: translate3d(5%, 0, 0) }
+  100% { transform: translate3d(-100%, 0, 0) }
 }
+
+#scrollWrap {
+  overflow: hidden;
+}
+
+#scrolling {
+  animation: stockTicker linear 60s infinite;
+}
+
 @media screen and (max-width: 768px) {
   button.navbar-toggler {
     position: absolute;
@@ -38,23 +51,23 @@ background: #777;
   nav.navbar {
     justify-content: center !important;
   }
-  a:link { 
-    text-decoration: none; 
+  a:link {
+    text-decoration: none;
     color: black;
     font-weight: bold;
   }
-  a:visited { 
-    text-decoration: none; 
+  a:visited {
+    text-decoration: none;
     color: black;
     font-weight: bold;
   }
-  a:hover { 
-    text-decoration: none; 
+  a:hover {
+    text-decoration: none;
     color: grey;
     font-weight: bold;
   }
-  a:active { 
-    text-decoration: none; 
+  a:active {
+    text-decoration: none;
     color: red;
     font-weight: bold;
   }
@@ -64,23 +77,23 @@ background: #777;
     max-width: 300px;
     min-width: 200px;
   }
-  a:link { 
-    text-decoration: none; 
+  a:link {
+    text-decoration: none;
     color: black;
     font-weight: bold;
   }
-  a:visited { 
-    text-decoration: none; 
+  a:visited {
+    text-decoration: none;
     color: black;
     font-weight: bold;
   }
-  a:hover { 
-    text-decoration: none; 
+  a:hover {
+    text-decoration: none;
     color: grey;
     font-weight: bold;
   }
-  a:active { 
-    text-decoration: none; 
+  a:active {
+    text-decoration: none;
     color: red;
     font-weight: bold;
   }
