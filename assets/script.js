@@ -53,7 +53,11 @@ currencyBtn.addEventListener("click", handleSelect);
 // Load Google Charts
 google.charts.load("current", { packages: ["corechart"] });
 
-// Initialization Function
+// Initialize
+init();
+
+//////////////////////////////////////////////// Initialization Functions /////////////////////////////////////////////////////////////////////
+
 async function init() {
   selectBtn();
   getHistory();
@@ -61,10 +65,8 @@ async function init() {
   let currencyOptions = await loadCurrencyOptions();
   addCurrencyOptions(toCurrencyInput, currencyOptions);
   addCurrencyOptions(fromCurrencyInput, currencyOptions);
-  // getContinuousStocks();
+  getContinuousStocks();
 }
-
-init();
 
 async function loadCurrencyOptions() {
   let response = await fetch("./assets/currencyOptions.json");
@@ -138,6 +140,8 @@ async function handleData(input) {
   updateChart();
   addHistory(input);
 }
+
+///////////////////////////////////////////////////////// UI Functions /////////////////////////////////////////////////////////////////////
 
 function undoBtnSelection() {
   // Page button
@@ -270,6 +274,36 @@ function changeUIforPage(page) {
   }
 }
 
+function hide(selector) {
+  selector.classList.add("d-none");
+}
+
+function show(selector) {
+  selector.classList.remove("d-none");
+}
+
+function enable(s_1, s_2, s_3, s_4, s_5) {
+  for (let i = 0; i < arguments.length; i++) {
+    arguments[i].classList.remove("disabled");
+  }
+}
+
+function disable(s_1, s_2, s_3, s_4, s_5) {
+  for (let i = 0; i < arguments.length; i++) {
+    arguments[i].classList.add("disabled");
+  }
+}
+
+function addLoadingSymbol() {
+  chartContainer.innerHTML = `
+    <div id="loading" class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    `;
+}
+
+/////////////////////////////////////////// Welcome and History Functions /////////////////////////////////////////////////////////////////////
+
 function createWelcome() {
   let selectedHistory = global.selectedPage === 'Stocks' ? 'stockHistory' : 'currencyHistory';
   let pageHistory = global[selectedHistory];
@@ -357,35 +391,6 @@ function clearHistory() {
   createWelcome();
 }
 
-// add event listners for history btns
-
-function hide(selector) {
-  selector.classList.add("d-none");
-}
-
-function show(selector) {
-  selector.classList.remove("d-none");
-}
-
-function enable(s_1, s_2, s_3, s_4, s_5) {
-  for (let i = 0; i < arguments.length; i++) {
-    arguments[i].classList.remove("disabled");
-  }
-}
-
-function disable(s_1, s_2, s_3, s_4, s_5) {
-  for (let i = 0; i < arguments.length; i++) {
-    arguments[i].classList.add("disabled");
-  }
-}
-
-function addLoadingSymbol() {
-  chartContainer.innerHTML = `
-    <div id="loading" class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
-    `;
-}
 //////////////////////////////////////////////// Data Management Functions /////////////////////////////////////////////////////////////////////
 
 async function getData(input) {
@@ -541,15 +546,15 @@ function parseAlphaVantage(rawData) {
 
 /////////////////////////////////////////////////////// BEA API Functions /////////////////////////////////////////////////////////////////////
 
-let MacroData = {
-  tablename: {
-    GDPannual: "t10101", //Gross domestic product percent change annual rate // line 1
-    PCEannual: "t20301",
-    GDPquarter: "t10101",
-    PCEquarter: "t20301",
-  },
-};
 async function getBEA(input) {
+  let MacroData = {
+    tablename: {
+      GDPannual: "t10101", //Gross domestic product percent change annual rate // line 1
+      PCEannual: "t20301",
+      GDPquarter: "t10101",
+      PCEquarter: "t20301",
+    },
+  };
   let frequency = input.endsWith('quarter') ? 'q' : 'a';
   var url = `http://apps.bea.gov/api/data/?UserID=${bea_APIKEY}&method=getDATA&datasetname=nipa&TABLENAME=${MacroData.tablename[input]}&FREQUENCY=${frequency}&YEAR=ALL`;
   console.log(url);
@@ -617,7 +622,7 @@ async function getContinuousStocks() {
   } else {
     updateContinuousStocks(continuousData);
   }
-  setTimeout(getContinuousStocks, 600000);
+  setTimeout(getContinuousStocks, 120000);
 }
 
 function createContinuousStocks(continuousData) {
