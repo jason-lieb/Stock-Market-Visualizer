@@ -8,7 +8,7 @@ let bea_APIKEY = "D34BBF56-E892-4E7A-9427-83869BD3A09D";
 let global = {
   data: undefined,
   dataInTimePeriodIndex: 0,
-  selectedTimePeriod: "10-y",
+  selectedTimePeriod: "3-m",
   selectedPage: "Stocks",
 };
 
@@ -119,7 +119,7 @@ function handleSelect(e) {
 
 async function handleData(input) {
   clearChart();
-  addLoadingSymbol();
+  // addLoadingSymbol();
   await getData(input);
   // for (let i = 0; i < 1000000000; i++) { ////////// For testing loading symbol
   //   let j = i;
@@ -202,6 +202,13 @@ function disable(s_1, s_2, s_3, s_4, s_5) {
   }
 }
 
+function addLoadingSymbol() {
+  chartContainer.innerHTML = `
+    <div id="loading" class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    `;
+}
 //////////////////////////////////////////////// Data Management Functions /////////////////////////////////////////////////////////////////////
 
 async function getData(input) {
@@ -225,6 +232,7 @@ async function getData(input) {
       break;
     case "Government Data":
       global.data = await getBEA();
+      global.selectedTimePeriod='200-y';//200 to show all.
       break;
   }
 }
