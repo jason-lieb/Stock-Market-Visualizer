@@ -46,7 +46,7 @@ async function init() {
   let currencyOptions = await loadCurrencyOptions();
   addCurrencyOptions(toCurrencyInput, currencyOptions, 'To');
   addCurrencyOptions(fromCurrencyInput, currencyOptions, 'From');
-  // getContinuousStocks();
+  getContinuousStocks();
 }
 
 init();
@@ -370,25 +370,25 @@ async function getContinuousStocks() {
     'TSLA',
     'GOOGL',
     'GOOG',
-    'BRK.B',
-    'UNH',
-    'JNJ',
-    'XOM',
-    'JPM',
-    'META',
-    'V',
-    'PG',
-    'NVDA',
-    'HD',
-    'CVX',
-    'LLY',
-    'MA',
-    'ABBV',
-    'PFE',
-    'MRK',
-    'PEP',
-    'BAC',
-    'KO'
+    // 'BRK.B',
+    // 'UNH',
+    // 'JNJ',
+    // 'XOM',
+    // 'JPM',
+    // 'META',
+    // 'V',
+    // 'PG',
+    // 'NVDA',
+    // 'HD',
+    // 'CVX',
+    // 'LLY',
+    // 'MA',
+    // 'ABBV',
+    // 'PFE',
+    // 'MRK',
+    // 'PEP',
+    // 'BAC',
+    // 'KO'
   ];
   let continuousData = [];
   for (let i = 0; i < continuousStocks.length; i++) {
@@ -405,10 +405,16 @@ function createContinuousStocks(continuousData) {
   for(let i = 0; i < continuousData.length; i++) {
     let stock = continuousData[i];
     let chevron = stock.incPercent > 0 ? 'fa-chevron-up' : 'fa-chevron-down';
-    let color = stock.incPercent > 0 ? 'text-green' : 'text-red';
+    let color = stock.incPercent > 0 ? 'text-success' : 'text-danger';
     scrollingData.innerHTML += `
-      <div>${stock.ticker} <span class="${color}"><i class="fas ${chevron}"></i> ${stock.incPercent}%</span></div>
-    `
+      <div class="bg-dark card" style="width: 10rem; margin-right: 0.5rem;">
+        <div class="card-body ${color} d-flex justify-content-between py-1">
+          <span>${stock.ticker}</span>
+          <i class="fas ${chevron}"></i>
+          <span>${stock.incPercent}%</span>
+        </div>
+      </div>
+      `;
   }
 }
 
