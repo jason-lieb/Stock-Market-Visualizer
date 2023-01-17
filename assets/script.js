@@ -54,7 +54,7 @@ async function init() {
   let currencyOptions = await loadCurrencyOptions();
   addCurrencyOptions(toCurrencyInput, currencyOptions);
   addCurrencyOptions(fromCurrencyInput, currencyOptions);
-  getContinuousStocks();
+  // getContinuousStocks();
 }
 
 init();
@@ -229,7 +229,7 @@ async function getData(input) {
       );
       break;
     case "Government Data":
-      global.data = await getBEA();
+      global.data = await getBEA(input);
       global.selectedTimePeriod = "200-y"; //200 to show all.
       break;
   }
@@ -270,7 +270,7 @@ function selectDataForTimeRange() {
       break;
     case "Government Data":
       for (let i = 0; i < global.data.length; i++) {
-        if (Number(global.data[i][0]) < year) {
+        if (Number(global.data[i][0].slice(0,4)) < year) {
           global.dataInTimePeriodIndex = i;
           allData = false;
         }
@@ -362,8 +362,17 @@ function parseAlphaVantage(rawData) {
 
 /////////////////////////////////////////////////////// BEA API Functions /////////////////////////////////////////////////////////////////////
 
-async function getBEA() {
-  var url = `http://apps.bea.gov/api/data/?UserID=${bea_APIKEY}&method=getDATA&datasetname=nipa&TABLENAME=t10101&FREQUENCY=a&YEAR=ALL`;
+let MacroData = {
+  tablename: {
+    GDPannual: "t10101", //Gross domestic product percent change annual rate // line 1
+    PCE: "t20301",
+    GDPquarter: "t10101",
+    PCEquarter: "t20301",
+  },
+};
+async function getBEA(input) {
+  let frequency = input.endsWith('quarter') ? 'q' : 'a'; 
+  var url = `http://apps.bea.gov/api/data/?UserID=${bea_APIKEY}&method=getDATA&datasetname=nipa&TABLENAME=${MacroData.tablename[input]}&FREQUENCY=${frequency}&YEAR=ALL`;
   console.log(url);
   let response = await fetch(url);
   let data = await response.json();
