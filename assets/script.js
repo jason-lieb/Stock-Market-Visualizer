@@ -504,19 +504,20 @@ function updateChart() {
 // Generate Chart with Google Charts
 function drawChart() {
   let chart = new google.visualization.LineChart(chartContainer);
-  console.log(global.dataInTimePeriodIndex);
   let displayData = global.data.slice(global.dataInTimePeriodIndex);
-
-  // displayData.unshift(["Time", "Stock Price"]); //////////////////////////// Modify header based on incoming data
-  displayData.unshift(["Time", "Value"]); //////////////////////////// Modify header based on incoming data
-  // global.data.unshift(["Time", "Stock Price"]); //////////////////////////// Modify header based on incoming data
+  if (global.selectedPage === 'Stocks' || global.selectedPage === 'Currency') {
+    for (let i = 0; i < displayData.length; i++) {
+      displayData[i][0] = new Date(displayData[i][0]);
+    }
+  }
+  displayData.unshift(["Time", "Value"]);
   let chartData = google.visualization.arrayToDataTable(displayData);
   console.log(displayData);
   let options = {};
   switch (global.selectedPage) {
     case "Stocks":
       options = {
-        title: "Stock Price $",
+        title: "Stock Price ($)",
         titleTextStyle: { color: "white" },
         curveType: "function",
         legend: "none",
