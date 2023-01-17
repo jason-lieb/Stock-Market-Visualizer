@@ -10,10 +10,8 @@ let global = {
   dataInTimePeriodIndex: 0,
   selectedTimePeriod: "3-m",
   selectedPage: "Stocks",
-  history: {
-    'Stocks': [],
-    'Currency': []
-  }
+  stockHistory: undefined,
+  currencyHistory: undefined
 };
 
 // Query Selectors
@@ -58,6 +56,7 @@ google.charts.load("current", { packages: ["corechart"] });
 // Initialization Function
 async function init() {
   selectBtn();
+  getHistory();
   createWelcome();
   let currencyOptions = await loadCurrencyOptions();
   addCurrencyOptions(toCurrencyInput, currencyOptions);
@@ -137,6 +136,7 @@ async function handleData(input) {
   await getData(input);
   clearChart();
   updateChart();
+  addHistory(input);
 }
 
 function undoBtnSelection() {
@@ -271,7 +271,8 @@ function changeUIforPage(page) {
 }
 
 function createWelcome() {
-  let pageHistory = global.history[global.selectedPage];
+  let selectedHistory = global.selectedPage === 'Stocks' ? 'stockHistory' : 'currencyHistory';
+  let pageHistory = global[selectedHistory];
   if (global.selectedPage === 'Government Data') {
     // Government data page
     chartContainer.innerHTML = `
@@ -280,7 +281,7 @@ function createWelcome() {
             <p>Choose whatever data you would like to see from our options on the left.</p>
           </div>
           `;
-  } else if (pageHistory.length === 0) {
+  } else if (pageHistory === null || pageHistory === undefined || pageHistory.length === 0) {
     // Stock and currency pages without history
     let pageSpecificMessage;
     switch (global.selectedPage) {
@@ -301,30 +302,62 @@ function createWelcome() {
     // Stock and currency with history
     let historyBtns = '';
     for (let i = 0; i < pageHistory.length; i++) {
-      historyBtns += `<button data-value="${pageHistory[i]}" class="btn btn-dark rounded-1 clickHighlight">${pageHistory[i]}</button>`;
+      historyBtns += `<button id="${pageHistory[i].split('/').join('')}History" data-value="${pageHistory[i]}" class="btn btn-dark rounded-1 clickHighlight">${pageHistory[i]}</button>`;
     }
     chartContainer.innerHTML = `
       <div id="welcome" class="container">
         <h2>Welcome to the ${global.selectedPage} Page</h2>
         <h3>History:</h3>
         ${historyBtns}
+        <button id="clearHistory" class="btn btn-danger rounded-1">Clear History</button>
       </div>
       `;
+    for (let i = 0; i < pageHistory.length; i++) {
+      let historyBtn = document.querySelector(`#${pageHistory[i].split('/').join('')}History`);
+      historyBtn.addEventListener("click", handleDefault);
+    }
+    let clearHistoryBtn = document.querySelector('#clearHistory');
+    clearHistoryBtn.addEventListener("click", clearHistory);
   }
 }
 
-function setHistory() {
-  let history = global.history;
-  localStorage.setItem('history', JSON.stringify(history));
+function saveHistory() {
+  localStorage.setItem('stockHistory', JSON.stringify(global.stockHistory));
+  localStorage.setItem('currencyHistory', JSON.stringify(global.currencyHistory));
 }
 
 function getHistory() {
-  global.history = JSON.parse(localStorage.getItem('history'));
+  global.stockHistory = JSON.parse(localStorage.getItem('stockHistory'));
+  global.currencyHistory = JSON.parse(localStorage.getItem('currencyHistory'));
 }
 
-// add to history function => remove duplicates, order based on latest
+function addHistory(input) {
+  let selectedHistory = global.selectedPage === 'Stocks' ? 'stockHistory' : 'currencyHistory';
+  let pageHistory = global[selectedHistory];
+  if (pageHistory !== null && pageHistory !== undefined) {
+    for(let i = 0; i < pageHistory.length; i++) {
+      if (pageHistory[i] === input) {
+        pageHistory.splice(i,1);
+      }
+    }
+    if (pageHistory.length > 5) pageHistory.pop();
+    pageHistory.unshift(input);
+  } else {
+    pageHistory = [input];
+  }
+  global[selectedHistory] = pageHistory;
+  saveHistory();
+}
 
-// add items to global history and populate history functions in workflow
+function clearHistory() {
+  global.stockHistory = [];
+  global.currencyHistory = [];
+  saveHistory();
+  clearChart();
+  createWelcome();
+}
+
+// add event listners for history btns
 
 function hide(selector) {
   selector.classList.add("d-none");
