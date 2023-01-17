@@ -17,6 +17,8 @@ let global = {
 // Query Selectors
 let chartContainer = document.querySelector("#chart");
 
+let searchDefault = document.querySelector('#search_default');
+
 let navbarBtns = document.querySelector("#navbar-btns");
 let defaultBtns = document.querySelector("#default-btns");
 let timeBtns = document.querySelector("#time-btns");
@@ -128,7 +130,10 @@ function handleSearch(e) {
 function handleSelect(e) {
   let fromCurrency = e.target.parentElement.previousElementSibling.children[1];
   let toCurrency = e.target.parentElement.previousElementSibling.previousElementSibling.children[1];
-  if (fromCurrency.value === '' || toCurrency.value === '') return; // Add better error handling
+  if (fromCurrency.value === '' || toCurrency.value === '') {
+    addAlert('Please Choose Two Currencies');
+    return
+  };
   handleData(`${toCurrency.value}/${fromCurrency.value}`);
 }
 
@@ -300,6 +305,28 @@ function addLoadingSymbol() {
       <span class="visually-hidden">Loading...</span>
     </div>
     `;
+}
+
+function addAlert(alertText) {
+  // Limit of 1 alert
+  if (searchDefault.children[2].id === 'alert') return;
+  // Create alert
+  let alert = document.createElement('div');
+  alert.id = 'alert';
+  alert.className = 'alert alert-danger mb-1 text-center'
+  alert.textContent = alertText;
+  // Insert alert in space between containers
+  let currencyContainer = document.querySelector('#currencyInputs');
+  currencyContainer.className = 'card default-card mb-1';
+  searchDefault.insertBefore(alert, alertReference);
+  // Remove after 2 seconds
+  setTimeout(removeAlert, 2000);
+}
+
+function removeAlert() {
+  searchDefault.removeChild(document.querySelector('#alert'));
+  let currencyContainer = document.querySelector('#currencyInputs');
+  currencyContainer.className = 'card default-card mb-5';
 }
 
 /////////////////////////////////////////// Welcome and History Functions /////////////////////////////////////////////////////////////////////
