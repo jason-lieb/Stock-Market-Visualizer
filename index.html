@@ -41,36 +41,40 @@
               <select name="fromCurrency" class="form-select mb-2"></select>
             </div>
             <div class="d-grid gap-2">
-              <button id="loadCurrency" class="btn btn-dark rounded-1">Load Data</button>
+              <button id="loadCurrency" class="btn btn-dark rounded-1 clickHighlight">Load Data</button>
             </div>
           </div>
         </div>
 
         <!-- Defaults -->
-        <div class="card default-card flex-fill" style=" padding-bottom: 2rem;">
+        <div class="card default-card flex-fill">
           <div id="default-btns" class="card-body">
             <h5 id="defaultText" class="card-title">Popular Stocks</h5>
             <div class="d-grid gap-2" id="stock-card"> <!-- use d-none to show or hide different buttons under different category-->
-              <button data-value="AMZN" class="btn btn-dark rounded-1">AMZN</button>
-              <button data-value="AAPL" class="btn btn-dark rounded-1">AAPL</button>
-              <button data-value="GOOG" class="btn btn-dark rounded-1">GOOG</button>
-              <button data-value="META" class="btn btn-dark rounded-1">META</button>
-              <button data-value="NFLX" class="btn btn-dark rounded-1">NFLX</button>
-              <button data-value="TSLA" class="btn btn-dark rounded-1">TSLA</button>
+              <button data-value="AMZN" class="btn btn-dark rounded-1 clickHighlight">AMZN</button>
+              <button data-value="AAPL" class="btn btn-dark rounded-1 clickHighlight">AAPL</button>
+              <button data-value="GOOG" class="btn btn-dark rounded-1 clickHighlight">GOOG</button>
+              <button data-value="META" class="btn btn-dark rounded-1 clickHighlight">META</button>
+              <button data-value="NFLX" class="btn btn-dark rounded-1 clickHighlight">NFLX</button>
+              <button data-value="TSLA" class="btn btn-dark rounded-1 clickHighlight">TSLA</button>
+              <button data-value="NVDA" class="btn btn-dark rounded-1 clickHighlight">NVDA</button>
+              <button data-value="MSFT" class="btn btn-dark rounded-1 clickHighlight">MSFT</button>
+              <button data-value="DIS" class="btn btn-dark rounded-1 clickHighlight">DIS</button>
+              <button data-value="GME" class="btn btn-dark rounded-1 clickHighlight">GME</button>
             </div>
             <div class="d-grid gap-2 d-none" id="governdata-card">
-              <button data-value="GDPannual" class="btn btn-dark rounded-1">GDP Annually</button>
-              <button data-value="GDPquarter" class="btn btn-dark rounded-1">GDP Quarterly</button>
-              <button data-value="PCE" class="btn btn-dark rounded-1">PCE Annually<br><span style="font-size:x-small">Personal Consumption Expenditures</span></button>
-              <button data-value="PCEquarter" class="btn btn-dark rounded-1">PCE Quarterly<br><span style="font-size:x-small">Personal Consumption Expenditures</span></button>
+              <button data-value="GDPannual" class="btn btn-dark rounded-1 clickHighlight">GDP Annually</button>
+              <button data-value="GDPquarter" class="btn btn-dark rounded-1 clickHighlight">GDP Quarterly</button>
+              <button data-value="PCE" class="btn btn-dark rounded-1 clickHighlight">PCE Annually<br><span style="font-size:x-small">Personal Consumption Expenditures</span></button>
+              <button data-value="PCEquarter" class="btn btn-dark rounded-1 clickHighlight">PCE Quarterly<br><span style="font-size:x-small">Personal Consumption Expenditures</span></button>
             </div>
             <div class="d-grid gap-2 d-none" id="currency-card">
-              <button data-value="EUR/USD" class="btn btn-dark rounded-1">EUR/USD</button>
-              <button data-value="GBP/USD" class="btn btn-dark rounded-1">GBP/USD</button>
-              <button data-value="CAD/USD" class="btn btn-dark rounded-1">CAD/USD</button>
-              <button data-value="AUD/USD" class="btn btn-dark rounded-1">AUD/USD</button>
-              <button data-value="CNY/USD" class="btn btn-dark rounded-1">CNY/USD</button>
-              <button data-value="JPY/USD" class="btn btn-dark rounded-1">JPY/USD</button>
+              <button data-value="EUR/USD" class="btn btn-dark rounded-1 clickHighlight">EUR/USD</button>
+              <button data-value="GBP/USD" class="btn btn-dark rounded-1 clickHighlight">GBP/USD</button>
+              <button data-value="CAD/USD" class="btn btn-dark rounded-1 clickHighlight">CAD/USD</button>
+              <button data-value="AUD/USD" class="btn btn-dark rounded-1 clickHighlight">AUD/USD</button>
+              <button data-value="CNY/USD" class="btn btn-dark rounded-1 clickHighlight">CNY/USD</button>
+              <button data-value="JPY/USD" class="btn btn-dark rounded-1 clickHighlight">JPY/USD</button>
             </div>
           </div>
         </div>

@@ -86,6 +86,12 @@ function handlePage(e) {
   if (e.target.dataset.value === global.selectedPage) return;
   undoBtnSelection()
   global.selectedPage = e.target.dataset.value;
+  if (global.selectedPage === 'Government Data') {
+    global.selectedTimePeriod = '200-y';
+  } else if (global.selectedTimePeriod === '200-y') {
+    global.selectedTimePeriod = '3-m';
+  }
+
   selectBtn()
   changeUIforPage(e.target);
 }

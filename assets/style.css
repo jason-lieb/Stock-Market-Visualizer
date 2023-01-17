@@ -27,6 +27,11 @@ nav {
   background: var(--bs-success) !important;
 }
 
+.clickHighlight:active {
+  background: var(--bs-success) !important;
+  border: var(--bs-success) 1px solid !important;
+}
+
 .invisibleBorder {
   border: 5px #999 solid !important;
 }
