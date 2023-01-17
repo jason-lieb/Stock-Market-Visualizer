@@ -7,6 +7,10 @@
   --header-color: rgb(46, 49, 53);
   --background-color: #14191f;
   --light-buttons: rgb(113, 117, 122);
+  --font1:'Merriweather', serif;
+  --font2:'Roboto', sans-serif;
+  --font3:'Open Sans', sans-serif;
+
 }
 
 body {
@@ -23,10 +27,14 @@ h1 {
 
 li {
   color: aliceblue;
+
+nav a {
+  font-family: var(--font1);
 }
 
 #nav-btn1, #nav-btn2, #nav-btn3 {
   background: var(--light-buttons) !important;
+  font-family: var(--font2);
 }
 
 #nav-btn1:hover, #nav-btn2:hover, #nav-btn3:hover {
@@ -48,19 +56,44 @@ li {
   border: 5px var(--light-buttons) solid !important;
 }
 
+#search {
+  font-family: var(--font3);
+}
+
+#currencyInputs {
+  font-family: var(--font3);
+}
+
 .default-card {
   background: var(--light-buttons);
+  font-family: var(--font2);
+}
+
+#alert {
+  margin-top: 0.125rem !important;
+  margin-bottom: 0.375rem !important;
+  padding: 0.375rem !important;
+  border: 0 !important;
 }
 
 #welcome {
   background-color: var(--header-color);
   color: white;
+  font-family: var(--font1);
 }
 
 #chart {
   height: 35em;
   border: 3px var(--header-color) solid;
   border-radius: 1rem;
+}
+
+#time-btns {
+  font-family: var(--font3);
+}
+
+ a {
+  font-family: var(--font3);
 }
 
 

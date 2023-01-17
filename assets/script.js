@@ -17,6 +17,8 @@ let global = {
 // Query Selectors
 let chartContainer = document.querySelector("#chart");
 
+let searchDefault = document.querySelector('#search_default');
+
 let navbarBtns = document.querySelector("#navbar-btns");
 let defaultBtns = document.querySelector("#default-btns");
 let timeBtns = document.querySelector("#time-btns");
@@ -53,7 +55,11 @@ currencyBtn.addEventListener("click", handleSelect);
 // Load Google Charts
 google.charts.load("current", { packages: ["corechart"] });
 
-// Initialization Function
+// Initialize
+init();
+
+//////////////////////////////////////////////// Initialization Functions /////////////////////////////////////////////////////////////////////
+
 async function init() {
   selectBtn();
   getHistory();
@@ -61,10 +67,8 @@ async function init() {
   let currencyOptions = await loadCurrencyOptions();
   addCurrencyOptions(toCurrencyInput, currencyOptions);
   addCurrencyOptions(fromCurrencyInput, currencyOptions);
-  // getContinuousStocks();
+  getContinuousStocks();
 }
-
-init();
 
 async function loadCurrencyOptions() {
   let response = await fetch("./assets/currencyOptions.json");
@@ -126,7 +130,10 @@ function handleSearch(e) {
 function handleSelect(e) {
   let fromCurrency = e.target.parentElement.previousElementSibling.children[1];
   let toCurrency = e.target.parentElement.previousElementSibling.previousElementSibling.children[1];
-  if (fromCurrency.value === '' || toCurrency.value === '') return; // Add better error handling
+  if (fromCurrency.value === '' || toCurrency.value === '') {
+    addAlert('Please Choose Two Currencies');
+    return
+  };
   handleData(`${toCurrency.value}/${fromCurrency.value}`);
 }
 
@@ -138,6 +145,8 @@ async function handleData(input) {
   updateChart();
   addHistory(input);
 }
+
+///////////////////////////////////////////////////////// UI Functions /////////////////////////////////////////////////////////////////////
 
 function undoBtnSelection() {
   // Page button
@@ -270,6 +279,58 @@ function changeUIforPage(page) {
   }
 }
 
+function hide(selector) {
+  selector.classList.add("d-none");
+}
+
+function show(selector) {
+  selector.classList.remove("d-none");
+}
+
+function enable(s_1, s_2, s_3, s_4, s_5) {
+  for (let i = 0; i < arguments.length; i++) {
+    arguments[i].classList.remove("disabled");
+  }
+}
+
+function disable(s_1, s_2, s_3, s_4, s_5) {
+  for (let i = 0; i < arguments.length; i++) {
+    arguments[i].classList.add("disabled");
+  }
+}
+
+function addLoadingSymbol() {
+  chartContainer.innerHTML = `
+    <div id="loading" class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    `;
+}
+
+function addAlert(alertText) {
+  // Limit of 1 alert
+  if (searchDefault.children[2].id === 'alert') return;
+  // Create alert
+  let alert = document.createElement('div');
+  alert.id = 'alert';
+  alert.className = 'alert alert-danger mb-1 text-center'
+  alert.textContent = alertText;
+  // Insert alert in space between containers
+  let currencyContainer = document.querySelector('#currencyInputs');
+  currencyContainer.className = 'card default-card mb-1';
+  searchDefault.insertBefore(alert, alertReference);
+  // Remove after 2 seconds
+  setTimeout(removeAlert, 2000);
+}
+
+function removeAlert() {
+  searchDefault.removeChild(document.querySelector('#alert'));
+  let currencyContainer = document.querySelector('#currencyInputs');
+  currencyContainer.className = 'card default-card mb-5';
+}
+
+/////////////////////////////////////////// Welcome and History Functions /////////////////////////////////////////////////////////////////////
+
 function createWelcome() {
   let selectedHistory = global.selectedPage === 'Stocks' ? 'stockHistory' : 'currencyHistory';
   let pageHistory = global[selectedHistory];
@@ -357,35 +418,6 @@ function clearHistory() {
   createWelcome();
 }
 
-// add event listners for history btns
-
-function hide(selector) {
-  selector.classList.add("d-none");
-}
-
-function show(selector) {
-  selector.classList.remove("d-none");
-}
-
-function enable(s_1, s_2, s_3, s_4, s_5) {
-  for (let i = 0; i < arguments.length; i++) {
-    arguments[i].classList.remove("disabled");
-  }
-}
-
-function disable(s_1, s_2, s_3, s_4, s_5) {
-  for (let i = 0; i < arguments.length; i++) {
-    arguments[i].classList.add("disabled");
-  }
-}
-
-function addLoadingSymbol() {
-  chartContainer.innerHTML = `
-    <div id="loading" class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
-    `;
-}
 //////////////////////////////////////////////// Data Management Functions /////////////////////////////////////////////////////////////////////
 
 async function getData(input) {
@@ -571,15 +603,15 @@ function parseAlphaVantage(rawData) {
 
 /////////////////////////////////////////////////////// BEA API Functions /////////////////////////////////////////////////////////////////////
 
-let MacroData = {
-  tablename: {
-    GDPannual: "t10101", //Gross domestic product percent change annual rate // line 1
-    PCEannual: "t20301",
-    GDPquarter: "t10101",
-    PCEquarter: "t20301",
-  },
-};
 async function getBEA(input) {
+  let MacroData = {
+    tablename: {
+      GDPannual: "t10101", //Gross domestic product percent change annual rate // line 1
+      PCEannual: "t20301",
+      GDPquarter: "t10101",
+      PCEquarter: "t20301",
+    },
+  };
   let frequency = input.endsWith('quarter') ? 'q' : 'a';
   var url = `http://apps.bea.gov/api/data/?UserID=${bea_APIKEY}&method=getDATA&datasetname=nipa&TABLENAME=${MacroData.tablename[input]}&FREQUENCY=${frequency}&YEAR=ALL`;
   console.log(url);
@@ -647,7 +679,7 @@ async function getContinuousStocks() {
   } else {
     updateContinuousStocks(continuousData);
   }
-  setTimeout(getContinuousStocks, 600000);
+  setTimeout(getContinuousStocks, 120000);
 }
 
 function createContinuousStocks(continuousData) {
