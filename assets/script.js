@@ -322,6 +322,8 @@ function getHistory() {
   global.history = JSON.parse(localStorage.getItem('history'));
 }
 
+// add to history function => remove duplicates, order based on latest
+
 // add items to global history and populate history functions in workflow
 
 function hide(selector) {
