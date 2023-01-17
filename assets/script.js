@@ -104,7 +104,7 @@ function handleSearch(e) {
 function handleSelect(e) {
   let fromCurrency = e.target.previousElementSibling.children[1];
   let toCurrency = e.target.previousElementSibling.previousElementSibling.children[1];
-  if (fromCurrency.value === 'From Currency' || toCurrency.value === 'To Currency') return; // Add better error handling
+  if (fromCurrency.value === '' || toCurrency.value === '') return; // Add better error handling
   handleData(`${toCurrency.value}/${fromCurrency.value}`);
 }
 
