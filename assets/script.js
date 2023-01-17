@@ -149,7 +149,7 @@ function changeUIforPage(page) {
     // Government
     hide(governCard);
     enable(threeMonBtn, sixMonBtn, ytd, oneYBtn, threeYBtn);
-    disable(allBtn)
+    disable(allBtn);
   }
   if (page.dataset.value === "Currency") {
     // Stock
@@ -164,7 +164,6 @@ function changeUIforPage(page) {
     hide(governCard);
     enable(threeMonBtn, sixMonBtn, ytd, oneYBtn, threeYBtn);
     disable(allBtn);
-
   }
   if (page.dataset.value === "Government Data") {
     // Stock
@@ -232,7 +231,7 @@ async function getData(input) {
       break;
     case "Government Data":
       global.data = await getBEA();
-      global.selectedTimePeriod='200-y';//200 to show all.
+      global.selectedTimePeriod = "200-y"; //200 to show all.
       break;
   }
 }
@@ -260,15 +259,27 @@ function selectDataForTimeRange() {
   // Create Index for Data in Time Period
   global.dataInTimePeriodIndex = 0;
   let allData = true;
-  for (let i = 0; i < global.data.length; i++) {
-    if (global.data[i][0] < timeBound) {
-      global.dataInTimePeriodIndex = i;
-      allData = false;
-    }
+  switch (global.selectedPage) {
+    case "Stocks":
+    case "Currency":
+      for (let i = 0; i < global.data.length; i++) {
+        if (global.data[i][0] < timeBound) {
+          global.dataInTimePeriodIndex = i;
+          allData = false;
+        }
+      }
+      break;
+    case "Government Data":
+      for (let i = 0; i < global.data.length; i++) {
+        if (Number(global.data[i][0]) < year) {
+          global.dataInTimePeriodIndex = i;
+          allData = false;
+        }
+      }
+      break;
   }
   if (!allData) global.dataInTimePeriodIndex += 1;
 }
-
 //////////////////////////////////////////////////////// Chart Functions /////////////////////////////////////////////////////////////////////
 
 function updateChart() {
@@ -283,14 +294,34 @@ function drawChart() {
   let displayData = global.data.slice(global.dataInTimePeriodIndex);
 
   // displayData.unshift(["Time", "Stock Price"]); //////////////////////////// Modify header based on incoming data
-  global.data.unshift(["Time", "Stock Price"]); //////////////////////////// Modify header based on incoming data
-  let chartData = google.visualization.arrayToDataTable(global.data);
+  displayData.unshift(["Time", "Value"]); //////////////////////////// Modify header based on incoming data
+  // global.data.unshift(["Time", "Stock Price"]); //////////////////////////// Modify header based on incoming data
+  let chartData = google.visualization.arrayToDataTable(displayData);
   console.log(displayData);
-  let options = {
-    title: "Stock Price",
-    curveType: "function",
-    legend: "none",
-  };
+  let options;
+  switch (global.selectedPage) {
+    case "stocks":
+      options = {
+        title: "Stock Price",
+        curveType: "function",
+        legend: "none",
+      };
+      break;
+    case "Currency":
+      options = {
+        title: "Currency Exchange Rate",
+        curveType: "function",
+        legend: "none",
+      };
+      break;
+    case "Government Data":
+      let options = {
+        title: "Macro Data",
+        curveType: "function",
+        legend: "none",
+      };
+      break;
+  }
   chart.draw(chartData, options);
 }
 
