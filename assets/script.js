@@ -493,20 +493,25 @@ function drawChart() {
           axis: "horizontal",
           actions: ["dragToZoom", "rightClickToReset"],
           keepInBounds: true,
-        },
+        }
       };
       break;
     case "Currency":
       options = {
         title: "Currency Exchange Rate",
-        titleTextStyle: {color: 'white'},
+        titleTextStyle: { color: "white" },
         curveType: "function",
         legend: "none",
-        backgroundColor: {fill: 'black'},
-        colors: ['white'],
-        vAxis:{textStyle: {color: 'white'}},
-        hAxis:{textStyle: {color: 'white'}},
-        animation: {"startup": true, duration: 1000, easing: "linear"}
+        backgroundColor: { fill: "black" },
+        colors: ["white"],
+        vAxis: { textStyle: { color: "white" } },
+        hAxis: { textStyle: { color: "white" } },
+        animation: { startup: true, duration: 1000, easing: "linear" },
+        explorer: {
+          axis: "horizontal",
+          actions: ["dragToZoom", "rightClickToReset"],
+          keepInBounds: true,
+        }
       };
       break;
     case "Government Data":
