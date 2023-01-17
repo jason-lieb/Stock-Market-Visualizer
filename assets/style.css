@@ -13,20 +13,16 @@ nav {
   background: #555;
 }
 
-#nav-btn2, #nav-btn3 {
+#nav-btn1, #nav-btn2, #nav-btn3 {
   background: #999 !important;
 }
 
-#nav-btn1 {
-background: #777;
+.invisibleBorder {
+  border: 5px #999 solid !important;
 }
 
 .default-card {
   background: #999;
-}
-
-.card-body2 {
-    background: #555;
 }
 
 @keyframes stockTicker {

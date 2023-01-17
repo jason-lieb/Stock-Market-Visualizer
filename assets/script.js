@@ -54,6 +54,7 @@ google.charts.load("current", { packages: ["corechart"] });
 
 // Initialization Function
 async function init() {
+  selectBtn();
   let currencyOptions = await loadCurrencyOptions();
   addCurrencyOptions(toCurrencyInput, currencyOptions);
   addCurrencyOptions(fromCurrencyInput, currencyOptions);
@@ -84,19 +85,19 @@ function addCurrencyOptions(parent, currencyOptions) {
 function handlePage(e) {
   if (e.target.dataset.value === undefined) return;
   if (e.target.dataset.value === global.selectedPage) return;
-  // undoBtnSelection() // Remove styling from currently selected button
+  undoBtnSelection()
   global.selectedPage = e.target.dataset.value;
-  // selectBtn() // Change Styling of Navbars to unselect old page and select new page
+  selectBtn()
   changeUIforPage(e.target);
 }
 
 function handleTime(e) {
   if (e.target.dataset.value === undefined) return;
   if (e.target.dataset.value === global.selectedTimePeriod) return;
+  undoBtnSelection()
   global.selectedTimePeriod = e.target.dataset.value;
-  // undoBtnSelection() // Remove styling from currently selected button
+  selectBtn()
   if (global.data !== undefined) updateChart();
-  // selectBtn() // Change Styling of Navbars to unselect old page and select new page
 }
 
 function handleDefault(e) {
@@ -113,15 +114,15 @@ function handleSearch(e) {
 }
 
 function handleSelect(e) {
-  let fromCurrency = e.target.previousElementSibling.children[1];
-  let toCurrency = e.target.previousElementSibling.previousElementSibling.children[1];
+  let fromCurrency = e.target.parentElement.previousElementSibling.children[1];
+  let toCurrency = e.target.parentElement.previousElementSibling.previousElementSibling.children[1];
   if (fromCurrency.value === '' || toCurrency.value === '') return; // Add better error handling
   handleData(`${toCurrency.value}/${fromCurrency.value}`);
 }
 
 async function handleData(input) {
   clearChart();
-  // addLoadingSymbol();
+  addLoadingSymbol();
   await getData(input);
   // for (let i = 0; i < 1000000000; i++) { ////////// For testing loading symbol
   //   let j = i;
@@ -130,13 +131,91 @@ async function handleData(input) {
   updateChart();
 }
 
-// function undoSelectedBtn() {
-//   //
-// }
+function undoBtnSelection() {
+  // Page button
+  let pageId;
+  switch (global.selectedPage) {
+    case 'Stocks':
+      pageId = 'nav-btn1';
+      break;
+    case 'Currency':
+      pageId = 'nav-btn2';
+      break;
+    case 'Government Data':
+      pageId = 'nav-btn3';
+      break;
+  }
+  document.querySelector(`#${pageId}`).className = 'nav-link text-dark ms-2 px-1 my-1 mx-md-2 invisibleBorder border border-5';
+  // Time button
+  let timeId;
+  switch (global.selectedTimePeriod) {
+    case '3-m':
+      timeId = 'three-mon-btn';
+      break;
+    case '6-m':
+      timeId = 'six-mon-btn';
+      break;
+    case 'YTD':
+      timeId = 'ytd-btn';
+      break;
+    case '1-y':
+      timeId = 'one-y-btn';
+      break;
+    case '3-y':
+      timeId = 'three-y-btn';
+      break;
+    case '10-y':
+      timeId = 'ten-y-btn';
+      break;
+    case '200-y':
+      timeId = 'all-btn';
+      break;
+  }
+  document.querySelector(`#${timeId}`).className = 'btn btn-dark rounded-1';
+}
 
-// function selectBtn() {
-//   //
-// }
+function selectBtn() {
+  // Page button
+  let pageId;
+  switch (global.selectedPage) {
+    case 'Stocks':
+      pageId = 'nav-btn1';
+      break;
+    case 'Currency':
+      pageId = 'nav-btn2';
+      break;
+    case 'Government Data':
+      pageId = 'nav-btn3';
+      break;
+  }
+  document.querySelector(`#${pageId}`).className = 'nav-link text-dark ms-2 px-1 my-1 mx-md-2 border border-5 border-success border-opacity-50';
+  // Time button
+  let timeId;
+  switch (global.selectedTimePeriod) {
+    case '3-m':
+      timeId = 'three-mon-btn';
+      break;
+    case '6-m':
+      timeId = 'six-mon-btn';
+      break;
+    case 'YTD':
+      timeId = 'ytd-btn';
+      break;
+    case '1-y':
+      timeId = 'one-y-btn';
+      break;
+    case '3-y':
+      timeId = 'three-y-btn';
+      break;
+    case '10-y':
+      timeId = 'ten-y-btn';
+      break;
+    case '200-y':
+      timeId = 'all-btn';
+      break;
+  }
+  document.querySelector(`#${timeId}`).className = 'btn btn-dark rounded-1 btn-outline-success';
+}
 
 function changeUIforPage(page) {
   if (page.dataset.value === "Stocks") {
@@ -162,7 +241,6 @@ function changeUIforPage(page) {
     // Currency
     show(currencyCard);
     show(currencyInputs);
-
     // Government
     hide(governCard);
     enable(threeMonBtn, sixMonBtn, ytd, oneYBtn, threeYBtn);
