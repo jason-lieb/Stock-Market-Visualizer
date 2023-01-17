@@ -1,7 +1,8 @@
 //API Keys
 let polygon_APIKEY = "TTNbgrcWIJyP1tavyIdjxgTywo6ixljm";
 let alpha_vantage_APIKEY = "0BGSBFE3M96OL784";
-let fred_APIKEY = "ce4ba2fd678f9dfc7903324adee68449";
+// let fred_APIKEY = "ce4ba2fd678f9dfc7903324adee68449"; //depreciated
+let bea_APIKEY = "D34BBF56-E892-4E7A-9427-83869BD3A09D";
 let finnhub_APIKEY = "cf2ap1aad3idqn4q4nlgcf2ap1aad3idqn4q4nm0";
 
 // Global Variables
@@ -30,13 +31,20 @@ let currencyBtn = document.querySelector("#loadCurrency");
 
 let scrollingData = document.querySelector('#scrolling');
 
+let threeMonBtn = document.querySelector("#three-mon-btn");
+let sixMonBtn = document.querySelector("#six-mon-btn");
+let ytd = document.querySelector("#ytd-btn");
+let oneYBtn = document.querySelector("#one-y-btn");
+let threeYBtn = document.querySelector("#three-y-btn");
+let tenYBtn = document.querySelector("#ten-y-btn");
+let allBtn = document.querySelector("#all-btn");
+
 // Event Listeners
 navbarBtns.addEventListener("click", handlePage);
 defaultBtns.addEventListener("click", handleDefault);
 timeBtns.addEventListener("click", handleTime);
 searchInput.addEventListener("keypress", handleSearch);
 currencyBtn.addEventListener("click", handleSelect);
-
 
 // Load Google Charts
 google.charts.load("current", { packages: ["corechart"] });
@@ -52,13 +60,13 @@ async function init() {
 init();
 
 async function loadCurrencyOptions() {
-  let response = await fetch('./assets/currencyOptions.json');
-  let currencyOptions = await response.json()
+  let response = await fetch("./assets/currencyOptions.json");
+  let currencyOptions = await response.json();
   let optionHTML = "";
   for (let i = 0; i < currencyOptions.length; i++) {
     optionHTML += `<option value="${currencyOptions[i]}">${currencyOptions[i]}</option>`;
   }
-  return optionHTML
+  return optionHTML;
 }
 
 function addCurrencyOptions(parent, currencyOptions) {
@@ -110,7 +118,7 @@ function handleSelect(e) {
 
 async function handleData(input) {
   clearChart();
-  addLoadingSymbol();
+  // addLoadingSymbol();
   await getData(input);
   // for (let i = 0; i < 1000000000; i++) { ////////// For testing loading symbol
   //   let j = i;
@@ -139,6 +147,8 @@ function changeUIforPage(page) {
     hide(currencyBtn);
     // Government
     hide(governCard);
+    enable(threeMonBtn, sixMonBtn, ytd, oneYBtn, threeYBtn);
+    disable(allBtn);
   }
   if (page.dataset.value === "Currency") {
     // Stock
@@ -151,6 +161,8 @@ function changeUIforPage(page) {
     show(currencyBtn);
     // Government
     hide(governCard);
+    enable(threeMonBtn, sixMonBtn, ytd, oneYBtn, threeYBtn);
+    disable(allBtn);
   }
   if (page.dataset.value === "Government Data") {
     // Stock
@@ -163,6 +175,8 @@ function changeUIforPage(page) {
     hide(currencyBtn);
     // Government
     show(governCard);
+    disable(threeMonBtn, sixMonBtn, ytd, oneYBtn, threeYBtn);
+    enable(allBtn);
   }
 }
 
@@ -174,6 +188,18 @@ function show(selector) {
   selector.classList.remove("d-none");
 }
 
+function enable(s_1, s_2, s_3, s_4, s_5) {
+  for (let i = 0; i < arguments.length; i++) {
+    arguments[i].classList.remove("disabled");
+  }
+}
+
+function disable(s_1, s_2, s_3, s_4, s_5) {
+  for (let i = 0; i < arguments.length; i++) {
+    arguments[i].classList.add("disabled");
+  }
+}
+
 function addLoadingSymbol() {
   chartContainer.innerHTML = `
     <div id="loading" class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
@@ -181,13 +207,12 @@ function addLoadingSymbol() {
     </div>
     `;
 }
-
 //////////////////////////////////////////////// Data Management Functions /////////////////////////////////////////////////////////////////////
 
 async function getData(input) {
   let newData;
   switch (global.selectedPage) {
-    case 'Stocks':
+    case "Stocks":
       // newData = await getAlphaVantageStock(input); //Commented out to prevent accidental usage of limited API calls
       // global.data = parseAlphaVantage(newData);
       global.data = await importTestData(
@@ -195,8 +220,8 @@ async function getData(input) {
       ); ///////// Temporarily here to use test data
       break;
     case "Currency":
-      let toCurrency = input.split('/')[0];
-      let fromCurrency = input.split('/')[1];
+      let toCurrency = input.split("/")[0];
+      let fromCurrency = input.split("/")[1];
       // newData = await getAlphaVantageForex(toCurrency, fromCurrency);
       // global.data = parseAlphaVantage(newData);
       global.data = await importTestData(
@@ -204,8 +229,8 @@ async function getData(input) {
       );
       break;
     case "Government Data":
-      //
-      //
+      global.data = await getBEA();
+      global.selectedTimePeriod = "200-y"; //200 to show all.
       break;
   }
 }
@@ -233,15 +258,27 @@ function selectDataForTimeRange() {
   // Create Index for Data in Time Period
   global.dataInTimePeriodIndex = 0;
   let allData = true;
-  for (let i = 0; i < global.data.length; i++) {
-    if (global.data[i][0] < timeBound) {
-      global.dataInTimePeriodIndex = i;
-      allData = false;
-    }
+  switch (global.selectedPage) {
+    case "Stocks":
+    case "Currency":
+      for (let i = 0; i < global.data.length; i++) {
+        if (global.data[i][0] < timeBound) {
+          global.dataInTimePeriodIndex = i;
+          allData = false;
+        }
+      }
+      break;
+    case "Government Data":
+      for (let i = 0; i < global.data.length; i++) {
+        if (Number(global.data[i][0]) < year) {
+          global.dataInTimePeriodIndex = i;
+          allData = false;
+        }
+      }
+      break;
   }
   if (!allData) global.dataInTimePeriodIndex += 1;
 }
-
 //////////////////////////////////////////////////////// Chart Functions /////////////////////////////////////////////////////////////////////
 
 function updateChart() {
@@ -252,14 +289,38 @@ function updateChart() {
 // Generate Chart with Google Charts
 function drawChart() {
   let chart = new google.visualization.LineChart(chartContainer);
+  console.log(global.dataInTimePeriodIndex);
   let displayData = global.data.slice(global.dataInTimePeriodIndex);
-  displayData.unshift(["Time", "Stock Price"]); //////////////////////////// Modify header based on incoming data
+
+  // displayData.unshift(["Time", "Stock Price"]); //////////////////////////// Modify header based on incoming data
+  displayData.unshift(["Time", "Value"]); //////////////////////////// Modify header based on incoming data
+  // global.data.unshift(["Time", "Stock Price"]); //////////////////////////// Modify header based on incoming data
   let chartData = google.visualization.arrayToDataTable(displayData);
-  let options = {
-    title: "Stock Price",
-    curveType: "function",
-    legend: "none",
-  };
+  console.log(displayData);
+  let options;
+  switch (global.selectedPage) {
+    case "stocks":
+      options = {
+        title: "Stock Price",
+        curveType: "function",
+        legend: "none",
+      };
+      break;
+    case "Currency":
+      options = {
+        title: "Currency Exchange Rate",
+        curveType: "function",
+        legend: "none",
+      };
+      break;
+    case "Government Data":
+      let options = {
+        title: "Macro Data",
+        curveType: "function",
+        legend: "none",
+      };
+      break;
+  }
   chart.draw(chartData, options);
 }
 
@@ -280,7 +341,7 @@ async function getAlphaVantageStock(ticker) {
 async function getAlphaVantageForex(toCurrency, fromCurrency) {
   let response = await fetch(
     `https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=${fromCurrency}&to_symbol=${toCurrency}&outputsize=full&apikey=${alpha_vantage_APIKEY}`
-    );
+  );
   let rawData = await response.json();
   return { rawData, dataKey: "Time Series FX (Daily)" };
 }
@@ -299,50 +360,27 @@ function parseAlphaVantage(rawData) {
   return parsedData;
 }
 
-/////////////////////////////////////////////////////// FRED API Functions /////////////////////////////////////////////////////////////////////
-var root = "https://api.stlouisfed.org/fred/";
-var series_id = "CPIAUCSL";
-/* different series data options */
-[
-  "GDP", //GDP returns quarterly
-  "SP500", //index sp500 daily, close, daily
-  "NASDAQCOM", //NASDAQ Composite Index, close, daily
-  "DJIA", //Dow Jones Industrial Average, close, daily
-  "CPIAUCSL", // Consumer Price Index for All Urban Consumers: All Items in U.S. City Average, monthly, only price index, not percent change
-  "UNRATE", // Unemployment Rate, percent, monthly
-];
-/* different parameters */
-[
-  "observation_start", //YYYY-MM-DD formatted string, optional, default: 1776-07-04 (earliest available)
-  "observation_end", //YYYY-MM-DD formatted string, optional, default: 9999-12-31 (latest available)
-];
-var params = { observation_start: "2020-01-01", observation_end: "2022-12-31" };
-var qeuryString = "";
-for (var key in params) {
-  qeuryString += "&" + key + "=" + params[key];
-}
-var url = `${root}series/observations?series_id=${series_id}&api_key=${fred_APIKEY}&file_type=json${qeuryString}`;
-function getFRED() {
+/////////////////////////////////////////////////////// BEA API Functions /////////////////////////////////////////////////////////////////////
+
+async function getBEA() {
+  var url = `http://apps.bea.gov/api/data/?UserID=${bea_APIKEY}&method=getDATA&datasetname=nipa&TABLENAME=t10101&FREQUENCY=a&YEAR=ALL`;
   console.log(url);
-  fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data.observations.length);
-      parseFREDdata(data);
-    });
+  let response = await fetch(url);
+  let data = await response.json();
+  return parseBEAdata(data);
 }
 
-// Parse FRED Response
-function parseFREDdata(rawData) {
-  let data_temp = rawData.observations;
+// Parse BEA Response
+function parseBEAdata(rawData) {
+  let data_temp = rawData.BEAAPI.Results.Data;
   let parsedData = [];
   for (let i = 0; i < data_temp.length; i++) {
-    parsedData.push({
-      date: data_temp[i].date,
-      closeValue: data_temp[i].value,
-    });
+    if (data_temp[i].LineNumber !== "1") {
+      break; //only take line1 which is the real GDP data
+    }
+    parsedData.push([data_temp[i].TimePeriod, Number(data_temp[i].DataValue)]);
   }
-  console.log(parsedData);
+  // parsedData.unshift(["Year", "Value"]);
   return parsedData;
 }
 
