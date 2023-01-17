@@ -21,6 +21,13 @@ nav {
   background: var(--header-color);
 }
 
+h1 {
+  color: aliceblue;
+}
+
+li {
+  color: aliceblue;
+
 nav a {
   font-family: var(--font1);
 }
