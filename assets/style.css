@@ -44,6 +44,11 @@ nav {
   background: var(--light-buttons);
 }
 
+#welcome {
+  background-color: var(--header-color);
+  color: white;
+}
+
 #chart {
   height: 35em;
   border: 3px var(--header-color) solid;
@@ -58,7 +63,7 @@ nav {
 
 #scrollWrap {
   overflow: hidden;
-  background-color: var(--header-color);
+  background-color: var(--background-color);
   height: 3rem;
 }
 
@@ -106,8 +111,8 @@ nav {
    #search_default {
     max-width: 300px;
     min-width: 200px;
-   
-  }  
+
+  }
   a:link {
     text-decoration: none;
     color: var(--light-buttons);
@@ -206,7 +211,7 @@ nav {
   }
 }
 
-@media screen and (max-width: 576px){ 
+@media screen and (max-width: 576px){
   #search_default {
      margin-top: 80px;
   }

@@ -10,6 +10,8 @@ let global = {
   dataInTimePeriodIndex: 0,
   selectedTimePeriod: "3-m",
   selectedPage: "Stocks",
+  stockHistory: undefined,
+  currencyHistory: undefined
 };
 
 // Query Selectors
@@ -54,6 +56,8 @@ google.charts.load("current", { packages: ["corechart"] });
 // Initialization Function
 async function init() {
   selectBtn();
+  getHistory();
+  createWelcome();
   let currencyOptions = await loadCurrencyOptions();
   addCurrencyOptions(toCurrencyInput, currencyOptions);
   addCurrencyOptions(fromCurrencyInput, currencyOptions);
@@ -91,9 +95,10 @@ function handlePage(e) {
   } else if (global.selectedTimePeriod === '200-y') {
     global.selectedTimePeriod = '3-m';
   }
-
   selectBtn()
   changeUIforPage(e.target);
+  clearChart();
+  createWelcome();
 }
 
 function handleTime(e) {
@@ -129,11 +134,9 @@ async function handleData(input) {
   clearChart();
   addLoadingSymbol();
   await getData(input);
-  // for (let i = 0; i < 1000000000; i++) { ////////// For testing loading symbol
-  //   let j = i;
-  // }
   clearChart();
   updateChart();
+  addHistory(input);
 }
 
 function undoBtnSelection() {
@@ -266,6 +269,95 @@ function changeUIforPage(page) {
     enable(allBtn);
   }
 }
+
+function createWelcome() {
+  let selectedHistory = global.selectedPage === 'Stocks' ? 'stockHistory' : 'currencyHistory';
+  let pageHistory = global[selectedHistory];
+  if (global.selectedPage === 'Government Data') {
+    // Government data page
+    chartContainer.innerHTML = `
+          <div id="welcome" class="container">
+            <h2>Welcome to the ${global.selectedPage} Page</h2>
+            <p>Choose whatever data you would like to see from our options on the left.</p>
+          </div>
+          `;
+  } else if (pageHistory === null || pageHistory === undefined || pageHistory.length === 0) {
+    // Stock and currency pages without history
+    let pageSpecificMessage;
+    switch (global.selectedPage) {
+      case 'Stocks':
+        pageSpecificMessage = 'Use the search bar to search for stocks by ticker or choose one of our most popular options.';
+        break;
+      case 'Currency':
+        pageSpecificMessage = 'Choose which currency you would like to change from and to or choose one of our most popular options';
+        break;
+    }
+    chartContainer.innerHTML = `
+      <div id="welcome" class="container">
+        <h2>Welcome to the ${global.selectedPage} Page</h2>
+        <p>Your history is empty. ${pageSpecificMessage}</p>
+      </div>
+      `;
+  } else {
+    // Stock and currency with history
+    let historyBtns = '';
+    for (let i = 0; i < pageHistory.length; i++) {
+      historyBtns += `<button id="${pageHistory[i].split('/').join('')}History" data-value="${pageHistory[i]}" class="btn btn-dark rounded-1 clickHighlight">${pageHistory[i]}</button>`;
+    }
+    chartContainer.innerHTML = `
+      <div id="welcome" class="container">
+        <h2>Welcome to the ${global.selectedPage} Page</h2>
+        <h3>History:</h3>
+        ${historyBtns}
+        <button id="clearHistory" class="btn btn-danger rounded-1">Clear History</button>
+      </div>
+      `;
+    for (let i = 0; i < pageHistory.length; i++) {
+      let historyBtn = document.querySelector(`#${pageHistory[i].split('/').join('')}History`);
+      historyBtn.addEventListener("click", handleDefault);
+    }
+    let clearHistoryBtn = document.querySelector('#clearHistory');
+    clearHistoryBtn.addEventListener("click", clearHistory);
+  }
+}
+
+function saveHistory() {
+  localStorage.setItem('stockHistory', JSON.stringify(global.stockHistory));
+  localStorage.setItem('currencyHistory', JSON.stringify(global.currencyHistory));
+}
+
+function getHistory() {
+  global.stockHistory = JSON.parse(localStorage.getItem('stockHistory'));
+  global.currencyHistory = JSON.parse(localStorage.getItem('currencyHistory'));
+}
+
+function addHistory(input) {
+  let selectedHistory = global.selectedPage === 'Stocks' ? 'stockHistory' : 'currencyHistory';
+  let pageHistory = global[selectedHistory];
+  if (pageHistory !== null && pageHistory !== undefined) {
+    for(let i = 0; i < pageHistory.length; i++) {
+      if (pageHistory[i] === input) {
+        pageHistory.splice(i,1);
+      }
+    }
+    if (pageHistory.length > 5) pageHistory.pop();
+    pageHistory.unshift(input);
+  } else {
+    pageHistory = [input];
+  }
+  global[selectedHistory] = pageHistory;
+  saveHistory();
+}
+
+function clearHistory() {
+  global.stockHistory = [];
+  global.currencyHistory = [];
+  saveHistory();
+  clearChart();
+  createWelcome();
+}
+
+// add event listners for history btns
 
 function hide(selector) {
   selector.classList.add("d-none");
