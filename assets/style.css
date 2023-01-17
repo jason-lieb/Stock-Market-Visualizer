@@ -50,6 +50,7 @@ nav {
   border-radius: 1rem;
 }
 
+
 @keyframes stockTicker {
   0% { transform: translate3d(110%, 0, 0) }
   100% { transform: translate3d(-135%, 0, 0) }
@@ -102,10 +103,11 @@ nav {
   }
 }
 @media screen and (min-width: 576px){
-  #search_default {
+   #search_default {
     max-width: 300px;
     min-width: 200px;
-  }
+   
+  }  
   a:link {
     text-decoration: none;
     color: var(--light-buttons);
@@ -126,6 +128,7 @@ nav {
     color: var(--bs-success);
     font-weight: bold;
   }
+
   footer {
     position: absolute;
     border-left: 2000px;
@@ -201,4 +204,16 @@ nav {
       background-repeat: no-repeat;
       background-size: cover;
   }
+}
+
+@media screen and (max-width: 576px){ 
+  #search_default {
+     margin-top: 80px;
+  }
+
+  div.row {
+  display: flex;
+  flex-wrap: wrap-reverse;
+ }
+
 }
