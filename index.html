@@ -1,119 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="./assets/style.css"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans&family=Roboto:wght@500&display=swap" rel="stylesheet">
-  <title>Stock Market Visualizer</title>
-</head>
-<body>
-  <!-- Nav -->
-  <nav class="navbar navbar-expand-md border-bottom border-dark border-opacity-50 bg-body-tertiary justify-content-between">
-      <a class="navbar-brand bg-dark text-light ms-2 p-2 fw-bold rounded ">Stock Market Visualizer</a>
-      <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-end" id="navbar-toggler"><!--d-flex justify-content-end-->
-          <div id="navbar-btns" class="navbar-nav nav-pills ">
-              <button id="nav-btn1" data-value="Stocks" class="nav-link text-dark ms-2 px-2 my-1 mx-md-2 invisibleBorder border border-5" href="#">STOCKS</button>
-              <button id="nav-btn2" data-value="Currency" class="nav-link text-dark ms-2 px-2 my-1 mx-md-2 invisibleBorder border border-5" href="#">CURRENCY</button>
-              <button id="nav-btn3" data-value="Government Data" class="nav-link text-dark ms-2 px-2 my-1 mx-md-2 invisibleBorder border border-5" href="#">GOVERNMENT DATA</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./login/login.css" />
+    <title>Login</title>
+  </head>
+  <body>
+    <!-- particles.js container -->
+    <div id="particles-js">
+      <div class="d-grid gap-3 position-absolute" style="top: 40%; left: 40%;width:20%" >
+          <div class="col-12 form-floating">
+            <input
+              type="email"
+              class="form-control"
+              id="floatingInput"
+              placeholder="name@example.com"
+            />
+            <label for="floatingInput">Email address</label>
           </div>
-      </div>
-  </nav>
-  <div id="scrollWrap" class="d-flex align-items-center mt-2 mb-md-5">
-    <div id="scrolling" class="d-flex container-fluid"></div>
-  </div>
-
-  <main class="container-fluid mt-5">
-    <div class="row justify-content-around">
-      <div class="col-sm-3 d-flex flex-column" id="search_default">
-
-        <!-- Inputs -->
-        <input id="search" class="form-control mb-5" type="search" placeholder="Search stock tickers here" aria-label="Stock search bar input">
-        <div id="currencyInputs" class="card default-card d-none mb-5 text-uppercase">
-          <div class="card-body">
-            <div id="toCurrency" class="text-light">
-              <label for="toCurrency" class="text-dark">To Currency</label>
-              <select name="toCurrency" class="form-select mb-2"></select>
-            </div>
-            <div id="fromCurrency" class="text-light">
-              <label for="fromCurrency"  class="text-dark">From Currency</label>
-              <select name="fromCurrency" class="form-select mb-2"></select>
-            </div>
-            <div class="d-grid gap-2">
-              <button id="loadCurrency" class="btn btn-dark rounded-1 clickHighlight text-uppercase">Load Data</button>
-            </div>
+          <div class="col-12 form-floating">
+            <input
+              type="password"
+              class="form-control"
+              id="floatingPassword"
+              placeholder="Password"
+            />
+            <label for="floatingPassword">Password</label>
           </div>
-        </div>
-
-        <!-- Defaults -->
-        <div id="alertReference" class="card default-card ">
-          <div id="default-btns" class="card-body">
-            <h5 id="defaultText" class="card-title text-center text-uppercase">Popular Stocks</h5>
-            <div class="d-grid gap-2" id="stock-card">
-              <button data-value="AMZN" class="btn btn-dark rounded-1 clickHighlight">AMZN</button>
-              <button data-value="AAPL" class="btn btn-dark rounded-1 clickHighlight">AAPL</button>
-              <button data-value="GOOG" class="btn btn-dark rounded-1 clickHighlight">GOOG</button>
-              <button data-value="META" class="btn btn-dark rounded-1 clickHighlight">META</button>
-              <button data-value="NFLX" class="btn btn-dark rounded-1 clickHighlight">NFLX</button>
-              <button data-value="TSLA" class="btn btn-dark rounded-1 clickHighlight">TSLA</button>
-              <button data-value="NVDA" class="btn btn-dark rounded-1 clickHighlight">NVDA</button>
-              <button data-value="MSFT" class="btn btn-dark rounded-1 clickHighlight">MSFT</button>
-              <button data-value="DIS" class="btn btn-dark rounded-1 clickHighlight">DIS</button>
-              <button data-value="GME" class="btn btn-dark rounded-1 clickHighlight">GME</button>
-            </div>
-            <div class="d-grid gap-2 d-none" id="governdata-card">
-              <button data-value="GDPannual" class="btn btn-dark rounded-1 clickHighlight">GDP Annually</button>
-              <button data-value="GDPquarter" class="btn btn-dark rounded-1 clickHighlight">GDP Quarterly</button>
-              <button data-value="PCEannual" class="btn btn-dark rounded-1 clickHighlight">PCE Annually<br><span style="font-size:small">Personal Consumption Expenditures</span></button>
-              <button data-value="PCEquarter" class="btn btn-dark rounded-1 clickHighlight">PCE Quarterly<br><span style="font-size:small">Personal Consumption Expenditures</span></button>
-            </div>
-            <div class="d-grid gap-2 d-none" id="currency-card">
-              <button data-value="EUR/USD" class="btn btn-dark rounded-1 clickHighlight">EUR/USD</button>
-              <button data-value="GBP/USD" class="btn btn-dark rounded-1 clickHighlight">GBP/USD</button>
-              <button data-value="CAD/USD" class="btn btn-dark rounded-1 clickHighlight">CAD/USD</button>
-              <button data-value="AUD/USD" class="btn btn-dark rounded-1 clickHighlight">AUD/USD</button>
-              <button data-value="CNY/USD" class="btn btn-dark rounded-1 clickHighlight">CNY/USD</button>
-              <button data-value="JPY/USD" class="btn btn-dark rounded-1 clickHighlight">JPY/USD</button>
-            </div>
+          <div class="col-12 form-floating">
+            <input
+              type="button"
+              class="btn btn-primary w-100"
+              value="Sign In"
+              onclick="location.href='./app.html'"
+            />
           </div>
-        </div>
-      </div>
-
-      <div class="col-sm-7">
-        <!-- Chart -->
-        <div class="d-flex justify-content-center align-items-center" id="chart"></div>
-
-        <!-- Time Buttons -->
-        <div id="time-btns" class="mt-2 mx-3">
-          <button data-value="3-m" id="three-mon-btn" class="btn btn-dark rounded-1 hoverHighlight" type="button">3m</button>
-          <button data-value="6-m" id="six-mon-btn" class="btn btn-dark rounded-1 hoverHighlight" type="button">6m</button>
-          <button data-value="YTD" id="ytd-btn" class="btn btn-dark rounded-1 hoverHighlight" type="button">YTD</button>
-          <button data-value="1-y" id="one-y-btn" class="btn btn-dark rounded-1 hoverHighlight" type="button">1y</button>
-          <button data-value="3-y" id="three-y-btn" class="btn btn-dark rounded-1 hoverHighlight" type="button">3y</button>
-          <button data-value="10-y" id="ten-y-btn" class="btn btn-dark rounded-1 hoverHighlight" type="button">10y</button>
-          <button data-value="200-y" id="all-btn" class="btn btn-dark rounded-1 hoverHighlight" type="button">All</button>
-        </div>
-
       </div>
     </div>
-  </main>
-
-  <footer class="container-fluid d-flex justify-content-center" style="margin-top: 50px;">
-    <div class="col-6 d-flex justify-content-between">
-      <span><a href="./about.html">About</a></span><span><a href="./contact.html">Contact</a></span><span><a href="./support.html">Support</a></span><span><a href="./social.html">Social</a></span>
-    </div>
-  </footer>
-
-  <script src="https://kit.fontawesome.com/63c059a934.js" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-  <script src="./assets/script.js" ></script>
-</body>
+        <!-- particles.js lib - https://github.com/VincentGarreau/particles.js -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+        <script src="./login/login.js"></script>
+  </body>
 </html>

@@ -1,0 +1,62 @@
+[
+  {
+      "ticker": "AAPL",
+      "incPercent": 0.88
+  },
+  {
+      "ticker": "MSFT",
+      "incPercent": 0.47
+  },
+  {
+      "ticker": "AMZN",
+      "incPercent": -2.11
+  },
+  {
+      "ticker": "TSLA",
+      "incPercent": 7.43
+  },
+  {
+      "ticker": "GOOGL",
+      "incPercent": -0.9
+  },
+  {
+      "ticker": "GOOG",
+      "incPercent": -0.69
+  },
+  {
+      "ticker": "BRK.B",
+      "incPercent": -0.9
+  },
+  {
+      "ticker": "UNH",
+      "incPercent": -0.92
+  },
+  {
+      "ticker": "JNJ",
+      "incPercent": -0.62
+  },
+  {
+      "ticker": "XOM",
+      "incPercent": -0.17
+  },
+  {
+      "ticker": "JPM",
+      "incPercent": -1.55
+  },
+  {
+      "ticker": "META",
+      "incPercent": -1.18
+  },
+  {
+      "ticker": "V",
+      "incPercent": -0.03
+  },
+  {
+      "ticker": "PG",
+      "incPercent": -0.26
+  },
+  {
+      "ticker": "NVDA",
+      "incPercent": 4.75
+  }
+]
