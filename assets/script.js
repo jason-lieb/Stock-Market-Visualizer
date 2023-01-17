@@ -368,9 +368,13 @@ function createWelcome() {
     chartContainer.innerHTML = `
       <div id="welcome" class="container">
         <h2>Welcome to the ${global.selectedPage} Page</h2>
-        <h3>History:</h3>
-        ${historyBtns}
-        <button id="clearHistory" class="btn btn-danger rounded-1">Clear History</button>
+        <div class="container" style="padding: 1.5rem;">
+          <h4>Recently Searched</h4>
+          <div class="d-grid gap-2" style="width: 12rem;">
+            ${historyBtns}
+            <button id="clearHistory" class="btn btn-danger rounded-1">Clear History</button>
+          </div>
+        </div>
       </div>
       `;
     for (let i = 0; i < pageHistory.length; i++) {

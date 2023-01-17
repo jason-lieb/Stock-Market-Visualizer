@@ -70,6 +70,9 @@ nav a {
 }
 
 #welcome {
+  height: 35em;
+  border-radius: 1rem;
+  padding: 4rem;
   background-color: var(--header-color);
   color: white;
   font-family: var(--font1);
