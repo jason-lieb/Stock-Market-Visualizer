@@ -124,7 +124,11 @@ function handleSearch(e) {
   if (e.key !== "Enter") return;
   let search = searchInput.value;
   searchInput.value = "";
-  handleData(search);
+  handleData(inputValidation(search));
+}
+
+function inputValidation(input) {
+  input = input.toString().toUpperCase();
 }
 
 function handleSelect(e) {
@@ -140,10 +144,14 @@ function handleSelect(e) {
 async function handleData(input) {
   clearChart();
   addLoadingSymbol();
-  await getData(input).catch(handleGetDataError);
-  clearChart();
-  updateChart();
-  addHistory(input);
+  let success = await getData(input);
+  if (success) {
+    clearChart();
+    updateChart();
+    addHistory(input);
+  } else {
+    createWelcome();
+  }
 }
 
 ///////////////////////////////////////////////////////// UI Functions /////////////////////////////////////////////////////////////////////
@@ -316,17 +324,25 @@ function addAlert(alertText) {
   alert.className = 'alert alert-danger mb-1 text-center'
   alert.textContent = alertText;
   // Insert alert in space between containers
-  let currencyContainer = document.querySelector('#currencyInputs');
-  currencyContainer.className = 'card default-card mb-1';
+  if (global.selectedPage === 'Currency') {
+    let currencyContainer = document.querySelector('#currencyInputs');
+    currencyContainer.className = 'card default-card mb-1';
+  } else if (global.selectedPage === 'Stocks') {
+    searchInput.className = 'form-control mb-1';
+  }
   searchDefault.insertBefore(alert, alertReference);
   // Remove after 2 seconds
-  setTimeout(removeAlert, 2000);
+  setTimeout(removeAlert, 3000);
 }
 
 function removeAlert() {
   searchDefault.removeChild(document.querySelector('#alert'));
-  let currencyContainer = document.querySelector('#currencyInputs');
-  currencyContainer.className = 'card default-card mb-5';
+  if (global.selectedPage === 'Currency') {
+    let currencyContainer = document.querySelector('#currencyInputs');
+    currencyContainer.className = 'card default-card mb-5';
+  } else if (global.selectedPage === 'Stocks') {
+    searchInput.className = 'form-control mb-5';
+  }
 }
 
 /////////////////////////////////////////// Welcome and History Functions /////////////////////////////////////////////////////////////////////
@@ -397,6 +413,7 @@ function getHistory() {
 }
 
 function addHistory(input) {
+  if (global.selectedPage === 'Government Data') return;
   let selectedHistory = global.selectedPage === 'Stocks' ? 'stockHistory' : 'currencyHistory';
   let pageHistory = global[selectedHistory];
   if (pageHistory !== null && pageHistory !== undefined) {
@@ -428,25 +445,30 @@ async function getData(input) {
   let newData;
   switch (global.selectedPage) {
     case "Stocks":
-      // newData = await getAlphaVantageStock(input); //Commented out to prevent accidental usage of limited API calls
-      // global.data = parseAlphaVantage(newData);
-      global.data = await importTestData(
-        "../testData/testStockDataAmazon.json"
-      ); ///////// Temporarily here to use test data
-      break;
+      newData = await getAlphaVantageStock(input); //Commented out to prevent accidental usage of limited API calls
+      if (Object.keys(newData.rawData).length === 0 || newData.rawData['Error Message'] !== undefined) {
+        addAlert('Please Enter A Valid Stock Ticker');
+        return false;
+      }
+      console.log(newData);
+      global.data = parseAlphaVantage(newData);
+      return true;
+      // global.data = await importTestData(
+      //   "../testData/testStockDataAmazon.json"
+      // ); ///////// Temporarily here to use test data
     case "Currency":
       let toCurrency = input.split("/")[0];
       let fromCurrency = input.split("/")[1];
-      // newData = await getAlphaVantageForex(toCurrency, fromCurrency);
-      // global.data = parseAlphaVantage(newData);
-      global.data = await importTestData(
-        "../testData/testCurrencyDataEURUSD.json"
-      );
-      break;
+      newData = await getAlphaVantageForex(toCurrency, fromCurrency);
+      global.data = parseAlphaVantage(newData);
+      // global.data = await importTestData(
+      //   "../testData/testCurrencyDataEURUSD.json"
+      // );
+      return true;
     case "Government Data":
       global.data = await getBEA(input);
       global.selectedTimePeriod = "200-y"; //200 to show all.
-      break;
+      return true;
   }
 }
 
@@ -512,7 +534,6 @@ function drawChart() {
   }
   displayData.unshift(["Time", "Value"]);
   let chartData = google.visualization.arrayToDataTable(displayData);
-  console.log(displayData);
   let options = {};
   switch (global.selectedPage) {
     case "Stocks":
@@ -525,7 +546,6 @@ function drawChart() {
         colors: ["white"],
         vAxis: { textStyle: { color: "white" } },
         hAxis: { textStyle: { color: "white" } },
-        // animation: { startup: true, duration: 1000, easing: "linear" },
         explorer: {
           axis: "horizontal",
           actions: ["dragToZoom", "rightClickToReset"],
@@ -543,7 +563,6 @@ function drawChart() {
         colors: ["white"],
         vAxis: { textStyle: { color: "white" } },
         hAxis: { textStyle: { color: "white" } },
-        // animation: { startup: true, duration: 1000, easing: "linear" },
         explorer: {
           axis: "horizontal",
           actions: ["dragToZoom", "rightClickToReset"],
@@ -561,11 +580,9 @@ function drawChart() {
         colors: ['white'],
         vAxis:{textStyle: {color: 'white'}},
         hAxis:{textStyle: {color: 'white'}},
-        // animation: {"startup": true, duration: 2000, easing: "linear"}
       };
       break;
   }
-  console.log(options);
   chart.draw(chartData, options);
   document.querySelector('svg').setAttribute('style', 'border-radius: 1rem');
 }
@@ -575,6 +592,14 @@ function clearChart() {
 }
 
 /////////////////////////////////////////////////// Alpha Vantage API Functions /////////////////////////////////////////////////////////////////////
+
+// async function testError(ticker) {
+//   let response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${ticker}&outputsize=full&apikey=${alpha_vantage_APIKEY}`)
+//   console.log(response);
+//   let rawData = await response.json();
+//   console.log(Object.keys(rawData).length);
+// }
+// testError('spx');
 
 async function getAlphaVantageStock(ticker) {
   let response = await fetch(
@@ -619,7 +644,6 @@ async function getBEA(input) {
   };
   let frequency = input.endsWith('quarter') ? 'q' : 'a';
   var url = `http://apps.bea.gov/api/data/?UserID=${bea_APIKEY}&method=getDATA&datasetname=nipa&TABLENAME=${MacroData.tablename[input]}&FREQUENCY=${frequency}&YEAR=ALL`;
-  console.log(url);
   let response = await fetch(url);
   let data = await response.json();
   return parseBEAdata(data);
@@ -635,7 +659,6 @@ function parseBEAdata(rawData) {
     }
     parsedData.push([data_temp[i].TimePeriod, Number(data_temp[i].DataValue)]);
   }
-  // parsedData.unshift(["Year", "Value"]);
   return parsedData;
 }
 
@@ -727,7 +750,6 @@ function createContinuousStocks(continuousData, error429) {
 function updateContinuousStocks(continuousData, error429) {
   if (error429) return;
   if (document.querySelector('#error429') !== null) {
-    console.log(document.querySelector('#error429'))
     document.querySelector('#scrolling').removeChild(document.querySelector('#error429'));
   }
   for(let i = 0; i < continuousData.length; i++) {
@@ -761,10 +783,4 @@ async function importTestData(url) {
   let testDataPromise = await fetch(url);
   let testData = await testDataPromise.json();
   return testData;
-}
-
-//////////////////////////////////////////////////////// Error Handling Functions /////////////////////////////////////////////////////////////////////
-
-function handleGetDataError(err) {
-  console.error(err);
 }
