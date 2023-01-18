@@ -452,7 +452,6 @@ async function getData(input) {
         addAlert('Please Enter A Valid Stock Ticker');
         return false;
       }
-      console.log(newData);
       global.data = parseAlphaVantage(newData);
       return true;
     case "Currency":
