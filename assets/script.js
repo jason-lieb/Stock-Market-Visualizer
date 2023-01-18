@@ -11,7 +11,8 @@ let global = {
   selectedTimePeriod: "3-m",
   selectedPage: "Stocks",
   stockHistory: undefined,
-  currencyHistory: undefined
+  currencyHistory: undefined,
+  chartName: undefined
 };
 
 // Query Selectors
@@ -147,7 +148,8 @@ async function handleData(input) {
   let success = await getData(input);
   if (success) {
     clearChart();
-    updateChart(input);
+    global.chartName = input;
+    updateChart();
     addHistory(input);
   } else {
     createWelcome();
@@ -512,14 +514,13 @@ function selectDataForTimeRange() {
 }
 //////////////////////////////////////////////////////// Chart Functions /////////////////////////////////////////////////////////////////////
 
-function updateChart(input) {
+function updateChart() {
   selectDataForTimeRange();
-  drawChart(input);
+  drawChart();
 }
 
 // Generate Chart with Google Charts
-function drawChart(input) {
-  // let chartTitle = input !== undefined ? input : '';
+function drawChart() {
   let chart = new google.visualization.LineChart(chartContainer);
   let displayData = global.data.slice(global.dataInTimePeriodIndex);
   if (global.selectedPage === 'Stocks' || global.selectedPage === 'Currency') {
@@ -533,7 +534,7 @@ function drawChart(input) {
   switch (global.selectedPage) {
     case "Stocks":
       options = {
-        title: `${input} Stock Price (USD)`,
+        title: `${global.chartName} Stock Price (USD)`,
         titleTextStyle: { color: "white" },
         curveType: "function",
         legend: "none",
@@ -550,7 +551,7 @@ function drawChart(input) {
       break;
     case "Currency":
       options = {
-        title: `${input} Currency Exchange Rate`,
+        title: `${global.chartName} Currency Exchange Rate`,
         titleTextStyle: { color: "white" },
         curveType: "function",
         legend: "none",
