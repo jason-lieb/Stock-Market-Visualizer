@@ -630,7 +630,7 @@ async function getBEA(input) {
     },
   };
   let frequency = input.endsWith('quarter') ? 'q' : 'a';
-  var url = `http://apps.bea.gov/api/data/?UserID=${bea_APIKEY}&method=getDATA&datasetname=nipa&TABLENAME=${MacroData.tablename[input]}&FREQUENCY=${frequency}&YEAR=ALL`;
+  var url = `https://apps.bea.gov/api/data/?UserID=${bea_APIKEY}&method=getDATA&datasetname=nipa&TABLENAME=${MacroData.tablename[input]}&FREQUENCY=${frequency}&YEAR=ALL`;
   let response = await fetch(url);
   let data = await response.json();
   return parseBEAdata(data);
