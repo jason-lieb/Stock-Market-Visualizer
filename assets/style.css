@@ -158,10 +158,12 @@ nav a {
   }
 }
 @media screen and (min-width: 576px){
+  footer {
+    margin-top: 10rem !important;
+  }
    #search_default {
     max-width: 300px;
     min-width: 200px;
-
   }
   a:link {
     text-decoration: none;
@@ -213,20 +215,14 @@ nav a {
     opacity: .5;
     width: 650px;
     height: 300px;
-    /* justify-content: center; */
   }
   .link {
-    /* border-style: solid; */
     border: 5px solid var(--light-blue);
-    /* border-width: 1px; */
     border-radius: 50px;
     padding: 10px;
     flex: 0 0 400px;
     display: flex;
     flex-wrap: wrap;
-    /* background-image: url(../images/iStock-1224500457.jpg);
-    background-repeat: no-repeat;
-    background-size: cover; */
     margin: 25px;
   }
   .other.link header
