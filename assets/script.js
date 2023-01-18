@@ -147,7 +147,7 @@ async function handleData(input) {
   let success = await getData(input);
   if (success) {
     clearChart();
-    updateChart();
+    updateChart(input);
     addHistory(input);
   } else {
     createWelcome();
@@ -331,7 +331,7 @@ function addAlert(alertText) {
     searchInput.className = 'form-control mb-1';
   }
   searchDefault.insertBefore(alert, alertReference);
-  // Remove after 2 seconds
+  // Remove after 3 seconds
   setTimeout(removeAlert, 3000);
 }
 
@@ -445,7 +445,7 @@ async function getData(input) {
   let newData;
   switch (global.selectedPage) {
     case "Stocks":
-      newData = await getAlphaVantageStock(input); //Commented out to prevent accidental usage of limited API calls
+      newData = await getAlphaVantageStock(input);
       if (Object.keys(newData.rawData).length === 0 || newData.rawData['Error Message'] !== undefined) {
         addAlert('Please Enter A Valid Stock Ticker');
         return false;
@@ -453,17 +453,11 @@ async function getData(input) {
       console.log(newData);
       global.data = parseAlphaVantage(newData);
       return true;
-      // global.data = await importTestData(
-      //   "../testData/testStockDataAmazon.json"
-      // ); ///////// Temporarily here to use test data
     case "Currency":
       let toCurrency = input.split("/")[0];
       let fromCurrency = input.split("/")[1];
       newData = await getAlphaVantageForex(toCurrency, fromCurrency);
       global.data = parseAlphaVantage(newData);
-      // global.data = await importTestData(
-      //   "../testData/testCurrencyDataEURUSD.json"
-      // );
       return true;
     case "Government Data":
       global.data = await getBEA(input);
@@ -518,13 +512,14 @@ function selectDataForTimeRange() {
 }
 //////////////////////////////////////////////////////// Chart Functions /////////////////////////////////////////////////////////////////////
 
-function updateChart() {
+function updateChart(input) {
   selectDataForTimeRange();
-  drawChart();
+  drawChart(input);
 }
 
 // Generate Chart with Google Charts
-function drawChart() {
+function drawChart(input) {
+  // let chartTitle = input !== undefined ? input : '';
   let chart = new google.visualization.LineChart(chartContainer);
   let displayData = global.data.slice(global.dataInTimePeriodIndex);
   if (global.selectedPage === 'Stocks' || global.selectedPage === 'Currency') {
@@ -538,7 +533,7 @@ function drawChart() {
   switch (global.selectedPage) {
     case "Stocks":
       options = {
-        title: "Stock Price ($)",
+        title: `${input} Stock Price (USD)`,
         titleTextStyle: { color: "white" },
         curveType: "function",
         legend: "none",
@@ -555,7 +550,7 @@ function drawChart() {
       break;
     case "Currency":
       options = {
-        title: "Currency Exchange Rate",
+        title: `${input} Currency Exchange Rate`,
         titleTextStyle: { color: "white" },
         curveType: "function",
         legend: "none",
@@ -592,14 +587,6 @@ function clearChart() {
 }
 
 /////////////////////////////////////////////////// Alpha Vantage API Functions /////////////////////////////////////////////////////////////////////
-
-// async function testError(ticker) {
-//   let response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${ticker}&outputsize=full&apikey=${alpha_vantage_APIKEY}`)
-//   console.log(response);
-//   let rawData = await response.json();
-//   console.log(Object.keys(rawData).length);
-// }
-// testError('spx');
 
 async function getAlphaVantageStock(ticker) {
   let response = await fetch(
