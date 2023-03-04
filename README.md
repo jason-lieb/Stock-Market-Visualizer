@@ -2,7 +2,7 @@
 A data visualizer web application that shows historical data for popular stocks, currency exchange rates, and US government data
 
 ## Demo App
-[Demo Link](https://jason-lieb.github.io/stock-market-visualizer/)
+[Demo Link](https://jason-lieb.github.io/Stock-Market-Visualizer/)
 
 ## Presentation
 [Presentation Link](https://docs.google.com/presentation/d/1JcWxEDW5Tgzbru-Wd7Byzx0YIdSCBLJ5SOd3biquYfg/edit?usp=sharing)
